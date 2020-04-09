@@ -1,0 +1,87 @@
+---
+output: github_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+packagename <- 'limonaid';
+packageSubtitle <- 'Working With LimeSurvey Surveys and Responses';
+
+gitLab_ci_badge <-
+  paste0("https://gitlab.com/r-packages/", packagename, "/badges/master/pipeline.svg");
+gitLab_ci_url <-
+  paste0("https://gitlab.com/r-packages/", packagename, "/commits/master");
+
+codecov_badge <-
+  paste0("https://codecov.io/gl/r-packages/", packagename, "/branch/master/graph/badge.svg");
+codecov_url <-
+  paste0("https://codecov.io/gl/r-packages/", packagename, "?branch=master");
+
+pkgdown_url <-
+  paste0("https://r-packages.gitlab.io/", packagename);
+
+cran_url <-
+  paste0("https://cran.r-project.org/package=", packagename);
+cranVersion_badge <-
+  paste0("https://www.r-pkg.org/badges/version/", packagename, "?color=brightgreen");
+cranLastMonth_badge <-
+  paste0("https://cranlogs.r-pkg.org/badges/last-month/", packagename, "?color=brightgreen");
+cranTotal_badge <-
+  paste0("https://cranlogs.r-pkg.org/badges/grand-total/", packagename, "?color=brightgreen");
+
+```
+
+<!-- badges: start -->[![Pipeline status](`r gitLab_ci_badge`)](`r gitLab_ci_url`)
+[![Coverage status](`r codecov_badge`)](`r codecov_url`)
+[![Version on CRAN](`r cranVersion_badge`)](`r cran_url`)
+[![Version on CRAN](`r cranLastMonth_badge`)](`r cran_url`)
+[![Version on CRAN](`r cranTotal_badge`)](`r cran_url`)
+<!-- badges: end -->
+ 
+# <!--img src='img/hex-logo.png' align="right" height="200" /--> `r paste(packagename, "\U1F4E6")`
+
+`r packagename`: `r packageSubtitle`
+
+The pkgdown website for this project is located at `r pkgdown_url`.
+
+<!--------------------------------------------->
+<!-- Start of a custom bit for every package -->
+<!--------------------------------------------->
+
+LimeSurvey is Free/Libre Open Source Software for
+the development and administrations of online studies, using
+sophisticated tailoring capabilities to support multiple study
+designs. This package supports programmatic creation of surveys
+that can then be imported into LimeSurvey, as well as
+userfriendly import of responses from LimeSurvey studies.
+
+<!--------------------------------------------->
+<!--  End of a custom bit for every package  -->
+<!--------------------------------------------->
+
+## Installation
+
+You can install the released version of ``r packagename`` from [CRAN](https://CRAN.R-project.org) with:
+
+```{r echo=FALSE, comment="", results="asis"}
+cat(paste0("``` r
+install.packages('", packagename, "');
+```"));
+```
+
+You can install the development version of ``r packagename`` from [GitLab](https://gitlab.com) with:
+
+```{r echo=FALSE, comment="", results="asis"}
+cat(paste0("``` r
+devtools::install_gitlab('r-packages/", packagename, "');
+```"));
+```
+
+(assuming you have `devtools` installed; otherwise, install that first using the `install.packages` function)
