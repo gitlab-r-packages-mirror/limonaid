@@ -1,8 +1,12 @@
 #' @export
+
+# ls <- limonaid::ls_read_tsv(system.file("extdata",
+#                                         "export-of-minimal-survey-as-tsv.txt",
+#                                         package = "limonaid"));
+
 ls_tsv_question_row <- function(questioncode,
                                 text,
                                 id=NULL,
-                                class = "Q",
                                 type.scale = "L",
                                 relevance = 1,
                                 language = "en",
@@ -15,6 +19,8 @@ ls_tsv_question_row <- function(questioncode,
   if (is.null(id)) {
     id <- new_id(silent = silent);
   }
+
+  class = "Q";
 
   res <- as.list(environment());
   res$silent <- NULL;
