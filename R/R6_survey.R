@@ -23,20 +23,20 @@ survey <-
 survey$set(
   "public",
   "add_group",
-  function(name,
+  function(title,
            description = "",
            relevance = 1,
            random_group = "",
            language = self$primaryLanguage) {
-    if (name %in% names(self$groups)) {
-      stop("This survey already has a group with name '",
-           name,
+    if (title %in% names(self$groups)) {
+      stop("This survey already has a group with title '",
+           title,
            "'!");
     } else {
 
       thisGroup <-
-        list(names = stats::setNames(name,
-                                     nm = language),
+        list(titles = stats::setNames(title,
+                                      nm = language),
              descriptions = stats::setNames(description,
                                             nm = language),
              relevance = relevance,
