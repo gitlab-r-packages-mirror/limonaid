@@ -10,10 +10,16 @@ ls_tsv_question_row <- function(questioncode,
                                 other = "N",
                                 same_default = 1,
                                 cssclass = "",
-                                hide_tip = 1) {
+                                hide_tip = 1,
+                                silent = limonaid::opts$get("silent")) {
   if (is.null(id)) {
-
+    id <- new_id(silent = silent);
   }
+
   res <- as.list(environment());
+  res$silent <- NULL;
+  res <- as.data.frame(res);
+
+  return(res);
 
 }
