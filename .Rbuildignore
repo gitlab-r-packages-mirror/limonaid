@@ -1,2 +1,6 @@
 ^limonaid\.Rproj$
 ^\.Rproj\.user$
+^_pkgdown\.yml$
+^public$
+^pkgdown$
+^\.gitlab-ci\.yml$
