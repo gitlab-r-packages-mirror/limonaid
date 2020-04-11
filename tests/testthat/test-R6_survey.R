@@ -22,7 +22,7 @@ testthat::test_that("adding a question works", {
 
 testthat::test_that("exporting a survey to a TSV file works", {
 
-  ls <- Survey$new("Test Survey");
+  ls <- limonaid::Survey$new("Test Survey");
   ls$add_group("Only group",
                "This is the description of the only group in the survey.");
   ls$add_question(groupId = 1,

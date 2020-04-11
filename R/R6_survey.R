@@ -416,6 +416,10 @@ Survey <- R6::R6Class(
       ### Set general settings
       ###-----------------------------------------------------------------------
 
+      additional_languages <-
+        setdiff(names(titles),
+                language);
+
       self$sid <- sid;
       self$gsid <- gsid;
       self$admin <- admin;
@@ -656,6 +660,12 @@ Survey <- R6::R6Class(
         text <- selfAsList[[name]];
 
         if (is.null(text)) {
+          text <- "";
+        }
+
+        if (length(text) > 1) {
+          text <- paste(text, collapse=" ");
+        } else if (length(text) == 0) {
           text <- "";
         }
 
