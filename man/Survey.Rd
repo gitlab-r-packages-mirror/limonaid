@@ -22,6 +22,13 @@ A survey has at least a title and a primary language.
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{get_group_ids}}{A list of all group ids.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -37,7 +44,7 @@ A survey has at least a title and a primary language.
 \subsection{Method \code{new()}}{
 Create a new survey object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$new(title, primaryLanguage)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Survey$new(title, primaryLanguage = "en")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -57,31 +64,62 @@ A new \code{Survey} object.
 \if{html}{\out{<a id="method-add_group"></a>}}
 \if{latex}{\out{\hypertarget{method-add_group}{}}}
 \subsection{Method \code{add_group()}}{
+Add a group to a survey object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$add_group(
-  title,
-  description = "",
-  relevance = 1,
-  random_group = "",
-  language = self$primaryLanguage
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Survey$add_group(titles, descriptions = "", relevance = 1, random_group = "")}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{titles}}{The group's title, either as a named character vector
+where each element is the group title in a different language, and
+every element's name is the language code; or as a single character
+value, in which case the survey's primary language is used.}
+
+\item{\code{descriptions}}{The group description, either as a named character
+vector where each element is the group description in a different
+language, and every element's name is the language code; or as a single
+character value, in which case the survey's primary language is used.}
+
+\item{\code{relevance}}{The group's relevance equation.}
+
+\item{\code{random_group}}{The group's randomization group.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Invisibly, the \code{Survey} object.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-add_question"></a>}}
 \if{latex}{\out{\hypertarget{method-add_question}{}}}
 \subsection{Method \code{add_question()}}{
+Add a question to a survey object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$add_question(
-  group,
-  code,
-  text = "",
-  relevance = 1,
-  language = self$primaryLanguage
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Survey$add_question(groupId, code, type = NULL, lsType = NULL, ...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{groupId}}{The id of the group to add the question to.}
+
+\item{\code{code}}{The question code.}
+
+\item{\code{type}}{The question type.}
+
+\item{\code{lsType}}{The question type, as LimeSurvey question type.}
+
+\item{\code{...}}{Additional arguments are used to create the Question using
+\code{Question$new}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Invisibly, the \code{Survey} object.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -130,6 +130,8 @@ Survey <- R6::R6Class(
     #' Add a question to a survey object.
     #' @param groupId The id of the group to add the question to.
     #' @param code The question code.
+    #' @param type The question type.
+    #' @param lsType The question type, as LimeSurvey question type.
     #' @param ... Additional arguments are used to create the Question using
     #' `Question$new`.
     #' @return Invisibly, the `Survey` object.
@@ -194,6 +196,7 @@ Survey <- R6::R6Class(
 
   active = list(
 
+    #' @field get_group_ids A list of all group ids.
     get_group_ids = function(value) {
       if (missing(value)) {
         return(unlist(lapply(self$groups,

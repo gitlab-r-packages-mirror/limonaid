@@ -20,10 +20,10 @@ Question <- R6::R6Class(
     #' @field id The identifier of the question (a unique number in a survey)
     id = NULL,
 
-    #' @field questionType The question type.
+    #' @field type The question type.
     type = NULL,
 
-    #' @field qType The question type in LimeSurvey's format.
+    #' @field lsType The question type in LimeSurvey's format.
     lsType = NULL,
 
     #' @field questionTexts The question text(s) in all languages.
@@ -54,9 +54,11 @@ Question <- R6::R6Class(
     #' @param type The human-readable question type.
     #' @param lsType The type as LimeSurvey type (see
     #' https://manual.limesurvey.org/Question_object_types).
+    #' @param id The identifier of the question (in a survey).
     #' @param questionTexts The question text(s).
     #' @param helpTexts The help text(s).
     #' @param relevance The group's relevance equation.
+    #' @param primaryLanguage The question's primary language.
     #' @return A new `Survey` object.
     initialize = function(code,
                           type = NULL,
@@ -156,6 +158,11 @@ Question <- R6::R6Class(
     ### Add an answer option
     ###-------------------------------------------------------------------------
 
+    #' @description
+    #' Add an answer option to a question.
+    #' @param code The answer option code.
+    #' @param optionTexts The answer option text(s).
+    #' @return Invisible, the question object.
     add_answer_option = function(code,
                                  optionTexts) {
 
