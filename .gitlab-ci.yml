@@ -38,7 +38,9 @@ pages:
     # dependencies:
     #     - testing
     script:
-        - ls
+      - mkdir public/img
+      - cp img/hex-logo.png public/img
+      - ls
     artifacts:
         paths:
             - public
