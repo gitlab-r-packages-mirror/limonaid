@@ -13,7 +13,7 @@ CRAN](https://cranlogs.r-pkg.org/badges/last-month/limonaid?color=brightgreen)](
 CRAN](https://cranlogs.r-pkg.org/badges/grand-total/limonaid?color=brightgreen)](https://cran.r-project.org/package=limonaid)
 <!-- badges: end -->
 
-# <!--img src='img/hex-logo.png' align="right" height="200" /--> limonaid 📦
+# <img src='img/hex-logo.png' align="right" height="200" /> limonaid 📦
 
 limonaid: Working With LimeSurvey Surveys and Responses
 

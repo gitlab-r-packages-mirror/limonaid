@@ -45,7 +45,7 @@ cranTotal_badge <-
 [![Version on CRAN](`r cranTotal_badge`)](`r cran_url`)
 <!-- badges: end -->
  
-# <!--img src='img/hex-logo.png' align="right" height="200" /--> `r paste(packagename, "\U1F4E6")`
+# <img src='img/hex-logo.png' align="right" height="200" /> `r paste(packagename, "\U1F4E6")`
 
 `r packagename`: `r packageSubtitle`
 
