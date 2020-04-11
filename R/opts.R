@@ -12,7 +12,7 @@
 #' \describe{
 #'   \item{...}{For `limonaid::opts$set`, the dots can be used to specify the options
 #'   to set, in the format `option = value`, for example,
-#'   `EFFECTSIZE_POINTESTIMATE_NAME_IN_DF = "\n"`. For
+#'   `silent = FALSE`. For
 #'   `limonaid::opts$reset`, a list of options to be reset can be passed.}
 #'   \item{option}{For `limonaid::opts$set`, the name of the option to set.}
 #'   \item{default}{For `limonaid::opts$get`, the default value to return if the
@@ -23,13 +23,11 @@
 #'
 #' \describe{
 #'
-#'   \item{}{The name of the column
-#'   with the effect size values.}
+#'   \item{silent}{Whether to be chatty or silent.}
 #'
-#'   \item{}{The name of the column
-#'   with the effect size variance.}
+#'   \item{encoding}{The encoding to use when writing files.}
 #'
-#'   \item{}{The name of the column
+#'   \item{preventOverwriting}{The name of the column
 #'   with the missing values.}
 #'
 #' }
