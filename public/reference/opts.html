@@ -128,7 +128,7 @@ all options to their default values.</p>
 <dl class='dl-horizontal'>
 <dt>...</dt><dd><p>For <code>limonaid::opts$set</code>, the dots can be used to specify the options
 to set, in the format <code>option = value</code>, for example,
-<code>EFFECTSIZE_POINTESTIMATE_NAME_IN_DF = "\n"</code>. For
+<code>silent = FALSE</code>. For
 <code>limonaid::opts$reset</code>, a list of options to be reset can be passed.</p></dd>
 <dt>option</dt><dd><p>For <code>limonaid::opts$set</code>, the name of the option to set.</p></dd>
 <dt>default</dt><dd><p>For <code>limonaid::opts$get</code>, the default value to return if the
@@ -139,13 +139,11 @@ option has not been manually specified.</p></dd>
 <p>The following options can be set:</p>
 <dl class='dl-horizontal'>
 
-<dt></dt><dd><p>The name of the column
-with the effect size values.</p></dd>
+<dt>silent</dt><dd><p>Whether to be chatty or silent.</p></dd>
 
-<dt></dt><dd><p>The name of the column
-with the effect size variance.</p></dd>
+<dt>encoding</dt><dd><p>The encoding to use when writing files.</p></dd>
 
-<dt></dt><dd><p>The name of the column
+<dt>preventOverwriting</dt><dd><p>The name of the column
 with the missing values.</p></dd>
 
 
@@ -153,16 +151,18 @@ with the missing values.</p></dd>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>### Get the default utteranceMarker</span>
-<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>get</span>(<span class='no'>complecs_entitySheet</span>);</div><div class='output co'>#&gt; <span class='error'>Error in limonaid::opts$get(complecs_entitySheet): object 'complecs_entitySheet' not found</span></div><div class='input'>
-<span class='co'>### Set it to a custom version, so that every line starts with a pipe</span>
-<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>set</span>(<span class='kw'>complecs_entitySheet</span> <span class='kw'>=</span> <span class='st'>"sheet_with_entities"</span>);</div><div class='output co'>#&gt; <span class='error'>Error in stop("Option '", option, "' is not a valid (i.e. existing) option for limonaid!"): object 'option' not found</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'>### Get the default silent setting</span>
+<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>get</span>(<span class='st'>'silent'</span>);</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'>### Set it to FALSE</span>
+<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>set</span>(<span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>);
+
 <span class='co'>### Check that it worked</span>
-<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>get</span>(<span class='no'>complecs_entitySheet</span>);</div><div class='output co'>#&gt; <span class='error'>Error in limonaid::opts$get(complecs_entitySheet): object 'complecs_entitySheet' not found</span></div><div class='input'>
+<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>get</span>(<span class='st'>'silent'</span>);</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'>### Reset this option to its default value</span>
-<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>reset</span>(<span class='no'>complecs_entitySheet</span>);</div><div class='output co'>#&gt; <span class='error'>Error in limonaid::opts$reset(complecs_entitySheet): Option(s) 'complecs_entitySheet'' is/are not a valid (i.e. existing) option for limonaid!</span></div><div class='input'>
+<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>reset</span>(<span class='st'>'silent'</span>);
+
 <span class='co'>### Check that the reset worked, too</span>
-<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>get</span>(<span class='no'>complecs_entitySheet</span>);</div><div class='output co'>#&gt; <span class='error'>Error in limonaid::opts$get(complecs_entitySheet): object 'complecs_entitySheet' not found</span></div><div class='input'>
+<span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'>get</span>(<span class='st'>'silent'</span>);</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

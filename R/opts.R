@@ -36,20 +36,20 @@
 #'
 #' @usage opts
 #'
-#' @examples ### Get the default utteranceMarker
-#' limonaid::opts$get(complecs_entitySheet);
+#' @examples ### Get the default silent setting
+#' limonaid::opts$get('silent');
 #'
-#' ### Set it to a custom version, so that every line starts with a pipe
-#' limonaid::opts$set(complecs_entitySheet = "sheet_with_entities");
+#' ### Set it to FALSE
+#' limonaid::opts$set(silent = FALSE);
 #'
 #' ### Check that it worked
-#' limonaid::opts$get(complecs_entitySheet);
+#' limonaid::opts$get('silent');
 #'
 #' ### Reset this option to its default value
-#' limonaid::opts$reset(complecs_entitySheet);
+#' limonaid::opts$reset('silent');
 #'
 #' ### Check that the reset worked, too
-#' limonaid::opts$get(complecs_entitySheet);
+#' limonaid::opts$get('silent');
 #'
 #' @export
 opts <- list();

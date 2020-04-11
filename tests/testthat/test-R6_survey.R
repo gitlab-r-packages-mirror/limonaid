@@ -1,6 +1,6 @@
 testthat::test_that("creating a simple survey works", {
   ls <- Survey$new("Test Survey");
-  testthat::expect_equal(ls$titles, "Test Survey");
+  testthat::expect_equal(ls$titles, c(en = "Test Survey"));
 })
 
 testthat::test_that("adding groups works", {
@@ -42,13 +42,13 @@ testthat::test_that("exporting a survey to a TSV file works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
+  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
 
   cat(tmpFile);
 
-  testthat::expect_equal(ls$groups$`1`$questions$firstQuestion$code,
-                         "firstQuestion");
+  testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
+                         "onlyQuestion");
 })

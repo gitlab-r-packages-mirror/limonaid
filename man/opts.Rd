@@ -27,7 +27,7 @@ The following arguments can be passed:
 \describe{
 \item{...}{For \code{limonaid::opts$set}, the dots can be used to specify the options
 to set, in the format \code{option = value}, for example,
-\code{EFFECTSIZE_POINTESTIMATE_NAME_IN_DF = "\\n"}. For
+\code{silent = FALSE}. For
 \code{limonaid::opts$reset}, a list of options to be reset can be passed.}
 \item{option}{For \code{limonaid::opts$set}, the name of the option to set.}
 \item{default}{For \code{limonaid::opts$get}, the default value to return if the
@@ -38,32 +38,30 @@ The following options can be set:
 
 \describe{
 
-\item{}{The name of the column
-with the effect size values.}
+\item{silent}{Whether to be chatty or silent.}
 
-\item{}{The name of the column
-with the effect size variance.}
+\item{encoding}{The encoding to use when writing files.}
 
-\item{}{The name of the column
+\item{preventOverwriting}{The name of the column
 with the missing values.}
 
 }
 }
 \examples{
-### Get the default utteranceMarker
-limonaid::opts$get(complecs_entitySheet);
+### Get the default silent setting
+limonaid::opts$get('silent');
 
-### Set it to a custom version, so that every line starts with a pipe
-limonaid::opts$set(complecs_entitySheet = "sheet_with_entities");
+### Set it to FALSE
+limonaid::opts$set(silent = FALSE);
 
 ### Check that it worked
-limonaid::opts$get(complecs_entitySheet);
+limonaid::opts$get('silent');
 
 ### Reset this option to its default value
-limonaid::opts$reset(complecs_entitySheet);
+limonaid::opts$reset('silent');
 
 ### Check that the reset worked, too
-limonaid::opts$get(complecs_entitySheet);
+limonaid::opts$get('silent');
 
 }
 \keyword{datasets}

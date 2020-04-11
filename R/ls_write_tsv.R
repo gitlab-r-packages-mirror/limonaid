@@ -1,3 +1,15 @@
+#' Write a data frame to a LimeSurvey Tab Separated Values file
+#'
+#' @param data The dataframe to write.
+#' @param file The file to write to.
+#' @param encoding The encoding to write to.
+#' @param preventOverwriting Whether to prevent overwriting, should the
+#' target file exist, already.
+#' @param silent Whether to be silent or chatty.
+#'
+#' @return The dataframe, adapted for writing, invisibly.
+#'
+#' @examples ### Add example once something is available.
 #' @export
 ls_write_tsv <- function(data,
                          file,
@@ -78,7 +90,7 @@ ls_write_tsv <- function(data,
   ###-----------------------------------------------------------------------
 
   ### Write file
-  write.table(
+  utils::write.table(
     data,
     file = file,
     col.names = colNames,
