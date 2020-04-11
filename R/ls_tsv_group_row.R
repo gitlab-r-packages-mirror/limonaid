@@ -1,15 +1,4 @@
 #' @export
-
-# ls <- limonaid::ls_read_tsv(system.file("extdata",
-#                                         "export-of-minimal-survey-as-tsv.txt",
-#                                         package = "limonaid"));
-
-lsrv <- limonaid::ls_read_tsv(system.file("extdata",
-                                          "export-of-survey-with-one-question-as-tsv.txt",
-                                          package = "limonaid"));
-
-
-
 ls_tsv_group_row <- function(name,
                              text,
                              id=NULL,

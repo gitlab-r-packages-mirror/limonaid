@@ -2,7 +2,9 @@
 
 export(cat0)
 export(ls_read_tsv)
+export(ls_tsv_get_group_rows)
 export(ls_tsv_get_rows)
+export(ls_tsv_group_row)
 export(ls_tsv_question_row)
 export(ls_tsv_rows)
 export(ls_write_tsv)
