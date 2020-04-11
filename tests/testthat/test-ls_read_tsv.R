@@ -9,6 +9,10 @@ testthat::test_that("a minimal LimeSurvey TSV file can be imported", {
       )
     );
 
+  limonaid::ls_tsv_get_rows(lsrv, class = "S");
+
+  limonaid::ls_tsv_get_rows(lsrv, class = "SL")['name']
+
   testthat::expect_equal(nrow(lsrv), 72);
 
 })
@@ -23,6 +27,10 @@ testthat::test_that("a more extensive LimeSurvey TSV file can be imported", {
         package = "limonaid"
       )
     );
+
+  limonaid::ls_tsv_get_rows(lsrv, class = "S");
+
+  limonaid::ls_tsv_get_rows(lsrv, class = "SL")['name']
 
   testthat::expect_equal(nrow(lsrv), 312);
 

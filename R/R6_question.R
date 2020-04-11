@@ -35,6 +35,9 @@ Question <- R6::R6Class(
     #' @field relevance The relevance.
     relevance = 1,
 
+    #' @field validation The question's validation.
+    validation = "",
+
     #' @field language The primary language of the question.
     language = NULL,
 
@@ -53,6 +56,9 @@ Question <- R6::R6Class(
     #' @field other_replace_text If the question has an 'other' option, its
     #' label if the default label should be overwritten (multilingual).
     other_replace_text = NULL,
+
+    #' @field default The default value.
+    default = NULL,
 
     #' @field same_default Not entirely sure what this does.
     same_default = NULL,
@@ -84,11 +90,13 @@ Question <- R6::R6Class(
     #' @param id The identifier of the question (in a survey).
     #' @param questionTexts The question text(s).
     #' @param helpTexts The help text(s).
-    #' @param relevance The group's relevance equation.
+    #' @param relevance The question's relevance equation.
+    #' @param validation The question's validation.
     #' @param mandatory Whether the question is mandatory (`Y` or `N`);.
     #' @param other Whether the question has an 'other' option (`Y` or `N`).
     #' @param other_replace_text If the question has an 'other' option, its
     #' label if the default label should be overwritten (multilingual).
+    #' @param default The default value.
     #' @param same_default Not entirely sure what this does.
     #' @param array_filter The question code of the array filter question
     #' to apply.
@@ -105,9 +113,11 @@ Question <- R6::R6Class(
                           questionTexts = "",
                           helpTexts = "",
                           relevance = 1,
+                          validation = "",
                           mandatory = "N",
                           other = "N",
                           other_replace_text = "",
+                          default = "",
                           same_default = "0",
                           array_filter = "",
                           cssclass = "",
@@ -185,9 +195,11 @@ Question <- R6::R6Class(
       self$helpTexts <- helpTexts;
 
       self$relevance <- relevance;
+      self$validation <- validation;
       self$mandatory <- mandatory;
       self$other <- other;
       self$other_replace_text <- other_replace_text;
+      self$default <- default;
       self$same_default <- same_default;
       self$array_filter <- array_filter;
       self$cssclass <- cssclass;

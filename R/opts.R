@@ -111,6 +111,10 @@ opts$defaults <-
 
     silent=TRUE,
 
+    preventOverwriting=TRUE,
+
+    encoding = "UTF-8",
+
     ### For keeping track of unique identifiers (default value is zero,
     ### because they're incremented by 1 before new_id() returns them)
     group_idCounter = 0,

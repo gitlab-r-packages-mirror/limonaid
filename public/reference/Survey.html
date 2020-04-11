@@ -137,12 +137,12 @@ language and any additional languages</p></dd>
 <dt><code>endURLdescriptions</code></dt><dd><p>The end URL descriptions of the survey in
 the primary language and any additional languages</p></dd>
 
-<dt><code>dateformat</code></dt><dd><p>The date format to use in
+<dt><code>dateformats</code></dt><dd><p>The date format to use in
 the primary language and any additional languages; the index of
 the option from the dropdown in LimeSurvey (6 is the ISO standard,
 "YYYY-MM-DD").</p></dd>
 
-<dt><code>numberformat</code></dt><dd><p>The number format to use in
+<dt><code>numberformats</code></dt><dd><p>The number format to use in
 the primary language and any additional languages (for periods as
 decimal marks, <code>0</code>; for commas as decimal marks, <code>1</code>).</p></dd>
 
@@ -232,8 +232,8 @@ responses.</p></dd>
 <dt><code>showxquestions</code></dt><dd><p>Whether to show "There are X questions in this
 survey" (<code>Y</code> or <code>N</code>).</p></dd>
 
-<dt><code>showgroupinfo</code></dt><dd><p>Whether to show group name and info (<code>Y</code>, <code>N</code>,
-or <code>X</code> to show nothing).</p></dd>
+<dt><code>showgroupinfo</code></dt><dd><p>Whether to show group name and info (<code>B</code> for both,
+<code>?</code>, or <code>X</code> to show nothing).</p></dd>
 
 <dt><code>shownoanswer</code></dt><dd><p>Whether to show the "No answer" option (<code>Y</code> or <code>N</code>).</p></dd>
 
@@ -262,6 +262,9 @@ other values for other settings.</p></dd>
 <dt><code>googleanalyticsapikey</code></dt><dd><p>The google analytics API key.</p></dd>
 
 <dt><code>groups</code></dt><dd><p>The groups in the survey.</p></dd>
+
+<dt><code>tsvData</code></dt><dd><p>Used to store the dataframe saved to a file as
+tab separated values.</p></dd>
 
 </dl><p></div></p>
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active bindings</h2>
@@ -292,9 +295,9 @@ other values for other settings.</p></dd>
   endTexts = "",
   endURLs = "",
   endURLdescriptions = "",
-  dateformat = 6,
-  numberformat = 0,
-  sid = NULL,
+  dateformats = 6,
+  numberformats = 0,
+  sid = 1,
   gsid = 1,
   admin = "Admin Name",
   adminemail = "email@add.ress",
@@ -302,20 +305,20 @@ other values for other settings.</p></dd>
   faxto = "",
   format = "G",
   savetimings = "Y",
-  template = "",
+  template = "vanilla",
   language = "en",
   additional_languages = "",
   datestamp = "Y",
   usecookie = "N",
   allowregister = "N",
   allowsave = "N",
-  autonumber_start = 1,
+  autonumber_start = 0,
   autoredirect = "Y",
   allowprev = "N",
   printanswers = "N",
   ipaddr = "N",
   refurl = "N",
-  showsurveypolicynotice = "N",
+  showsurveypolicynotice = "0",
   publicstatistics = "N",
   publicgraphs = "N",
   listpublic = "N",
@@ -332,10 +335,10 @@ other values for other settings.</p></dd>
   showxquestions = "N",
   showgroupinfo = "X",
   shownoanswer = "N",
-  showqnumcode = "",
+  showqnumcode = "X",
   bounceprocessing = "N",
   showwelcome = "N",
-  showprogress = "",
+  showprogress = "N",
   questionindex = "0",
   navigationdelay = "0",
   nokeyboard = "N",
@@ -364,12 +367,12 @@ language and any additional languages</p></dd>
 <dt><code>endURLdescriptions</code></dt><dd><p>The end URL descriptions of the survey in
 the primary language and any additional languages</p></dd>
 
-<dt><code>dateformat</code></dt><dd><p>The date format to use in
+<dt><code>dateformats</code></dt><dd><p>The date formats to use in
 the primary language and any additional languages; the index of
 the option from the dropdown in LimeSurvey (6 is the ISO standard,
 "YYYY-MM-DD").</p></dd>
 
-<dt><code>numberformat</code></dt><dd><p>The number format to use in
+<dt><code>numberformats</code></dt><dd><p>The number formats to use in
 the primary language and any additional languages (for periods as
 decimal marks, <code>0</code>; for commas as decimal marks, <code>1</code>).</p></dd>
 
@@ -540,13 +543,22 @@ character value, in which case the survey's primary language is used.</p></dd>
 <a id="method-export_to_tsv"></a></p><h3>Method <code>export_to_tsv()</code></h3>
 <p>Export the survey as a tab separated values file (see
 https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).</p><h3>Usage</h3>
-<p><div class="r"></p><pre>Survey$export_to_tsv(file, encoding = "UTF-8")</pre><p></div></p>
+<p><div class="r"></p><pre>Survey$export_to_tsv(
+  file,
+  encoding = limonaid::opts$get("encoding"),
+  preventOverwriting = limonaid::opts$get("preventOverwriting"),
+  silent = limonaid::opts$get("silent")
+)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>file</code></dt><dd><p>The filename to which to save the file.</p></dd>
 
 <dt><code>encoding</code></dt><dd><p>The encoding to use</p></dd>
+
+<dt><code>preventOverwriting</code></dt><dd><p>Whether to prevent overwritting.</p></dd>
+
+<dt><code>silent</code></dt><dd><p>Whether to be silent or chatty.</p></dd>
 
 </dl><p></div></p>
 <h3>Returns</h3>

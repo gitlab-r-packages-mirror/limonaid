@@ -133,6 +133,8 @@ R6 Class representing a LimeSurvey question" />
 
 <dt><code>relevance</code></dt><dd><p>The relevance.</p></dd>
 
+<dt><code>validation</code></dt><dd><p>The question's validation.</p></dd>
+
 <dt><code>language</code></dt><dd><p>The primary language of the question.</p></dd>
 
 <dt><code>answerOptions</code></dt><dd><p>The answer options in the question.</p></dd>
@@ -145,6 +147,8 @@ R6 Class representing a LimeSurvey question" />
 
 <dt><code>other_replace_text</code></dt><dd><p>If the question has an 'other' option, its
 label if the default label should be overwritten (multilingual).</p></dd>
+
+<dt><code>default</code></dt><dd><p>The default value.</p></dd>
 
 <dt><code>same_default</code></dt><dd><p>Not entirely sure what this does.</p></dd>
 
@@ -180,9 +184,11 @@ by assigning <code><a href='https://rdrr.io/r/base/list.html'>as.list(...)</a></
   questionTexts = "",
   helpTexts = "",
   relevance = 1,
+  validation = "",
   mandatory = "N",
   other = "N",
   other_replace_text = "",
+  default = "",
   same_default = "0",
   array_filter = "",
   cssclass = "",
@@ -206,7 +212,9 @@ https://manual.limesurvey.org/Question_object_types).</p></dd>
 
 <dt><code>helpTexts</code></dt><dd><p>The help text(s).</p></dd>
 
-<dt><code>relevance</code></dt><dd><p>The group's relevance equation.</p></dd>
+<dt><code>relevance</code></dt><dd><p>The question's relevance equation.</p></dd>
+
+<dt><code>validation</code></dt><dd><p>The question's validation.</p></dd>
 
 <dt><code>mandatory</code></dt><dd><p>Whether the question is mandatory (<code>Y</code> or <code>N</code>);.</p></dd>
 
@@ -214,6 +222,8 @@ https://manual.limesurvey.org/Question_object_types).</p></dd>
 
 <dt><code>other_replace_text</code></dt><dd><p>If the question has an 'other' option, its
 label if the default label should be overwritten (multilingual).</p></dd>
+
+<dt><code>default</code></dt><dd><p>The default value.</p></dd>
 
 <dt><code>same_default</code></dt><dd><p>Not entirely sure what this does.</p></dd>
 

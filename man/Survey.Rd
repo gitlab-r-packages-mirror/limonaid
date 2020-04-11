@@ -32,12 +32,12 @@ language and any additional languages}
 \item{\code{endURLdescriptions}}{The end URL descriptions of the survey in
 the primary language and any additional languages}
 
-\item{\code{dateformat}}{The date format to use in
+\item{\code{dateformats}}{The date format to use in
 the primary language and any additional languages; the index of
 the option from the dropdown in LimeSurvey (6 is the ISO standard,
 "YYYY-MM-DD").}
 
-\item{\code{numberformat}}{The number format to use in
+\item{\code{numberformats}}{The number format to use in
 the primary language and any additional languages (for periods as
 decimal marks, \code{0}; for commas as decimal marks, \code{1}).}
 
@@ -127,8 +127,8 @@ responses.}
 \item{\code{showxquestions}}{Whether to show "There are X questions in this
 survey" (\code{Y} or \code{N}).}
 
-\item{\code{showgroupinfo}}{Whether to show group name and info (\code{Y}, \code{N},
-or \code{X} to show nothing).}
+\item{\code{showgroupinfo}}{Whether to show group name and info (\code{B} for both,
+\verb{?}, or \code{X} to show nothing).}
 
 \item{\code{shownoanswer}}{Whether to show the "No answer" option (\code{Y} or \code{N}).}
 
@@ -157,6 +157,9 @@ other values for other settings.}
 \item{\code{googleanalyticsapikey}}{The google analytics API key.}
 
 \item{\code{groups}}{The groups in the survey.}
+
+\item{\code{tsvData}}{Used to store the dataframe saved to a file as
+tab separated values.}
 }
 \if{html}{\out{</div>}}
 }
@@ -190,9 +193,9 @@ Create a new survey object.
   endTexts = "",
   endURLs = "",
   endURLdescriptions = "",
-  dateformat = 6,
-  numberformat = 0,
-  sid = NULL,
+  dateformats = 6,
+  numberformats = 0,
+  sid = 1,
   gsid = 1,
   admin = "Admin Name",
   adminemail = "email@add.ress",
@@ -200,20 +203,20 @@ Create a new survey object.
   faxto = "",
   format = "G",
   savetimings = "Y",
-  template = "",
+  template = "vanilla",
   language = "en",
   additional_languages = "",
   datestamp = "Y",
   usecookie = "N",
   allowregister = "N",
   allowsave = "N",
-  autonumber_start = 1,
+  autonumber_start = 0,
   autoredirect = "Y",
   allowprev = "N",
   printanswers = "N",
   ipaddr = "N",
   refurl = "N",
-  showsurveypolicynotice = "N",
+  showsurveypolicynotice = "0",
   publicstatistics = "N",
   publicgraphs = "N",
   listpublic = "N",
@@ -230,10 +233,10 @@ Create a new survey object.
   showxquestions = "N",
   showgroupinfo = "X",
   shownoanswer = "N",
-  showqnumcode = "",
+  showqnumcode = "X",
   bounceprocessing = "N",
   showwelcome = "N",
-  showprogress = "",
+  showprogress = "N",
   questionindex = "0",
   navigationdelay = "0",
   nokeyboard = "N",
@@ -264,12 +267,12 @@ language and any additional languages}
 \item{\code{endURLdescriptions}}{The end URL descriptions of the survey in
 the primary language and any additional languages}
 
-\item{\code{dateformat}}{The date format to use in
+\item{\code{dateformats}}{The date formats to use in
 the primary language and any additional languages; the index of
 the option from the dropdown in LimeSurvey (6 is the ISO standard,
 "YYYY-MM-DD").}
 
-\item{\code{numberformat}}{The number format to use in
+\item{\code{numberformats}}{The number formats to use in
 the primary language and any additional languages (for periods as
 decimal marks, \code{0}; for commas as decimal marks, \code{1}).}
 
@@ -462,7 +465,12 @@ Invisibly, the \code{Survey} object.
 Export the survey as a tab separated values file (see
 https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$export_to_tsv(file, encoding = "UTF-8")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Survey$export_to_tsv(
+  file,
+  encoding = limonaid::opts$get("encoding"),
+  preventOverwriting = limonaid::opts$get("preventOverwriting"),
+  silent = limonaid::opts$get("silent")
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -471,6 +479,10 @@ https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
 \item{\code{file}}{The filename to which to save the file.}
 
 \item{\code{encoding}}{The encoding to use}
+
+\item{\code{preventOverwriting}}{Whether to prevent overwritting.}
+
+\item{\code{silent}}{Whether to be silent or chatty.}
 }
 \if{html}{\out{</div>}}
 }

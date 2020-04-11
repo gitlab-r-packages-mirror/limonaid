@@ -28,6 +28,8 @@ A question has at least a code and a primary language.
 
 \item{\code{relevance}}{The relevance.}
 
+\item{\code{validation}}{The question's validation.}
+
 \item{\code{language}}{The primary language of the question.}
 
 \item{\code{answerOptions}}{The answer options in the question.}
@@ -40,6 +42,8 @@ A question has at least a code and a primary language.
 
 \item{\code{other_replace_text}}{If the question has an 'other' option, its
 label if the default label should be overwritten (multilingual).}
+
+\item{\code{default}}{The default value.}
 
 \item{\code{same_default}}{Not entirely sure what this does.}
 
@@ -77,9 +81,11 @@ Create a new question object.
   questionTexts = "",
   helpTexts = "",
   relevance = 1,
+  validation = "",
   mandatory = "N",
   other = "N",
   other_replace_text = "",
+  default = "",
   same_default = "0",
   array_filter = "",
   cssclass = "",
@@ -105,7 +111,9 @@ https://manual.limesurvey.org/Question_object_types).}
 
 \item{\code{helpTexts}}{The help text(s).}
 
-\item{\code{relevance}}{The group's relevance equation.}
+\item{\code{relevance}}{The question's relevance equation.}
+
+\item{\code{validation}}{The question's validation.}
 
 \item{\code{mandatory}}{Whether the question is mandatory (\code{Y} or \code{N});.}
 
@@ -113,6 +121,8 @@ https://manual.limesurvey.org/Question_object_types).}
 
 \item{\code{other_replace_text}}{If the question has an 'other' option, its
 label if the default label should be overwritten (multilingual).}
+
+\item{\code{default}}{The default value.}
 
 \item{\code{same_default}}{Not entirely sure what this does.}
 

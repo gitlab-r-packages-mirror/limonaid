@@ -38,20 +38,20 @@ Survey <- R6::R6Class(
     #' the primary language and any additional languages
     endURLdescriptions = NULL,
 
-    #' @field dateformat The date format to use in
+    #' @field dateformats The date format to use in
     #' the primary language and any additional languages; the index of
     #' the option from the dropdown in LimeSurvey (6 is the ISO standard,
     #' "YYYY-MM-DD").
-    dateformat = 6,
+    dateformats = 6,
 
-    #' @field numberformat The number format to use in
+    #' @field numberformats The number format to use in
     #' the primary language and any additional languages (for periods as
     #' decimal marks, `0`; for commas as decimal marks, `1`).
-    numberformat = 0,
+    numberformats = 0,
 
     #' @field sid The unique survey identifier; if this is free when
     #' importing the survey, this will be used.
-    sid = NULL,
+    sid = "1",
 
     #' @field gsid The Survey Group identifier.
     gsid = "1",
@@ -171,8 +171,8 @@ Survey <- R6::R6Class(
     #' survey" (`Y` or `N`).
     showxquestions = "N",
 
-    #' @field showgroupinfo Whether to show group name and info (`Y`, `N`,
-    #' or `X` to show nothing).
+    #' @field showgroupinfo Whether to show group name and info (`B` for both,
+    #' `?`, or `X` to show nothing).
     showgroupinfo = "X",
 
     #' @field shownoanswer Whether to show the "No answer" option (`Y` or `N`).
@@ -215,6 +215,10 @@ Survey <- R6::R6Class(
     #' @field groups The groups in the survey.
     groups = list(),
 
+    #' @field tsvData Used to store the dataframe saved to a file as
+    #' tab separated values.
+    tsvData = data.frame(),
+
     ###-------------------------------------------------------------------------
     ### Initialization
     ###-------------------------------------------------------------------------
@@ -233,11 +237,11 @@ Survey <- R6::R6Class(
     #' language and any additional languages
     #' @param endURLdescriptions The end URL descriptions of the survey in
     #' the primary language and any additional languages
-    #' @param dateformat The date format to use in
+    #' @param dateformats The date formats to use in
     #' the primary language and any additional languages; the index of
     #' the option from the dropdown in LimeSurvey (6 is the ISO standard,
     #' "YYYY-MM-DD").
-    #' @param numberformat The number format to use in
+    #' @param numberformats The number formats to use in
     #' the primary language and any additional languages (for periods as
     #' decimal marks, `0`; for commas as decimal marks, `1`).
     #' @param sid The unique survey identifier; if this is free when
@@ -314,9 +318,9 @@ Survey <- R6::R6Class(
                           endTexts = "",
                           endURLs = "",
                           endURLdescriptions = "",
-                          dateformat = 6,
-                          numberformat = 0,
-                          sid = NULL,
+                          dateformats = 6,
+                          numberformats = 0,
+                          sid = 1,
                           gsid = 1,
                           admin = "Admin Name",
                           adminemail = "email@add.ress",
@@ -324,20 +328,20 @@ Survey <- R6::R6Class(
                           faxto = "",
                           format = "G",
                           savetimings = "Y",
-                          template = "",
+                          template = "vanilla",
                           language = "en",
                           additional_languages = "",
                           datestamp = "Y",
                           usecookie = "N",
                           allowregister = "N",
                           allowsave = "N",
-                          autonumber_start = 1,
+                          autonumber_start = 0,
                           autoredirect = "Y",
                           allowprev = "N",
                           printanswers = "N",
                           ipaddr = "N",
                           refurl = "N",
-                          showsurveypolicynotice = "N",
+                          showsurveypolicynotice = "0",
                           publicstatistics = "N",
                           publicgraphs = "N",
                           listpublic = "N",
@@ -354,10 +358,10 @@ Survey <- R6::R6Class(
                           showxquestions = "N",
                           showgroupinfo = "X",
                           shownoanswer = "N",
-                          showqnumcode = "",
+                          showqnumcode = "X",
                           bounceprocessing = "N",
                           showwelcome = "N",
-                          showprogress = "",
+                          showprogress = "N",
                           questionindex = "0",
                           navigationdelay = "0",
                           nokeyboard = "N",
@@ -393,23 +397,22 @@ Survey <- R6::R6Class(
         checkMultilingualFields(endURLdescriptions,
                                 language = language);
 
-      dateformat <-
-        checkMultilingualFields(dateformat,
+      dateformats <-
+        checkMultilingualFields(dateformats,
                                 language = language,
                                 classCheck = is.numeric,
                                 className = "numeric");
 
-      numberformat <-
-        checkMultilingualFields(numberformat,
+      numberformats <-
+        checkMultilingualFields(numberformats,
                                 language = language,
                                 classCheck = is.numeric,
                                 className = "numeric");
 
       ###-----------------------------------------------------------------------
-      ### Set all the settings
+      ### Set general settings
       ###-----------------------------------------------------------------------
 
-      self$titles <- titles;
       self$sid <- sid;
       self$gsid <- gsid;
       self$admin <- admin;
@@ -458,6 +461,19 @@ Survey <- R6::R6Class(
       self$alloweditaftercompletion <- alloweditaftercompletion;
       self$googleanalyticsstyle <- googleanalyticsstyle;
       self$googleanalyticsapikey <- googleanalyticsapikey;
+
+      ###-----------------------------------------------------------------------
+      ### Set language-specific settings
+      ###-----------------------------------------------------------------------
+
+      self$titles <- titles;
+      self$descriptions <- descriptions;
+      self$welcomeTexts <- welcomeTexts;
+      self$endTexts <- endTexts;
+      self$endURLs <- endURLs;
+      self$endURLdescriptions <- endURLdescriptions;
+      self$dateformats <- dateformats;
+      self$numberformats <- numberformats;
 
     },
 
@@ -593,13 +609,273 @@ Survey <- R6::R6Class(
     #' Export the survey as a tab separated values file (see
     #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
     #' @param file The filename to which to save the file.
+    #' @param preventOverwriting Whether to prevent overwritting.
     #' @param encoding The encoding to use
+    #' @param silent Whether to be silent or chatty.
     #' @return Invisibly, the `Survey` object.
     export_to_tsv = function(file,
-                             encoding = "UTF-8") {
+                             encoding = limonaid::opts$get("encoding"),
+                             preventOverwriting = limonaid::opts$get("preventOverwriting"),
+                             silent = limonaid::opts$get("silent")) {
+
+      ###-----------------------------------------------------------------------
+      ### First we create the right dataframe; then we write that dataframe
+      ### using `ls_write_tsv()`.
+      ###-----------------------------------------------------------------------
+
+      ### Note that since only a few columns are quoted anyway, which
+      ### is done 'manually' by `ls_write_tsv()`, we can just set all
+      ### columns to character
+      dat <- data.frame(id = character(),
+                        related_id = character(),
+                        class = character(),
+                        type.scale = character(),
+                        name = character(),
+                        relevance = character(),
+                        text = character(),
+                        help = character(),
+                        language = character(),
+                        validation = character(),
+                        mandatory = character(),
+                        other = character(),
+                        default = character(),
+                        same_default = character(),
+                        stringsAsFactors = FALSE);
+
+      selfAsList <- as.list(self);
+
+      ###-----------------------------------------------------------------------
+      ### Add general survey settings
+      ###-----------------------------------------------------------------------
+
+      for (name in private$generalSurveySettings) {
+
+        text <- selfAsList[[name]];
+
+        if (is.null(text)) {
+          text <- "";
+        }
+
+        dat <-
+          rbind(dat,
+                data.frame(id = "",
+                           related_id = "",
+                           class="S",
+                           type.scale = "",
+                           name = name,
+                           relevance = "",
+                           text = text,
+                           help = "",
+                           language = "",
+                           validation = "",
+                           mandatory = "",
+                           other = "",
+                           default = "",
+                           same_default = "",
+                           stringsAsFactors = FALSE));
+      }
+
+      ###-----------------------------------------------------------------------
+      ### Configure language list
+      ###-----------------------------------------------------------------------
+
+      if ((length(self$additional_languages) > 0) &&
+          nchar(self$additional_languages[1]) > 0) {
+        ### We have multiple languages
+        languageList <-
+          c(self$language,
+            self$additional_languages);
+      } else {
+        ### Only one language
+        languageList <- self$language;
+      }
+
+      ###-----------------------------------------------------------------------
+      ### Add language-specific survey settings
+      ###-----------------------------------------------------------------------
+
+      for (currentLanguage in languageList) {
+
+        dat <-
+          rbind(dat,
+                data.frame(id = rep("", 2),
+                           related_id = rep("", 2),
+                           class = rep("SL", 2),
+                           type.scale = rep("", 2),
+                           name = c("surveyls_survey_id", "surveyls_language"),
+                           relevance = rep("", 2),
+                           text = c(self$sid, currentLanguage),
+                           help = rep("", 2),
+                           language = rep(currentLanguage, 2),
+                           validation = rep("", 2),
+                           mandatory = rep("", 2),
+                           other = rep("", 2),
+                           default = rep("", 2),
+                           same_default = rep("", 2),
+                           stringsAsFactors = FALSE));
+
+        for (i in seq_along(private$languageSpecificSurveySettings)) {
+
+          name <- names(private$languageSpecificSurveySettings)[i];
+          propertyName <- private$languageSpecificSurveySettings[i];
+
+          text <- selfAsList[[propertyName]];
+          if ((!is.null(text)) &&
+              (currentLanguage %in% names(text))) {
+            text <- selfAsList[[propertyName]][[currentLanguage]];
+          } else {
+            text <- "\"\"";
+          }
+
+          dat <-
+            rbind(dat,
+                  data.frame(id = "",
+                             related_id = "",
+                             class="SL",
+                             type.scale = "",
+                             name = name,
+                             relevance = "",
+                             text = text,
+                             help = "",
+                             language = currentLanguage,
+                             validation = "",
+                             mandatory = "",
+                             other = "",
+                             default = "",
+                             same_default = "",
+                             stringsAsFactors = FALSE));
+        }
+      }
+
+      ###-----------------------------------------------------------------------
+      ### Loop through languages and add groups, questions, subquestions, and
+      ### answer options
+      ###-----------------------------------------------------------------------
+
+      for (currentLanguage in languageList) {
+
+        for (currentGroup in seq_along(self$groups)) {
+
+          newRow <-
+            data.frame(
+              id = self$groups[[currentGroup]]$id,
+              related_id = "",
+              class="G",
+              type.scale = "0",
+              name = self$groups[[currentGroup]]$titles[[currentLanguage]],
+              relevance = self$groups[[currentGroup]]$relevance,
+              text = self$groups[[currentGroup]]$descriptions[[currentLanguage]],
+              help = "",
+              language = currentLanguage,
+              validation = "",
+              mandatory = "",
+              other = "",
+              default = "",
+              same_default = "",
+              stringsAsFactors = FALSE
+            );
+
+          ### Add group row
+          dat <-
+            rbind(dat,
+                  newRow);
+
+          ### Loop through questions
+          for (currentQuestionIndex in seq_along(self$groups[[currentGroup]]$questions)) {
+
+            convenienceQ <- self$groups[[currentGroup]]$questions[[currentQuestionIndex]];
+
+            newRow <-
+              data.frame(
+                id = convenienceQ$id,
+                related_id = "",
+                class="Q",
+                type.scale = convenienceQ$lsType,
+                name = convenienceQ$code,
+                relevance = convenienceQ$relevance,
+                text = convenienceQ$questionTexts[[currentLanguage]],
+                help = convenienceQ$helpTexts[[currentLanguage]],
+                language = currentLanguage,
+                validation = convenienceQ$validation,
+                mandatory = convenienceQ$mandatory,
+                other = convenienceQ$other,
+                default = convenienceQ$default,
+                same_default = convenienceQ$same_default,
+                stringsAsFactors = FALSE
+              );
+
+            ### Add question row
+            dat <-
+              rbind(dat,
+                    newRow);
+
+            ### Loop through subquestions
+            if (!is.null(convenienceQ$subquestions)) {
+              for (currentSubquestionIndex in seq_along(convenienceQ$subquestions)) {
+
+                convenienceSQ <- convenienceQ$subquestions[[currentSubquestionIndex]];
+                ### Add subquestions
+
+              }
+            }
+
+            ### Loop through answer options
+            if (!is.null(convenienceQ$answerOptions)) {
+              for (currentAnswerOptionIndex in seq_along(convenienceQ$answerOptions)) {
+
+                convenienceA <-
+                  convenienceQ$answerOptions[[currentAnswerOptionIndex]];
+
+                ### Add answer option row
+                dat <-
+                  rbind(dat,
+                        data.frame(
+                          id = convenienceQ$id,  ### Id of Q, not of A!
+                          related_id = "",
+                          class="A",
+                          type.scale = 0,
+                          name = convenienceA$code,
+                          relevance = "",
+                          text = convenienceA$optionTexts[[currentLanguage]],
+                          help = "",
+                          language = currentLanguage,
+                          validation = "",
+                          mandatory = "",
+                          other = "",
+                          default = "",
+                          same_default = "",
+                          stringsAsFactors = FALSE
+                        )
+                      );
+
+              }
+            }
 
 
 
+
+          }
+
+        }
+
+      }
+
+      ### Add other columns
+      dat[, setdiff(private$otherColumns, names(dat))] <- "";
+
+      ###-----------------------------------------------------------------------
+      ### Write file
+      ###-----------------------------------------------------------------------
+
+      self$tsvData <-
+        ls_write_tsv(data = dat,
+                     file = file,
+                     preventOverwriting = preventOverwriting,
+                     encoding = encoding,
+                     silent = silent);
+
+      ### Return self invisibly
+      return(invisible(self));
     }
 
   ), ### End of public properties and methods
@@ -631,8 +907,213 @@ Survey <- R6::R6Class(
 
     ### Unique numeric identifiers for groups and questions in this survey
     groupIdCounter = 0,
-    questionIdCounter = 0,
-    answerOptionIdCounter = 0,
+    questionIdCounter = 1000,
+
+    generalSurveySettings =
+      c("sid",
+        "gsid",
+        "admin",
+        "adminemail",
+        "anonymized",
+        "faxto",
+        "format",
+        "savetimings",
+        "template",
+        "language",
+        "additional_languages",
+        "datestamp",
+        "usecookie",
+        "allowregister",
+        "allowsave",
+        "autonumber_start",
+        "autoredirect",
+        "allowprev",
+        "printanswers",
+        "ipaddr",
+        "refurl",
+        "showsurveypolicynotice",
+        "publicstatistics",
+        "publicgraphs",
+        "listpublic",
+        "htmlemail",
+        "sendconfirmation",
+        "tokenanswerspersistence",
+        "assessments",
+        "usecaptcha",
+        "usetokens",
+        "bounce_email",
+        "emailresponseto",
+        "emailnotificationto",
+        "tokenlength",
+        "showxquestions",
+        "showgroupinfo",
+        "shownoanswer",
+        "showqnumcode",
+        "bounceprocessing",
+        "showwelcome",
+        "showprogress",
+        "questionindex",
+        "navigationdelay",
+        "nokeyboard",
+        "alloweditaftercompletion",
+        "googleanalyticsstyle",
+        "googleanalyticsapikey"),
+
+    languageSpecificSurveySettings =
+      c(surveyls_title = "titles",
+        surveyls_description = "descriptions",
+        surveyls_welcometext = "welcomeTexts",
+        surveyls_endtext = "endTexts",
+        surveyls_url = "endURLs",
+        surveyls_urldescription = "endURLdescriptions",
+        surveyls_email_invite_subj = "surveyls_email_invite_subj",
+        surveyls_email_invite = "surveyls_email_invite",
+        surveyls_email_remind_subj = "surveyls_email_remind_subj",
+        surveyls_email_remind = "surveyls_email_remind",
+        surveyls_email_register_subj = "surveyls_email_register_subj",
+        surveyls_email_register = "surveyls_email_register",
+        surveyls_email_confirm_subj = "surveyls_email_confirm_subj",
+        surveyls_email_confirm = "surveyls_email_confirm",
+        surveyls_dateformat = "dateformats",
+        email_admin_notification_subj = "email_admin_notification_subj",
+        email_admin_notification = "email_admin_notification",
+        email_admin_responses_subj = "email_admin_responses_subj",
+        email_admin_responses = "email_admin_responses",
+        surveyls_numberformat = "numberformats"),
+
+    otherColumns =
+      c("allowed_filetypes",
+        "alphasort",
+        "answer_width",
+        "answer_width_bycolumn",
+        "array_filter",
+        "array_filter_exclude",
+        "array_filter_style",
+        "assessment_value",
+        "category_separator",
+        "choice_input_columns",
+        "choice_title",
+        "code_filter",
+        "commented_checkbox",
+        "commented_checkbox_auto",
+        "cssclass",
+        "date_format",
+        "date_max",
+        "date_min",
+        "display_columns",
+        "display_rows",
+        "display_type",
+        "dropdown_dates",
+        "dropdown_dates_minute_step",
+        "dropdown_dates_month_style",
+        "dropdown_prefix",
+        "dropdown_prepostfix",
+        "dropdown_separators",
+        "dropdown_size",
+        "dualscale_headerA",
+        "dualscale_headerB",
+        "em_validation_q",
+        "em_validation_q_tip",
+        "em_validation_sq",
+        "em_validation_sq_tip",
+        "equals_num_value",
+        "equation",
+        "exclude_all_others",
+        "exclude_all_others_auto",
+        "hidden",
+        "hide_tip",
+        "input_boxes",
+        "input_size",
+        "label_input_columns",
+        "location_city",
+        "location_country",
+        "location_defaultcoordinates",
+        "location_mapheight",
+        "location_mapservice",
+        "location_mapwidth",
+        "location_mapzoom",
+        "location_nodefaultfromip",
+        "location_postal",
+        "location_state",
+        "max_answers",
+        "max_filesize",
+        "max_num_of_files",
+        "max_num_value",
+        "max_num_value_n",
+        "max_subquestions",
+        "maximum_chars",
+        "min_answers",
+        "min_num_of_files",
+        "min_num_value",
+        "min_num_value_n",
+        "multiflexible_checkbox",
+        "multiflexible_max",
+        "multiflexible_min",
+        "multiflexible_step",
+        "num_value_int_only",
+        "numbers_only",
+        "other_comment_mandatory",
+        "other_numbers_only",
+        "other_replace_text",
+        "page_break",
+        "parent_order",
+        "prefix",
+        "printable_help",
+        "public_statistics",
+        "question_template",
+        "random_group",
+        "random_order",
+        "rank_title",
+        "repeat_headings",
+        "reverse",
+        "samechoiceheight",
+        "samelistheight",
+        "scale_export",
+        "show_comment",
+        "show_grand_total",
+        "show_title",
+        "show_totals",
+        "showpopups",
+        "slider_accuracy",
+        "slider_custom_handle",
+        "slider_default",
+        "slider_default_set",
+        "slider_handle",
+        "slider_layout",
+        "slider_max",
+        "slider_middlestart",
+        "slider_min",
+        "slider_orientation",
+        "slider_rating",
+        "slider_reset",
+        "slider_reversed",
+        "slider_separator",
+        "slider_showminmax",
+        "statistics_graphtype",
+        "statistics_showgraph",
+        "statistics_showmap",
+        "suffix",
+        "text_input_columns",
+        "text_input_width",
+        "time_limit",
+        "time_limit_action",
+        "time_limit_countdown_message",
+        "time_limit_disable_next",
+        "time_limit_disable_prev",
+        "time_limit_message",
+        "time_limit_message_delay",
+        "time_limit_message_style",
+        "time_limit_timer_style",
+        "time_limit_warning",
+        "time_limit_warning_2",
+        "time_limit_warning_2_display_time",
+        "time_limit_warning_2_message",
+        "time_limit_warning_2_style",
+        "time_limit_warning_display_time",
+        "time_limit_warning_message",
+        "time_limit_warning_style",
+        "use_dropdown",
+        "value_range_allows_missing"),
 
     ### Create a new group identifier and return it
     new_group_id = function() {
