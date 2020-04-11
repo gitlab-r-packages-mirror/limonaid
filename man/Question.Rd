@@ -28,7 +28,7 @@ A question has at least a code and a primary language.
 
 \item{\code{relevance}}{The relevance.}
 
-\item{\code{primaryLanguage}}{The primary language of the question.}
+\item{\code{language}}{The primary language of the question.}
 
 \item{\code{answerOptions}}{The answer options in the question.}
 
@@ -84,7 +84,7 @@ Create a new question object.
   array_filter = "",
   cssclass = "",
   hide_tip = "",
-  primaryLanguage = "en",
+  language = "en",
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -123,7 +123,7 @@ to apply.}
 
 \item{\code{hide_tip}}{Whether to hide the tip (\code{Y} or \code{N}).}
 
-\item{\code{primaryLanguage}}{The question's primary language.}
+\item{\code{language}}{The question's primary language.}
 
 \item{\code{...}}{Any additional options, stored as a named list in the
 \code{otherOptions} property by assigning \code{as.list(...)}.}

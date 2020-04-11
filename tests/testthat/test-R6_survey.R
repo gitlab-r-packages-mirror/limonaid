@@ -1,6 +1,6 @@
 testthat::test_that("creating a simple survey works", {
   ls <- Survey$new("Test Survey");
-  testthat::expect_equal(ls$title, "Test Survey");
+  testthat::expect_equal(ls$titles, "Test Survey");
 })
 
 testthat::test_that("adding groups works", {

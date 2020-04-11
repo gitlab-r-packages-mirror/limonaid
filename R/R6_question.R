@@ -116,42 +116,16 @@ Question <- R6::R6Class(
                           ...) {
 
       ###-----------------------------------------------------------------------
-      ### Check and fix question and help texts
+      ### Check whether the multilingual fields have been passed properly
       ###-----------------------------------------------------------------------
 
-      if (!is.character(questionTexts) || (length(questionTexts) == 0)) {
-        stop("The question text or texts specified as `questionTexts` ",
-             "must be a character vector with at least one element!");
-      }
-      if (!is.character(helpTexts) || (length(helpTexts) == 0)) {
-        stop("The question help text or texts specified as ",
-             "`helpTexts` must be a character vector with at least ",
-             "one element!");
-      }
+      questionTexts <-
+        checkMultilingualFields(questionTexts,
+                                language = language);
 
-      if (length(questionTexts) == 1) {
-        questionTexts <-
-          stats::setNames(questionTexts,
-                          nm = language);
-      } else {
-        if (!(language %in% names(questionTexts))) {
-          stop("When providing multiple question texts, at least one ",
-               "of them has to be in the question's primary language (",
-               language, "').");
-        }
-      }
-
-      if (length(helpTexts) == 1) {
-        helpTexts <-
-          stats::setNames(helpTexts,
-                          nm = language);
-      } else {
-        if (!(language %in% names(helpTexts))) {
-          stop("When providing multiple help texts, at least one ",
-               "of them has to be in the question's primary language (",
-               language, "').");
-        }
-      }
+      helpTexts <-
+        checkMultilingualFields(helpTexts,
+                                language = language);
 
       ###-----------------------------------------------------------------------
       ### Check question type
@@ -219,7 +193,7 @@ Question <- R6::R6Class(
       self$cssclass <- cssclass;
       self$hide_tip <- hide_tip;
 
-      self$otherOptions <- as.list(...);
+      self$otherOptions <- list(...);
 
     },
 

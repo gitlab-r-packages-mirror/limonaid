@@ -14,9 +14,147 @@ A survey has at least a title and a primary language.
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{title}}{The title of the survey in the primary language.}
+\item{\code{titles}}{The title of the survey in the primary language and
+any additional languages}
 
-\item{\code{primaryLanguage}}{The primary language of the survey.}
+\item{\code{descriptions}}{The descriptions of the survey in the primary
+language and any additional languages}
+
+\item{\code{welcomeTexts}}{The welcome texts of the survey in the primary
+language and any additional languages}
+
+\item{\code{endTexts}}{The end texts of the survey in the primary
+language and any additional languages}
+
+\item{\code{endURLs}}{The end URLs of the survey in the primary
+language and any additional languages}
+
+\item{\code{endURLdescriptions}}{The end URL descriptions of the survey in
+the primary language and any additional languages}
+
+\item{\code{dateformat}}{The date format to use in
+the primary language and any additional languages; the index of
+the option from the dropdown in LimeSurvey (6 is the ISO standard,
+"YYYY-MM-DD").}
+
+\item{\code{numberformat}}{The number format to use in
+the primary language and any additional languages (for periods as
+decimal marks, \code{0}; for commas as decimal marks, \code{1}).}
+
+\item{\code{sid}}{The unique survey identifier; if this is free when
+importing the survey, this will be used.}
+
+\item{\code{gsid}}{The Survey Group identifier.}
+
+\item{\code{admin}}{The name of the survey administrator}
+
+\item{\code{adminemail}}{The email address of the survey administrator}
+
+\item{\code{anonymized}}{Whether the survey uses anonymized
+responses (\code{Y} or \code{N}).}
+
+\item{\code{faxto}}{The contents of the "Fax to" field}
+
+\item{\code{format}}{How to present the survey (\code{Q} for question by
+question; \code{G} for group by group; and \code{A} for all in one).}
+
+\item{\code{savetimings}}{Whether to save timings of responses (\code{Y} or \code{N}).}
+
+\item{\code{template}}{The name of the LimeSurvey theme to use.}
+
+\item{\code{language}}{The primary language of the survey.}
+
+\item{\code{additional_languages}}{Any additional languages the survey uses.}
+
+\item{\code{datestamp}}{Whether to datestamp responses (\code{Y} or \code{N}).}
+
+\item{\code{usecookie}}{Whether to use cookies to enable answer persistence.}
+
+\item{\code{allowregister}}{Whether to allow public registration (\code{Y} or \code{N}).}
+
+\item{\code{allowsave}}{Whether to allow users to save their responses and
+returning later (\code{Y} or \code{N}).}
+
+\item{\code{autonumber_start}}{Where to start autonumbering}
+
+\item{\code{autoredirect}}{Whether to automatically redirect users to a
+URL (\code{Y} or \code{N}).}
+
+\item{\code{allowprev}}{Whether to allow users to return to previous
+pages (\code{Y} or \code{N}).}
+
+\item{\code{printanswers}}{Whether to allow printing of answer (\code{Y} or \code{N}).}
+
+\item{\code{ipaddr}}{Whether to store IP addresses (\code{Y} or \code{N}).}
+
+\item{\code{refurl}}{Whether to store the referring URL (\code{Y} or \code{N}).}
+
+\item{\code{showsurveypolicynotice}}{Whether to show the data policy
+notice (\code{Y} or \code{N}).}
+
+\item{\code{publicstatistics}}{Whether to have public statistics (\code{Y} or \code{N}).}
+
+\item{\code{publicgraphs}}{Whether to show graphs in public
+statistics (\code{Y} or \code{N}).}
+
+\item{\code{listpublic}}{Whether to list the survey publicly (\code{Y} or \code{N}).}
+
+\item{\code{htmlemail}}{Whether to use HTML format for token
+emails (\code{Y} or \code{N}).}
+
+\item{\code{sendconfirmation}}{Whether to send confirmation
+emails (\code{Y} or \code{N}).}
+
+\item{\code{tokenanswerspersistence}}{Whether to use token-based
+response persistence (\code{Y} or \code{N}).}
+
+\item{\code{assessments}}{Whether to use assessments (\code{Y} or \code{N}).}
+
+\item{\code{usecaptcha}}{Whether to use CAPTCHA's (\code{Y} or \code{N}).}
+
+\item{\code{usetokens}}{Whether to use tokens (\code{Y} or \code{N}).}
+
+\item{\code{bounce_email}}{Where bouncing emails should be sent.}
+
+\item{\code{emailresponseto}}{Where detailed admin notifications emails
+should be sent.}
+
+\item{\code{emailnotificationto}}{Where a notification should be sent for new
+responses.}
+
+\item{\code{tokenlength}}{The token length.}
+
+\item{\code{showxquestions}}{Whether to show "There are X questions in this
+survey" (\code{Y} or \code{N}).}
+
+\item{\code{showgroupinfo}}{Whether to show group name and info (\code{Y}, \code{N},
+or \code{X} to show nothing).}
+
+\item{\code{shownoanswer}}{Whether to show the "No answer" option (\code{Y} or \code{N}).}
+
+\item{\code{showqnumcode}}{Whether to show answer codes or numbers  (\code{Y}, \code{N},
+or \code{X} to show nothing).}
+
+\item{\code{bounceprocessing}}{Whether to process bouncing emails? (\code{Y} or \code{N}).}
+
+\item{\code{showwelcome}}{Whether to show the welcome page (\code{Y} or \code{N}).}
+
+\item{\code{showprogress}}{Whether to show the progress bar (\code{Y} or \code{N}).}
+
+\item{\code{questionindex}}{Whether to show the question index  (\code{0} to
+disable; can also be set to incremental or full (\code{1} and \code{2}?)).}
+
+\item{\code{navigationdelay}}{The navigation delay in seconds}
+
+\item{\code{nokeyboard}}{Whether to show the on-screen keyboard (\code{Y} or \code{N}).}
+
+\item{\code{alloweditaftercompletion}}{Whether to allow multiple
+reponses (\code{N}) or to allow updating responses with one token (\code{Y})?}
+
+\item{\code{googleanalyticsstyle}}{The google analytics settings; \code{0} for None,
+other values for other settings.}
+
+\item{\code{googleanalyticsapikey}}{The google analytics API key.}
 
 \item{\code{groups}}{The groups in the survey.}
 }
@@ -44,15 +182,210 @@ A survey has at least a title and a primary language.
 \subsection{Method \code{new()}}{
 Create a new survey object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$new(title, primaryLanguage = "en")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Survey$new(
+  titles,
+  descriptions = "",
+  welcomeTexts = "",
+  endTexts = "",
+  endURLs = "",
+  endURLdescriptions = "",
+  dateformat = 6,
+  numberformat = 0,
+  sid = NULL,
+  gsid = 1,
+  admin = "Admin Name",
+  adminemail = "email@add.ress",
+  anonymized = "Y",
+  faxto = "",
+  format = "G",
+  savetimings = "Y",
+  template = "",
+  language = "en",
+  additional_languages = "",
+  datestamp = "Y",
+  usecookie = "N",
+  allowregister = "N",
+  allowsave = "N",
+  autonumber_start = 1,
+  autoredirect = "Y",
+  allowprev = "N",
+  printanswers = "N",
+  ipaddr = "N",
+  refurl = "N",
+  showsurveypolicynotice = "N",
+  publicstatistics = "N",
+  publicgraphs = "N",
+  listpublic = "N",
+  htmlemail = "Y",
+  sendconfirmation = "N",
+  tokenanswerspersistence = "N",
+  assessments = "N",
+  usecaptcha = "N",
+  usetokens = "N",
+  bounce_email = "",
+  emailresponseto = "",
+  emailnotificationto = "",
+  tokenlength = 15,
+  showxquestions = "N",
+  showgroupinfo = "X",
+  shownoanswer = "N",
+  showqnumcode = "",
+  bounceprocessing = "N",
+  showwelcome = "N",
+  showprogress = "",
+  questionindex = "0",
+  navigationdelay = "0",
+  nokeyboard = "N",
+  alloweditaftercompletion = "N",
+  googleanalyticsstyle = 0,
+  googleanalyticsapikey = ""
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{title}}{Title.}
+\item{\code{titles}}{The titles of the survey in the primary language and
+optionally any addiitonal languages.}
 
-\item{\code{primaryLanguage}}{The primary language.}
+\item{\code{descriptions}}{The descriptions of the survey in the primary
+language and any additional languages}
+
+\item{\code{welcomeTexts}}{The welcome texts of the survey in the primary
+language and any additional languages}
+
+\item{\code{endTexts}}{The end texts of the survey in the primary
+language and any additional languages}
+
+\item{\code{endURLs}}{The end URLs of the survey in the primary
+language and any additional languages}
+
+\item{\code{endURLdescriptions}}{The end URL descriptions of the survey in
+the primary language and any additional languages}
+
+\item{\code{dateformat}}{The date format to use in
+the primary language and any additional languages; the index of
+the option from the dropdown in LimeSurvey (6 is the ISO standard,
+"YYYY-MM-DD").}
+
+\item{\code{numberformat}}{The number format to use in
+the primary language and any additional languages (for periods as
+decimal marks, \code{0}; for commas as decimal marks, \code{1}).}
+
+\item{\code{sid}}{The unique survey identifier; if this is free when
+importing the survey, this will be used.}
+
+\item{\code{gsid}}{The Survey Group identifier.}
+
+\item{\code{admin}}{The name of the survey administrator}
+
+\item{\code{adminemail}}{The email address of the survey administrator}
+
+\item{\code{anonymized}}{Whether the survey uses anonymized
+responses (\code{Y} or \code{N}).}
+
+\item{\code{faxto}}{The contents of the "Fax to" field}
+
+\item{\code{format}}{How to present the survey (\code{Q} for question by
+question; \code{G} for group by group; and \code{A} for all in one).}
+
+\item{\code{savetimings}}{Whether to save timings of responses (\code{Y} or \code{N}).}
+
+\item{\code{template}}{The name of the LimeSurvey theme to use.}
+
+\item{\code{language}}{The primary language of the survey.}
+
+\item{\code{additional_languages}}{Any additional languages the survey uses.}
+
+\item{\code{datestamp}}{Whether to datestamp responses (\code{Y} or \code{N}).}
+
+\item{\code{usecookie}}{Whether to use cookies to enable answer persistence.}
+
+\item{\code{allowregister}}{Whether to allow public registration (\code{Y} or \code{N}).}
+
+\item{\code{allowsave}}{Whether to allow users to save their responses and
+returning later (\code{Y} or \code{N}).}
+
+\item{\code{autonumber_start}}{Where to start autonumbering}
+
+\item{\code{autoredirect}}{Whether to automatically redirect users to a
+URL (\code{Y} or \code{N}).}
+
+\item{\code{allowprev}}{Whether to allow users to return to previous
+pages (\code{Y} or \code{N}).}
+
+\item{\code{printanswers}}{Whether to allow printing of answer (\code{Y} or \code{N}).}
+
+\item{\code{ipaddr}}{Whether to store IP addresses (\code{Y} or \code{N}).}
+
+\item{\code{refurl}}{Whether to store the referring URL (\code{Y} or \code{N}).}
+
+\item{\code{showsurveypolicynotice}}{Whether to show the data policy
+notice (\code{Y} or \code{N}).}
+
+\item{\code{publicstatistics}}{Whether to have public statistics (\code{Y} or \code{N}).}
+
+\item{\code{publicgraphs}}{Whether to show graphs in public
+statistics (\code{Y} or \code{N}).}
+
+\item{\code{listpublic}}{Whether to list the survey publicly (\code{Y} or \code{N}).}
+
+\item{\code{htmlemail}}{Whether to use HTML format for token
+emails (\code{Y} or \code{N}).}
+
+\item{\code{sendconfirmation}}{Whether to send confirmation
+emails (\code{Y} or \code{N}).}
+
+\item{\code{tokenanswerspersistence}}{Whether to use token-based
+response persistence (\code{Y} or \code{N}).}
+
+\item{\code{assessments}}{Whether to use assessments (\code{Y} or \code{N}).}
+
+\item{\code{usecaptcha}}{Whether to use CAPTCHA's (\code{Y} or \code{N}).}
+
+\item{\code{usetokens}}{Whether to use tokens (\code{Y} or \code{N}).}
+
+\item{\code{bounce_email}}{Where bouncing emails should be sent.}
+
+\item{\code{emailresponseto}}{Where detailed admin notifications emails
+should be sent.}
+
+\item{\code{emailnotificationto}}{Where a notification should be sent for new
+responses.}
+
+\item{\code{tokenlength}}{The token length.}
+
+\item{\code{showxquestions}}{Whether to show "There are X questions in this
+survey" (\code{Y} or \code{N}).}
+
+\item{\code{showgroupinfo}}{Whether to show group name and info (\code{Y}, \code{N},
+or \code{X} to show nothing).}
+
+\item{\code{shownoanswer}}{Whether to show the "No answer" option (\code{Y} or \code{N}).}
+
+\item{\code{showqnumcode}}{Whether to show answer codes or numbers  (\code{Y}, \code{N},
+or \code{X} to show nothing).}
+
+\item{\code{bounceprocessing}}{Whether to process bouncing emails? (\code{Y} or \code{N}).}
+
+\item{\code{showwelcome}}{Whether to show the welcome page (\code{Y} or \code{N}).}
+
+\item{\code{showprogress}}{Whether to show the progress bar (\code{Y} or \code{N}).}
+
+\item{\code{questionindex}}{Whether to show the question index  (\code{0} to
+disable; can also be set to incremental or full (\code{1} and \code{2}?)).}
+
+\item{\code{navigationdelay}}{The navigation delay in seconds}
+
+\item{\code{nokeyboard}}{Whether to show the on-screen keyboard (\code{Y} or \code{N}).}
+
+\item{\code{alloweditaftercompletion}}{Whether to allow multiple
+reponses (\code{N}) or to allow updating responses with one token (\code{Y})?}
+
+\item{\code{googleanalyticsstyle}}{The google analytics settings; \code{0} for None,
+other values for other settings.}
+
+\item{\code{googleanalyticsapikey}}{The google analytics API key.}
 }
 \if{html}{\out{</div>}}
 }

@@ -14,9 +14,40 @@ Survey <- R6::R6Class(
     ### Public properties
     ###-------------------------------------------------------------------------
 
-    #' @field title The title of the survey in the primary language and
+    #' @field titles The title of the survey in the primary language and
     #' any additional languages
     titles = NULL,
+
+    #' @field descriptions The descriptions of the survey in the primary
+    #' language and any additional languages
+    descriptions = NULL,
+
+    #' @field welcomeTexts The welcome texts of the survey in the primary
+    #' language and any additional languages
+    welcomeTexts = NULL,
+
+    #' @field endTexts The end texts of the survey in the primary
+    #' language and any additional languages
+    endTexts = NULL,
+
+    #' @field endURLs The end URLs of the survey in the primary
+    #' language and any additional languages
+    endURLs = NULL,
+
+    #' @field endURLdescriptions The end URL descriptions of the survey in
+    #' the primary language and any additional languages
+    endURLdescriptions = NULL,
+
+    #' @field dateformat The date format to use in
+    #' the primary language and any additional languages; the index of
+    #' the option from the dropdown in LimeSurvey (6 is the ISO standard,
+    #' "YYYY-MM-DD").
+    dateformat = 6,
+
+    #' @field numberformat The number format to use in
+    #' the primary language and any additional languages (for periods as
+    #' decimal marks, `0`; for commas as decimal marks, `1`).
+    numberformat = 0,
 
     #' @field sid The unique survey identifier; if this is free when
     #' importing the survey, this will be used.
@@ -192,6 +223,23 @@ Survey <- R6::R6Class(
     #' Create a new survey object.
     #' @param titles The titles of the survey in the primary language and
     #' optionally any addiitonal languages.
+    #' @param descriptions The descriptions of the survey in the primary
+    #' language and any additional languages
+    #' @param welcomeTexts The welcome texts of the survey in the primary
+    #' language and any additional languages
+    #' @param endTexts The end texts of the survey in the primary
+    #' language and any additional languages
+    #' @param endURLs The end URLs of the survey in the primary
+    #' language and any additional languages
+    #' @param endURLdescriptions The end URL descriptions of the survey in
+    #' the primary language and any additional languages
+    #' @param dateformat The date format to use in
+    #' the primary language and any additional languages; the index of
+    #' the option from the dropdown in LimeSurvey (6 is the ISO standard,
+    #' "YYYY-MM-DD").
+    #' @param numberformat The number format to use in
+    #' the primary language and any additional languages (for periods as
+    #' decimal marks, `0`; for commas as decimal marks, `1`).
     #' @param sid The unique survey identifier; if this is free when
     #' importing the survey, this will be used.
     #' @param gsid The Survey Group identifier.
@@ -261,6 +309,13 @@ Survey <- R6::R6Class(
     #' @param googleanalyticsapikey The google analytics API key.
     #' @return A new `Survey` object.
     initialize = function(titles,
+                          descriptions = "",
+                          welcomeTexts = "",
+                          endTexts = "",
+                          endURLs = "",
+                          endURLdescriptions = "",
+                          dateformat = 6,
+                          numberformat = 0,
                           sid = NULL,
                           gsid = 1,
                           admin = "Admin Name",
@@ -310,6 +365,50 @@ Survey <- R6::R6Class(
                           googleanalyticsstyle = 0,
                           googleanalyticsapikey = "") {
 
+      ###-----------------------------------------------------------------------
+      ### Check whether the multilingual fields have been passed properly
+      ###-----------------------------------------------------------------------
+
+      titles <-
+        checkMultilingualFields(titles,
+                                language = language);
+
+      descriptions <-
+        checkMultilingualFields(descriptions,
+                                language = language);
+
+      welcomeTexts <-
+        checkMultilingualFields(welcomeTexts,
+                                language = language);
+
+      endTexts <-
+        checkMultilingualFields(endTexts,
+                                language = language);
+
+      endURLs <-
+        checkMultilingualFields(endURLs,
+                                language = language);
+
+      endURLdescriptions <-
+        checkMultilingualFields(endURLdescriptions,
+                                language = language);
+
+      dateformat <-
+        checkMultilingualFields(dateformat,
+                                language = language,
+                                classCheck = is.numeric,
+                                className = "numeric");
+
+      numberformat <-
+        checkMultilingualFields(numberformat,
+                                language = language,
+                                classCheck = is.numeric,
+                                className = "numeric");
+
+      ###-----------------------------------------------------------------------
+      ### Set all the settings
+      ###-----------------------------------------------------------------------
+
       self$titles <- titles;
       self$sid <- sid;
       self$gsid <- gsid;
@@ -333,7 +432,7 @@ Survey <- R6::R6Class(
       self$ipaddr <- ipaddr;
       self$refurl <- refurl;
       self$showsurveypolicynotice <- showsurveypolicynotice;
-      self$	publicstatistics <- 	publicstatistics;
+      self$publicstatistics <- 	publicstatistics;
       self$publicgraphs <- publicgraphs;
       self$listpublic <- listpublic;
       self$htmlemail <- htmlemail;
@@ -388,39 +487,13 @@ Survey <- R6::R6Class(
       ### Check and fix titles and descriptions
       ###-----------------------------------------------------------------------
 
-      if (!is.character(titles) || (length(titles) == 0)) {
-        stop("The group title or titles specified as `titles` ",
-             "must be a character vector with at least one element!");
-      }
-      if (!is.character(descriptions) || (length(descriptions) == 0)) {
-        stop("The group description or descriptions specified as ",
-             "`descriptions` must be a character vector with at least ",
-             "one element!");
-      }
+      titles <-
+        checkMultilingualFields(titles,
+                                language = self$language);
 
-      if (length(titles) == 1) {
-        titles <-
-          stats::setNames(titles,
-                          nm = self$primaryLanguage);
-      } else {
-        if (!(self$primaryLanguage %in% names(titles))) {
-          stop("When providing multiple titles, at least one ",
-               "of them has to be in the survey's primary language (",
-               self$primaryLanguage, "').");
-        }
-      }
-
-      if (length(descriptions) == 1) {
-        descriptions <-
-          stats::setNames(descriptions,
-                          nm = self$primaryLanguage);
-      } else {
-        if (!(self$primaryLanguage %in% names(descriptions))) {
-          stop("When providing multiple descriptions, at least one ",
-               "of them has to be in the survey's primary language (",
-               self$primaryLanguage, "').");
-        }
-      }
+      descriptions <-
+        checkMultilingualFields(descriptions,
+                                language = self$language);
 
       ###-----------------------------------------------------------------------
       ### Create group object and store it
@@ -496,7 +569,7 @@ Survey <- R6::R6Class(
                      code = code,
                      type = type,
                      lsType = lsType,
-                     primaryLanguage = self$primaryLanguage,
+                     language = self$language,
                      ...);
 
       ### Add to group
@@ -510,6 +583,23 @@ Survey <- R6::R6Class(
 
       ### Return self invisibly
       return(invisible(self));
+    },
+
+    ###-------------------------------------------------------------------------
+    ### Export the survey as a tab separated values file
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Export the survey as a tab separated values file (see
+    #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
+    #' @param file The filename to which to save the file.
+    #' @param encoding The encoding to use
+    #' @return Invisibly, the `Survey` object.
+    export_to_tsv = function(file,
+                             encoding = "UTF-8") {
+
+
+
     }
 
   ), ### End of public properties and methods
