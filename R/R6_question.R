@@ -1,6 +1,7 @@
 #' R6 Class representing a LimeSurvey question
 #'
 #' A question has at least a code and a primary language.
+#' @export
 Question <- R6::R6Class(
   "Question",
 

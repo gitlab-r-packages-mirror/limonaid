@@ -9,7 +9,9 @@ R6 Class representing a LimeSurvey survey
 R6 Class representing a LimeSurvey survey
 }
 \details{
-A survey has at least a title and a primary language.
+Create and work with a Survey to programmatically (or interactively)
+create a survey, export it to a tab separated values file, and import
+it to LimeSurvey.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

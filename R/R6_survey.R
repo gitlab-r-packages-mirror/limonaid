@@ -1,6 +1,9 @@
 #' R6 Class representing a LimeSurvey survey
 #'
-#' A survey has at least a title and a primary language.
+#' Create and work with a Survey to programmatically (or interactively)
+#' create a survey, export it to a tab separated values file, and import
+#' it to LimeSurvey.
+#' @export
 Survey <- R6::R6Class(
   "Survey",
 
