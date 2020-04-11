@@ -33,6 +33,22 @@ A question has at least a code and a primary language.
 \item{\code{answerOptions}}{The answer options in the question.}
 
 \item{\code{subQuestions}}{The subquestions in the question.}
+
+\item{\code{mandatory}}{Whether the question is mandatory (\code{Y} or \code{N}).}
+
+\item{\code{other}}{Whether the question has an 'other' option (\code{Y} or \code{N}).}
+
+\item{\code{other_replace_text}}{If the question has an 'other' option, its
+label if the default label should be overwritten (multilingual).}
+
+\item{\code{same_default}}{Not entirely sure what this does.}
+
+\item{\code{array_filter}}{The question code of the array filter question
+to apply.}
+
+\item{\code{cssclass}}{The CSS class(es) to apply to this question.}
+
+\item{\code{hide_tip}}{Whether to hide the tip (\code{Y} or \code{N}).}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,7 +74,15 @@ Create a new question object.
   questionTexts = "",
   helpTexts = "",
   relevance = 1,
-  primaryLanguage = "en"
+  mandatory = "N",
+  other = "N",
+  other_replace_text = "",
+  same_default = "0",
+  array_filter = "",
+  cssclass = "",
+  hide_tip = "",
+  primaryLanguage = "en",
+  ...
 )}\if{html}{\out{</div>}}
 }
 
@@ -80,7 +104,25 @@ https://manual.limesurvey.org/Question_object_types).}
 
 \item{\code{relevance}}{The group's relevance equation.}
 
+\item{\code{mandatory}}{Whether the question is mandatory (\code{Y} or \code{N});.}
+
+\item{\code{other}}{Whether the question has an 'other' option (\code{Y} or \code{N}).}
+
+\item{\code{other_replace_text}}{If the question has an 'other' option, its
+label if the default label should be overwritten (multilingual).}
+
+\item{\code{same_default}}{Not entirely sure what this does.}
+
+\item{\code{array_filter}}{The question code of the array filter question
+to apply.}
+
+\item{\code{cssclass}}{The CSS class(es) to apply to this question.}
+
+\item{\code{hide_tip}}{Whether to hide the tip (\code{Y} or \code{N}).}
+
 \item{\code{primaryLanguage}}{The question's primary language.}
+
+\item{\code{...}}{Other options set in the question}
 }
 \if{html}{\out{</div>}}
 }
