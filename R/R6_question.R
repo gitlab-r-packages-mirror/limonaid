@@ -67,6 +67,10 @@ Question <- R6::R6Class(
     #' @field hide_tip Whether to hide the tip (`Y` or `N`).
     hide_tip = NULL,
 
+    #' @field otherOptions Any additional options, stored as a named list
+    #' by assigning `as.list(...)`.
+    otherOptions = NULL,
+
     ###-------------------------------------------------------------------------
     ### Initialization
     ###-------------------------------------------------------------------------
@@ -91,7 +95,8 @@ Question <- R6::R6Class(
     #' @param cssclass The CSS class(es) to apply to this question.
     #' @param hide_tip Whether to hide the tip (`Y` or `N`).
     #' @param primaryLanguage The question's primary language.
-    #' @param ... Other options set in the question
+    #' @param ... Any additional options, stored as a named list in the
+    #' `otherOptions` property by assigning `as.list(...)`.
     #' @return A new `Survey` object.
     initialize = function(code,
                           type = NULL,
@@ -213,6 +218,8 @@ Question <- R6::R6Class(
       self$array_filter <- array_filter;
       self$cssclass <- cssclass;
       self$hide_tip <- hide_tip;
+
+      self$otherOptions <- as.list(...);
 
     },
 

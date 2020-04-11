@@ -139,6 +139,25 @@ R6 Class representing a LimeSurvey question" />
 
 <dt><code>subQuestions</code></dt><dd><p>The subquestions in the question.</p></dd>
 
+<dt><code>mandatory</code></dt><dd><p>Whether the question is mandatory (<code>Y</code> or <code>N</code>).</p></dd>
+
+<dt><code>other</code></dt><dd><p>Whether the question has an 'other' option (<code>Y</code> or <code>N</code>).</p></dd>
+
+<dt><code>other_replace_text</code></dt><dd><p>If the question has an 'other' option, its
+label if the default label should be overwritten (multilingual).</p></dd>
+
+<dt><code>same_default</code></dt><dd><p>Not entirely sure what this does.</p></dd>
+
+<dt><code>array_filter</code></dt><dd><p>The question code of the array filter question
+to apply.</p></dd>
+
+<dt><code>cssclass</code></dt><dd><p>The CSS class(es) to apply to this question.</p></dd>
+
+<dt><code>hide_tip</code></dt><dd><p>Whether to hide the tip (<code>Y</code> or <code>N</code>).</p></dd>
+
+<dt><code>otherOptions</code></dt><dd><p>Any additional options, stored as a named list
+by assigning <code><a href='https://rdrr.io/r/base/list.html'>as.list(...)</a></code>.</p></dd>
+
 </dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
@@ -161,7 +180,15 @@ R6 Class representing a LimeSurvey question" />
   questionTexts = "",
   helpTexts = "",
   relevance = 1,
-  primaryLanguage = "en"
+  mandatory = "N",
+  other = "N",
+  other_replace_text = "",
+  same_default = "0",
+  array_filter = "",
+  cssclass = "",
+  hide_tip = "",
+  primaryLanguage = "en",
+  ...
 )</pre><p></div></p>
 
 <h3>Arguments</h3>
@@ -181,7 +208,26 @@ https://manual.limesurvey.org/Question_object_types).</p></dd>
 
 <dt><code>relevance</code></dt><dd><p>The group's relevance equation.</p></dd>
 
+<dt><code>mandatory</code></dt><dd><p>Whether the question is mandatory (<code>Y</code> or <code>N</code>);.</p></dd>
+
+<dt><code>other</code></dt><dd><p>Whether the question has an 'other' option (<code>Y</code> or <code>N</code>).</p></dd>
+
+<dt><code>other_replace_text</code></dt><dd><p>If the question has an 'other' option, its
+label if the default label should be overwritten (multilingual).</p></dd>
+
+<dt><code>same_default</code></dt><dd><p>Not entirely sure what this does.</p></dd>
+
+<dt><code>array_filter</code></dt><dd><p>The question code of the array filter question
+to apply.</p></dd>
+
+<dt><code>cssclass</code></dt><dd><p>The CSS class(es) to apply to this question.</p></dd>
+
+<dt><code>hide_tip</code></dt><dd><p>Whether to hide the tip (<code>Y</code> or <code>N</code>).</p></dd>
+
 <dt><code>primaryLanguage</code></dt><dd><p>The question's primary language.</p></dd>
+
+<dt><code>...</code></dt><dd><p>Any additional options, stored as a named list in the
+<code>otherOptions</code> property by assigning <code><a href='https://rdrr.io/r/base/list.html'>as.list(...)</a></code>.</p></dd>
 
 </dl><p></div></p>
 <h3>Returns</h3>

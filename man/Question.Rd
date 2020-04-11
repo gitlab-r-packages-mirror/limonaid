@@ -49,6 +49,9 @@ to apply.}
 \item{\code{cssclass}}{The CSS class(es) to apply to this question.}
 
 \item{\code{hide_tip}}{Whether to hide the tip (\code{Y} or \code{N}).}
+
+\item{\code{otherOptions}}{Any additional options, stored as a named list
+by assigning \code{as.list(...)}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -122,7 +125,8 @@ to apply.}
 
 \item{\code{primaryLanguage}}{The question's primary language.}
 
-\item{\code{...}}{Other options set in the question}
+\item{\code{...}}{Any additional options, stored as a named list in the
+\code{otherOptions} property by assigning \code{as.list(...)}.}
 }
 \if{html}{\out{</div>}}
 }
