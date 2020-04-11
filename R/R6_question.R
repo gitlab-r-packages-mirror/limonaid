@@ -35,8 +35,8 @@ Question <- R6::R6Class(
     #' @field relevance The relevance.
     relevance = 1,
 
-    #' @field primaryLanguage The primary language of the question.
-    primaryLanguage = NULL,
+    #' @field language The primary language of the question.
+    language = NULL,
 
     #' @field answerOptions The answer options in the question.
     answerOptions = list(),
@@ -94,7 +94,7 @@ Question <- R6::R6Class(
     #' to apply.
     #' @param cssclass The CSS class(es) to apply to this question.
     #' @param hide_tip Whether to hide the tip (`Y` or `N`).
-    #' @param primaryLanguage The question's primary language.
+    #' @param language The question's primary language.
     #' @param ... Any additional options, stored as a named list in the
     #' `otherOptions` property by assigning `as.list(...)`.
     #' @return A new `Survey` object.
@@ -112,7 +112,7 @@ Question <- R6::R6Class(
                           array_filter = "",
                           cssclass = "",
                           hide_tip = "",
-                          primaryLanguage = "en",
+                          language = "en",
                           ...) {
 
       ###-----------------------------------------------------------------------
@@ -132,24 +132,24 @@ Question <- R6::R6Class(
       if (length(questionTexts) == 1) {
         questionTexts <-
           stats::setNames(questionTexts,
-                          nm = primaryLanguage);
+                          nm = language);
       } else {
-        if (!(primaryLanguage %in% names(questionTexts))) {
+        if (!(language %in% names(questionTexts))) {
           stop("When providing multiple question texts, at least one ",
                "of them has to be in the question's primary language (",
-               primaryLanguage, "').");
+               language, "').");
         }
       }
 
       if (length(helpTexts) == 1) {
         helpTexts <-
           stats::setNames(helpTexts,
-                          nm = primaryLanguage);
+                          nm = language);
       } else {
-        if (!(primaryLanguage %in% names(helpTexts))) {
+        if (!(language %in% names(helpTexts))) {
           stop("When providing multiple help texts, at least one ",
                "of them has to be in the question's primary language (",
-               primaryLanguage, "').");
+               language, "').");
         }
       }
 
@@ -205,7 +205,7 @@ Question <- R6::R6Class(
       self$type <- type;
       self$lsType <- lsType;
 
-      self$primaryLanguage <- primaryLanguage;
+      self$language <- language;
 
       self$questionTexts <- questionTexts;
       self$helpTexts <- helpTexts;
@@ -257,12 +257,12 @@ Question <- R6::R6Class(
       if (length(optionTexts) == 1) {
         optionTexts <-
           stats::setNames(optionTexts,
-                          nm = self$primaryLanguage);
+                          nm = self$language);
       } else {
-        if (!(self$primaryLanguage %in% names(optionTexts))) {
+        if (!(self$language %in% names(optionTexts))) {
           stop("When providing multiple option texts, at least one ",
                "of them has to be in the question's primary language (",
-               self$primaryLanguage, "').");
+               self$language, "').");
         }
       }
 
