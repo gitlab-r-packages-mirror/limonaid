@@ -173,6 +173,7 @@ other values for other settings.}
 \item \href{#method-new}{\code{Survey$new()}}
 \item \href{#method-add_group}{\code{Survey$add_group()}}
 \item \href{#method-add_question}{\code{Survey$add_question()}}
+\item \href{#method-export_to_tsv}{\code{Survey$export_to_tsv()}}
 \item \href{#method-clone}{\code{Survey$clone()}}
 }
 }
@@ -447,6 +448,29 @@ Add a question to a survey object.
 
 \item{\code{...}}{Additional arguments are used to create the Question using
 \code{Question$new}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Invisibly, the \code{Survey} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-export_to_tsv"></a>}}
+\if{latex}{\out{\hypertarget{method-export_to_tsv}{}}}
+\subsection{Method \code{export_to_tsv()}}{
+Export the survey as a tab separated values file (see
+https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Survey$export_to_tsv(file, encoding = "UTF-8")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{file}}{The filename to which to save the file.}
+
+\item{\code{encoding}}{The encoding to use}
 }
 \if{html}{\out{</div>}}
 }
