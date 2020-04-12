@@ -658,6 +658,10 @@ Survey <- R6::R6Class(
       ### Add general survey settings
       ###-----------------------------------------------------------------------
 
+      if (!silent) {
+        cat0("\n\nProcessing general survey settings.\n\n");
+      }
+
       for (name in private$generalSurveySettings) {
 
         text <- selfAsList[[name]];
@@ -714,6 +718,10 @@ Survey <- R6::R6Class(
       ###-----------------------------------------------------------------------
       ### Add language-specific survey settings
       ###-----------------------------------------------------------------------
+
+      if (!silent) {
+        cat0("\n\nProcessing survey-level, language-specific settings.\n\n");
+      }
 
       for (currentLanguage in languageList) {
 
@@ -796,6 +804,10 @@ Survey <- R6::R6Class(
 
       for (currentLanguage in languageList) {
 
+        if (!silent) {
+          cat0("\n\nProcessing survey for language: ", currentLanguage, "\n");
+        }
+
         for (currentGroup in seq_along(self$groups)) {
 
           ### Check whether this group already has a new, 'remapped'
@@ -830,6 +842,10 @@ Survey <- R6::R6Class(
                      (nchar(trimws(self$groups[[currentGroup]]$descriptions[[currentLanguage]])) > 0),
                    self$groups[[currentGroup]]$descriptions[[currentLanguage]],
                    self$groups[[currentGroup]]$descriptions[[self$language]]);
+
+          if (!silent) {
+            cat0("  Processing group: ", curLang_surveyTitle, "\n");
+          }
 
           newRow <-
             data.frame(
@@ -1110,6 +1126,10 @@ Survey <- R6::R6Class(
 
       }
 
+      if (!silent) {
+        cat0("\n\nFinalizing survey and starting to write file.\n\n");
+      }
+
       ### Add other columns
       dat[, setdiff(private$otherColumns, names(dat))] <- "";
 
@@ -1124,8 +1144,49 @@ Survey <- R6::R6Class(
                      encoding = encoding,
                      silent = silent);
 
+      if (!silent) {
+        cat0("Wrote file to '", file, "'\n\n");
+      }
+
       ### Return self invisibly
       return(invisible(self));
+    },
+
+    ###-------------------------------------------------------------------------
+    ### Find the numeric group identifier by group title
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Find the numeric group identifier by group title.
+    #' @param title The survey title.
+    #' @param titleLanguage The language in which to search.
+    #' @return Invisibly, the `Survey` object.
+    find_group_id = function(title,
+                             titleLanguage = NULL) {
+
+      if (is.null(titleLanguage)) {
+        titleLanguage <- self$language;
+      }
+
+      groupIds <- self$get_group_ids;
+
+      groupTitles <-
+        unlist(
+          lapply(
+            groupIds,
+            function(gId) {
+              return(self$groups[[gId]]$titles[[titleLanguage]]);
+            }));
+
+      titleIndex <-
+        which(groupTitles == title);
+
+      if (length(titleIndex) > 0) {
+        return(groupIds[titleIndex]);
+      } else {
+        return(FALSE);
+      }
+
     }
 
   ), ### End of public properties and methods
