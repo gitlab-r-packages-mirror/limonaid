@@ -164,3 +164,49 @@ testthat::test_that("exporting an en/nl survey with a slider works", {
   testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
                          "onlyQuestion");
 })
+
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+
+testthat::test_that("autofixing multiple choice questions works", {
+
+  ls <- limonaid::Survey$new(c(en = "Test Survey",
+                               nl = "Uittestvragenlijst"));
+
+  ls$add_group(c(en = "First group",
+                 nl = "Eerste groep"));
+
+  ls$add_question(groupId = 1,
+                  code = "q1",
+                  questionTexts =
+                    c(en = "Q1 question text",
+                      nl = "Q1 vraagtekst"),
+                  helpTexts =
+                    c(en = "Q1 help text",
+                      nl = "Q1 hulptekst"),
+                  type = "checkboxes");
+
+  ls$groups$`1`$questions$q1$add_answer_option(
+    code = 1,
+    optionTexts = c(en = "Q1, A1, in English",
+                    nl = "Q1, A1, in Dutch"));
+
+  ls$groups$`1`$questions$q1$add_answer_option(
+    code = 2,
+    optionTexts = c(en = "Q1, A2, in English",
+                    nl = "Q1, A2, in Dutch"));
+
+  tmpFile <- tempfile(fileext = ".txt");
+
+  ### Temporary
+  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-checkbox-autofix-export.txt";
+
+  ls$export_to_tsv(file = tmpFile,
+                   preventOverwriting = FALSE);
+
+  cat(tmpFile);
+
+  testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
+                         "onlyQuestion");
+})
