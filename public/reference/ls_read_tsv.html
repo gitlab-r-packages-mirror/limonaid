@@ -109,7 +109,7 @@
     <p>Read a LimeSurvey Tab-Separated Values file</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ls_read_tsv</span>(<span class='no'>file</span>)</pre>
+    <pre class="usage"><span class='fu'>ls_read_tsv</span>(<span class='no'>file</span>, <span class='kw'>encoding</span> <span class='kw'>=</span> <span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'><a href='opts.html'>get</a></span>(<span class='st'>"encoding"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -117,6 +117,10 @@
     <tr>
       <th>file</th>
       <td><p>The filename to read.</p></td>
+    </tr>
+    <tr>
+      <th>encoding</th>
+      <td><p>The encoding to use when reading the file.</p></td>
     </tr>
     </table>
 

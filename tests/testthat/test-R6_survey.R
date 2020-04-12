@@ -42,7 +42,51 @@ testthat::test_that("exporting a survey to a TSV file works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
+  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
+
+  ls$export_to_tsv(file = tmpFile,
+                   preventOverwriting = FALSE);
+
+  cat(tmpFile);
+
+  testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
+                         "onlyQuestion");
+})
+
+testthat::test_that("exporting a survey with two languages to a TSV file works", {
+
+  ls <- limonaid::Survey$new(c(en = "Test Survey",
+                               nl = "Uittestvragenlijst"));
+
+  ls$add_group(c(en = "Only group",
+                 nl = "Enige groep"),
+               c(en = "This is the description of the only group in the survey.",
+                 nl = "Beschrijving van de enige groep"));
+
+  ls$add_question(groupId = 1,
+                  code = "onlyQuestion",
+                  questionTexts =
+                    c(en = "This is the question text of the only question in this survey.",
+                      nl = "Vraagtekst"),
+                  helpTexts =
+                    c(en = "This is the help text of the only question in this survey.",
+                      nl = "Hulptekst"),
+                  type = "radiobuttons");
+
+  ls$groups$`1`$questions$onlyQuestion$add_answer_option(
+    code = 1,
+    optionTexts = c(en = "This is the first answer option",
+                    nl = "Dit is antwoordoptie 1"));
+
+  ls$groups$`1`$questions$onlyQuestion$add_answer_option(
+    code = 2,
+    optionTexts = c(en = "This is the second answer option",
+                    nl = "Antwoordoptie 2"));
+
+  tmpFile <- tempfile(fileext = ".txt");
+
+  ### Temporary
+  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);

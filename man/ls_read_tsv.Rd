@@ -4,10 +4,12 @@
 \alias{ls_read_tsv}
 \title{Read a LimeSurvey Tab-Separated Values file}
 \usage{
-ls_read_tsv(file)
+ls_read_tsv(file, encoding = limonaid::opts$get("encoding"))
 }
 \arguments{
 \item{file}{The filename to read.}
+
+\item{encoding}{The encoding to use when reading the file.}
 }
 \value{
 A dataframe.

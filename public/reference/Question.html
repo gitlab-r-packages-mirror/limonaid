@@ -171,11 +171,15 @@ by assigning <code><a href='https://rdrr.io/r/base/list.html'>as.list(...)</a></
 <ul>
 <li><p><a href='#method-new'><code>Question$new()</code></a></p></li>
 <li><p><a href='#method-add_answer_option'><code>Question$add_answer_option()</code></a></p></li>
+<li><p><a href='#method-add_subquestion'><code>Question$add_subquestion()</code></a></p></li>
 <li><p><a href='#method-clone'><code>Question$clone()</code></a></p></li>
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-<p>Create a new question object.</p><h3>Usage</h3>
+<p>Create a new question object. Most of this text comes directly
+from the TSV manual page at
+https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+please see that page for more details.</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Question$new(
   code,
   type = NULL,
@@ -225,7 +229,8 @@ label if the default label should be overwritten (multilingual).</p></dd>
 
 <dt><code>default</code></dt><dd><p>The default value.</p></dd>
 
-<dt><code>same_default</code></dt><dd><p>Not entirely sure what this does.</p></dd>
+<dt><code>same_default</code></dt><dd><p><code>Y</code> for true, in which case any default value set
+for the primary language applies to other languages.</p></dd>
 
 <dt><code>array_filter</code></dt><dd><p>The question code of the array filter question
 to apply.</p></dd>
@@ -244,8 +249,11 @@ to apply.</p></dd>
 <p>A new <code>Survey</code> object.</p>
 <p><hr>
 <a id="method-add_answer_option"></a></p><h3>Method <code>add_answer_option()</code></h3>
-<p>Add an answer option to a question.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>Question$add_answer_option(code, optionTexts)</pre><p></div></p>
+<p>Add an answer option to a question. Most of this text comes directly
+from the TSV manual page at
+https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+please see that page for more details.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Question$add_answer_option(code, optionTexts, type.scale = 0, relevance = "")</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl class='dl-horizontal'>
@@ -253,9 +261,64 @@ to apply.</p></dd>
 
 <dt><code>optionTexts</code></dt><dd><p>The answer option text(s).</p></dd>
 
+<dt><code>type.scale</code></dt><dd><p><code>0</code> or <code>1</code> (e.g. for dual-scale; 'scale_id').</p></dd>
+
+<dt><code>relevance</code></dt><dd><p>If using assessment option, this is the assessment
+value for the answer ('assessment_value').</p></dd>
+
 </dl><p></div></p>
 <h3>Returns</h3>
-<p>Invisible, the question object.</p>
+<p>Invisibly, the question object.</p>
+<p><hr>
+<a id="method-add_subquestion"></a></p><h3>Method <code>add_subquestion()</code></h3>
+<p>Add a subquestion to a question. Most of this text comes directly from
+the TSV manual page at
+https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+please see that page for more details.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Question$add_subquestion(
+  code,
+  subquestionTexts,
+  relevance = 1,
+  helpTexts = NULL,
+  type.scale = 0,
+  validation = "",
+  mandatory = "",
+  default = "",
+  same_default = ""
+)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>code</code></dt><dd><p>The subquestions code.</p></dd>
+
+<dt><code>subquestionTexts</code></dt><dd><p>The subquestion text(s).</p></dd>
+
+<dt><code>relevance</code></dt><dd><p>When to show this subquestion.</p></dd>
+
+<dt><code>helpTexts</code></dt><dd><p>As far as I know not yet implemented in LimeSurvey;
+but the TSV help page says "(Future) to support subquestion-level help".</p></dd>
+
+<dt><code>type.scale</code></dt><dd><p><code>0</code> or <code>1</code>, depending upon question type (e.g. array
+text will have two scales)0 or 1, depending upon question type (e.g.
+array text will have two scales)."</p></dd>
+
+<dt><code>validation</code></dt><dd><p>As far as I know not yet implemented in LimeSurvey;
+but the TSV help page says "(Future) to support subquestion-level
+regular expression validation (e.g. for address parts)"</p></dd>
+
+<dt><code>mandatory</code></dt><dd><p>As far as I know not yet implemented in LimeSurvey;
+but the TSV help page says "(Future) to support subquestion-level
+mandatory (e.g. make only a few subquestions mandatory)"</p></dd>
+
+<dt><code>default</code></dt><dd><p>If set, then this is the default value for the
+subquestion (inserted into defaultvalues table).</p></dd>
+
+<dt><code>same_default</code></dt><dd><p>If set, then the default for the primary language
+is used for all other languages.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>Invisibly, the question object.</p>
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>

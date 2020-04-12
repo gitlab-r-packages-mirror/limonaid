@@ -749,7 +749,11 @@ Survey <- R6::R6Class(
               (currentLanguage %in% names(text))) {
             text <- selfAsList[[propertyName]][[currentLanguage]];
           } else {
-            text <- "\"\"";
+            if (name %in% names(private$emailDefaults)) {
+              text <- private$emailDefaults[name];
+            } else {
+              text <- "";
+            }
           }
 
           newRow <-
@@ -1274,6 +1278,82 @@ Survey <- R6::R6Class(
         "time_limit_warning_style",
         "use_dropdown",
         "value_range_allows_missing"),
+
+    emailDefaults =
+      c(surveyls_email_invite_subj =
+          "Invitation to participate in a survey",
+        surveyls_email_invite =
+          paste0(
+            "Dear {FIRSTNAME},<br /><br />you have been invited to ",
+            "participate in a survey.<br /><br />The survey is ",
+            "titled:<br />\"{SURVEYNAME}\"<br />",
+            "<br />\"{SURVEYDESCRIPTION}\"<br /><br />To participate, please ",
+            "click on the link below.<br /><br />Sincerely,<br />",
+            "<br />{ADMINNAME} ({ADMINEMAIL})<br />",
+            "<br />----------------------------------------------<br />Click ",
+            "here to do the survey:<br />{SURVEYURL}<br /><br />If you do ",
+            "not want to participate in this survey and don't want to ",
+            "receive any more invitations please click the following link:",
+            "<br />{OPTOUTURL}<br /><br />If you are blacklisted but want to ",
+            "participate in this survey and want to receive invitations ",
+            "please click the following link:<br />{OPTINURL}"),
+        surveyls_email_remind_subj =
+          "Reminder to participate in a survey",
+        surveyls_email_remind =
+          paste0("Dear {FIRSTNAME},<br /><br />Recently we invited you to ",
+                 "participate in a survey.<br /><br />We note that you have ",
+                 "not yet completed the survey, and wish to remind you that ",
+                 "the survey is still available should you wish to take ",
+                 "part.<br /><br />The survey is titled:",
+                 "<br />\"{SURVEYNAME}\"<br /><br />\"{SURVEYDESCRIPTION}\"<br />",
+                 "<br />To participate, please click on the link below.<br />",
+                 "<br />Sincerely,<br /><br />{ADMINNAME} ({ADMINEMAIL})<br />",
+                 "<br />----------------------------------------------<br />",
+                 "Click here to do the survey:<br />{SURVEYURL}<br /><br />If ",
+                 "you do not want to participate in this survey and don't want ",
+                 "to receive any more invitations please click the following ",
+                 "link:<br />{OPTOUTURL}"),
+        surveyls_email_register_subj =
+          "Survey registration confirmation"	,
+        surveyls_email_register =
+          paste0("Dear {FIRSTNAME},<br /><br />You, or someone using your ",
+                 "email address, have registered to participate in an online ",
+                 "survey titled {SURVEYNAME}.<br /><br />To complete this ",
+                 "survey, click on the following URL:<br />",
+                 "<br />{SURVEYURL}<br /><br />If you have any questions about ",
+                 "this survey, or if you did not register to participate and ",
+                 "believe this email is in error, please contact {ADMINNAME} ",
+                 "at {ADMINEMAIL}."),
+        surveyls_email_confirm_subj =
+          "Confirmation of your participation in our survey",
+        surveyls_email_confirm =
+          paste0("Dear {FIRSTNAME},<br /><br />this email is to confirm that ",
+                 "you have completed the survey titled {SURVEYNAME} and your ",
+                 "response has been saved. Thank you for participating.<br />",
+                 "<br />If you have any further questions about this email, ",
+                 "please contact {ADMINNAME} on {ADMINEMAIL}.<br /><br />",
+                 "Sincerely,<br /><br />{ADMINNAME}"),
+        email_admin_notification_subj =
+          "Response submission for survey {SURVEYNAME}",
+        email_admin_notification =
+          paste0("Hello,<br /><br />A new response was submitted for your ",
+                 "survey '{SURVEYNAME}'.<br /><br />Click the following link ",
+                 "to see the individual response:<br />{VIEWRESPONSEURL}<br />",
+                 "<br />Click the following link to edit the individual ",
+                 "response:<br />{EDITRESPONSEURL}<br /><br />View statistics ",
+                 "by clicking here:<br />{STATISTICSURL}"),
+        email_admin_responses_subj =
+          "Response submission for survey {SURVEYNAME} with results",
+        email_admin_responses =
+          paste0("Hello,<br /><br />A new response was submitted for your ",
+                 "survey '{SURVEYNAME}'.<br /><br />Click the following link ",
+                 "to see the individual response:<br />{VIEWRESPONSEURL}<br />",
+                 "<br />Click the following link to edit the individual ",
+                 "response:<br />{EDITRESPONSEURL}<br /><br />View statistics ",
+                 "by clicking here:<br />{STATISTICSURL}<br /><br /><br />The ",
+                 "following answers were given by the participant:",
+                 "<br />{ANSWERTABLE}")
+        ),
 
     ### Create a new group identifier and return it
     new_group_id = function() {
