@@ -46,7 +46,7 @@ Question <- R6::R6Class(
     answerOptions = list(),
 
     #' @field subQuestions The subquestions in the question.
-    subQuestions = list(),
+    subquestions = list(),
 
     #' @field mandatory Whether the question is mandatory (`Y` or `N`).
     mandatory = NULL,
@@ -146,13 +146,13 @@ Question <- R6::R6Class(
       ### Check question type
       ###-----------------------------------------------------------------------
 
-      type <- tolower(type);
+      type <- trimws(tolower(type));
 
       if (is.null(lsType)) {
         if (type %in% c("array dual scale")) {
           lsType <- "1";
 
-        } else if (type %in% c("multiple numerical input")) {
+        } else if (type %in% c("multiple numerical input", "slider")) {
           lsType <- "K";
 
         } else if (type %in% c("radio", "radiobuttons")) {
@@ -176,8 +176,22 @@ Question <- R6::R6Class(
       }
 
       ###-----------------------------------------------------------------------
-      ### Check question type
+      ### Set all other arguments as 'other options'
       ###-----------------------------------------------------------------------
+
+      otherOptions <- list(...);
+
+      ###-----------------------------------------------------------------------
+      ### Check question type and set additional settings
+      ###-----------------------------------------------------------------------
+
+      if (type == "slider") {
+        otherOptions$slider_layout <- 1;
+        if (!"slider_accuracy" %in% names(otherOptions))
+          otherOptions$slider_accuracy <- 1;
+        if (!"slider_handle" %in% names(otherOptions))
+          otherOptions$slider_handle <- 2;
+      }
 
       ###
       ###
@@ -210,7 +224,7 @@ Question <- R6::R6Class(
       self$cssclass <- cssclass;
       self$hide_tip <- hide_tip;
 
-      self$otherOptions <- list(...);
+      self$otherOptions <- otherOptions;
 
     },
 
@@ -325,12 +339,12 @@ Question <- R6::R6Class(
 
       subquestionTexts <-
         checkMultilingualFields(subquestionTexts,
-                                language = language);
+                                language = self$language);
 
       if (!is.null(helpTexts)) {
         helpTexts <-
           checkMultilingualFields(helpTexts,
-                                  language = language);
+                                  language = self$language);
       } else {
         helpTexts <- stats::setNames(rep("", length(subquestionTexts)),
                                      nm = names(subquestionTexts));
@@ -340,15 +354,21 @@ Question <- R6::R6Class(
       ### Set the subquestions
       ###-----------------------------------------------------------------------
 
-      self$subQuestions <-
-        c(self$subQuestions,
+      self$subquestions <-
+        c(self$subquestions,
           list(list(code = code,
-                    subquestionTexts = optionTexts,
-                    relevance = relevance)));
+                    subquestionTexts = subquestionTexts,
+                    relevance = relevance,
+                    type.scale = type.scale,
+                    helpTexts = helpTexts,
+                    validation = validation,
+                    mandatory = mandatory,
+                    default = default,
+                    same_default = same_default)));
 
       ### Set name of this new subquestion
-      names(self$subQuestions)[
-        length(self$subQuestions)] <- code;
+      names(self$subquestions)[
+        length(self$subquestions)] <- code;
 
       ### Return self invisibly
       return(invisible(self));

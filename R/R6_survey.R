@@ -818,15 +818,26 @@ Survey <- R6::R6Class(
           currentGroupId <-
             exportGroupIdMapping[self$groups[[currentGroup]]$id];
 
+          ### For values unspecified for this language, get the value
+          ### from the primary language
+          curLang_surveyTitle <-
+            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$titles),
+                   self$groups[[currentGroup]]$titles[[currentLanguage]],
+                   self$groups[[currentGroup]]$titles[[self$language]]);
+          curLang_surveyDescription <-
+            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$descriptions),
+                   self$groups[[currentGroup]]$descriptions[[currentLanguage]],
+                   self$groups[[currentGroup]]$descriptions[[self$language]]);
+
           newRow <-
             data.frame(
               id = currentGroupId,
               related_id = "",
               class="G",
               type.scale = "0",
-              name = self$groups[[currentGroup]]$titles[[currentLanguage]],
+              name = curLang_surveyTitle,
               relevance = self$groups[[currentGroup]]$relevance,
-              text = self$groups[[currentGroup]]$descriptions[[currentLanguage]],
+              text = curLang_surveyDescription,
               help = "",
               language = currentLanguage,
               validation = "",
@@ -872,6 +883,18 @@ Survey <- R6::R6Class(
             currentQuestionId <-
               exportQuestionIdMapping[uniqueQuestionCodeId];
 
+            ### For values unspecified for this language, get the value
+            ### from the primary language
+            curLang_questionText <-
+              ifelse(currentLanguage %in% names(convenienceQ$questionTexts),
+                     convenienceQ$questionTexts[[currentLanguage]],
+                     convenienceQ$questionTexts[[self$language]]);
+            curLang_questionHelp <-
+              ifelse(currentLanguage %in% names(convenienceQ$helpTexts),
+                     convenienceQ$helpTexts[[currentLanguage]],
+                     convenienceQ$helpTexts[[self$language]]);
+
+            ### Specify this new row
             newRow <-
               data.frame(
                 id = currentQuestionId,
@@ -880,8 +903,8 @@ Survey <- R6::R6Class(
                 type.scale = convenienceQ$lsType,
                 name = convenienceQ$code,
                 relevance = convenienceQ$relevance,
-                text = convenienceQ$questionTexts[[currentLanguage]],
-                help = convenienceQ$helpTexts[[currentLanguage]],
+                text = curLang_questionText,
+                help = curLang_questionHelp,
                 language = currentLanguage,
                 validation = convenienceQ$validation,
                 mandatory = convenienceQ$mandatory,
@@ -948,6 +971,18 @@ Survey <- R6::R6Class(
                   typeScale <- 0;
                 }
 
+                ### For values unspecified for this language, get the value
+                ### from the primary language
+                curLang_subquestionText <-
+                  ifelse(currentLanguage %in% names(convenienceSQ$subquestionTexts),
+                         convenienceSQ$subquestionTexts[[currentLanguage]],
+                         convenienceSQ$subquestionTexts[[self$language]]);
+                curLang_subquestionHelp <-
+                  ifelse(currentLanguage %in% names(convenienceSQ$helpTexts),
+                         convenienceSQ$helpTexts[[currentLanguage]],
+                         convenienceSQ$helpTexts[[self$language]]);
+
+                ### Specify this new row
                 newRow <-
                   data.frame(
                     id = currentSubQuestionId,
@@ -956,8 +991,8 @@ Survey <- R6::R6Class(
                     type.scale = typeScale,
                     name = convenienceSQ$code,
                     relevance = convenienceSQ$relevance,
-                    text = convenienceSQ$subquestionTexts[[currentLanguage]],
-                    help = convenienceSQ$helpTexts[[currentLanguage]],
+                    text = curLang_subquestionText,
+                    help = curLang_subquestionHelp,
                     language = currentLanguage,
                     validation = convenienceSQ$validation,
                     mandatory = convenienceSQ$mandatory,
@@ -993,6 +1028,13 @@ Survey <- R6::R6Class(
                   typeScale <- 0;
                 }
 
+                ### For values unspecified for this language, get the value
+                ### from the primary language
+                curLang_optionText <-
+                  ifelse(currentLanguage %in% names(convenienceA$optionTexts),
+                         convenienceA$optionTexts[[currentLanguage]],
+                         convenienceA$optionTexts[[self$language]]);
+                ### Specify this new row
                 newRow <-
                   data.frame(
                     id = currentQuestionId,  ### Id of Q, not of A!
@@ -1001,7 +1043,7 @@ Survey <- R6::R6Class(
                     type.scale = typeScale,
                     name = convenienceA$code,
                     relevance = convenienceA$relevance,
-                    text = convenienceA$optionTexts[[currentLanguage]],
+                    text = curLang_optionText,
                     help = "",
                     language = currentLanguage,
                     validation = "",

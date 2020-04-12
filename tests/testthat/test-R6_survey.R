@@ -96,3 +96,71 @@ testthat::test_that("exporting a survey with two languages to a TSV file works",
   testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
                          "onlyQuestion");
 })
+
+
+testthat::test_that("exporting an en/nl survey with a slider works", {
+
+  ls <- limonaid::Survey$new(c(en = "Test Survey",
+                               nl = "Uittestvragenlijst"));
+
+  ls$add_group(c(en = "First group",
+                 nl = "Eerste groep"),
+               c(en = "First group description",
+                 nl = "Beschrijving van de eerste groep"));
+
+  ls$add_question(groupId = 1,
+                  code = "q1",
+                  questionTexts =
+                    c(en = "Q1 question text",
+                      nl = "Q1 vraagtekst"),
+                  helpTexts =
+                    c(en = "Q1 help text",
+                      nl = "Q1 hulptekst"),
+                  type = "radiobuttons");
+
+  ls$groups$`1`$questions$q1$add_answer_option(
+    code = 1,
+    optionTexts = c(en = "Q1, A1, in English",
+                    nl = "Q1, A1, in Dutch"));
+
+  ls$groups$`1`$questions$q1$add_answer_option(
+    code = 2,
+    optionTexts = c(en = "Q1, A2, in English",
+                    nl = "Q1, A2, in Dutch"));
+
+  ls$add_group(c(en = "Second group",
+                 nl = "Tweede groep"),
+               c(en = "Second group description",
+                 nl = "Beschrijving van de tweede groep"));
+
+  ls$add_question(groupId = 2,
+                  code = "sliderQuestion",
+                  questionTexts =
+                    c(en = "Q2 question text",
+                      nl = "Q2 vraagtekst"),
+                  helpTexts =
+                    c(en = "Q2 help text",
+                      nl = "Q2 hulptekst"),
+                  type = "slider",
+                  slider_min = 1,
+                  slider_max = 25,
+                  slider_default = 5);
+
+  ls$groups$`2`$questions$sliderQuestion$add_subquestion(
+    code = "nr",
+    subquestionTexts = "subquestion text"
+  );
+
+  tmpFile <- tempfile(fileext = ".txt");
+
+  ### Temporary
+  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-slider-export.txt";
+
+  ls$export_to_tsv(file = tmpFile,
+                   preventOverwriting = FALSE);
+
+  cat(tmpFile);
+
+  testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
+                         "onlyQuestion");
+})

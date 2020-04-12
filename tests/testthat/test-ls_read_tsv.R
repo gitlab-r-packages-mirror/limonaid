@@ -53,6 +53,9 @@ testthat::test_that("a more extensive LimeSurvey TSV file can be imported", {
 
   limonaid::ls_tsv_get_rows(lsrv, class = "SL")['name']
 
+  ### The row with the slider question
+  limonaid::ls_tsv_get_rows(lsrv, name = "nrOfDMQs")
+
   testthat::expect_equal(nrow(lsrv), 312);
 
 })
