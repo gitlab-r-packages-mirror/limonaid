@@ -937,14 +937,32 @@ Survey <- R6::R6Class(
             if (convenienceQ$lsType == "M") {
               ### For multiple-choice questions, the options are stored as
               ### subquestions, not as answer options.
-              if (!is.null(convenienceQ$answerOptions)) {
-                if ((length(convenienceQ$subquestions) == 0) &&
-                    (length(convenienceQ$answerOptions) > 0)) {
-                  convenienceQ$subquestions <-
-                    convenienceQ$answerOptions;
-                  convenienceQ$subquestions$subquestionTexts <-
-                    convenienceQ$subquestions$optionTexts;
-                }
+              if ((!is.null(convenienceQ$answerOptions)) &&
+                  (length(convenienceQ$answerOptions) > 0) &&
+                  (length(convenienceQ$subquestions) == 0)) {
+                convenienceQ$subquestions <-
+                  lapply(
+                    convenienceQ$answerOptions,
+                    function(x) {
+                      return(
+                        list(
+                          code = x$code,
+                          subquestionTexts = x$optionTexts,
+                          relevance = x$relevance,
+                          type.scale = x$type.scale,
+                          helpTexts = stats::setNames(rep("",
+                                                          length(x$optionTexts)),
+                                                      nm = names(x$optionTexts)),
+                          validation = "",
+                          mandatory = "",
+                          default = "",
+                          same_default = ""
+                        )
+                      );
+                    }
+                  );
+                names(convenienceQ$subquestions) <-
+                  names(convenienceQ$answerOptions);
               }
             }
 
