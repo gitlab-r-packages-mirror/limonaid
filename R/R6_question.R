@@ -45,7 +45,7 @@ Question <- R6::R6Class(
     #' @field answerOptions The answer options in the question.
     answerOptions = list(),
 
-    #' @field subQuestions The subquestions in the question.
+    #' @field subquestions The subquestions in the question.
     subquestions = list(),
 
     #' @field mandatory Whether the question is mandatory (`Y` or `N`).

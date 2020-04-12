@@ -34,7 +34,7 @@ A question has at least a code and a primary language.
 
 \item{\code{answerOptions}}{The answer options in the question.}
 
-\item{\code{subQuestions}}{The subquestions in the question.}
+\item{\code{subquestions}}{The subquestions in the question.}
 
 \item{\code{mandatory}}{Whether the question is mandatory (\code{Y} or \code{N}).}
 
