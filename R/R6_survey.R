@@ -805,7 +805,12 @@ Survey <- R6::R6Class(
       for (currentLanguage in languageList) {
 
         if (!silent) {
-          cat0("\n\nProcessing survey for language: ", currentLanguage, "\n");
+          cat0("\n\nProcessing survey for language: ", currentLanguage,
+               " (",
+               which(languageList == currentLanguage),
+               " out of ",
+               length(languageList),
+               ")\n");
         }
 
         for (currentGroup in seq_along(self$groups)) {
