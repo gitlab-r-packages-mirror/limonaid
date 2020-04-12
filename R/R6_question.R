@@ -315,7 +315,7 @@ Question <- R6::R6Class(
     #' @return Invisibly, the question object.
     add_subquestion = function(code,
                                subquestionTexts,
-                               relevance = 1,
+                               relevance = "",
                                helpTexts = NULL,
                                type.scale = 0,
                                validation = "",

@@ -821,11 +821,13 @@ Survey <- R6::R6Class(
           ### For values unspecified for this language, get the value
           ### from the primary language
           curLang_surveyTitle <-
-            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$titles),
+            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$titles) &&
+                     (nchar(trimws(self$groups[[currentGroup]]$titles[[currentLanguage]])) > 0),
                    self$groups[[currentGroup]]$titles[[currentLanguage]],
                    self$groups[[currentGroup]]$titles[[self$language]]);
           curLang_surveyDescription <-
-            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$descriptions),
+            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$descriptions) &&
+                     (nchar(trimws(self$groups[[currentGroup]]$descriptions[[currentLanguage]])) > 0),
                    self$groups[[currentGroup]]$descriptions[[currentLanguage]],
                    self$groups[[currentGroup]]$descriptions[[self$language]]);
 
@@ -886,11 +888,13 @@ Survey <- R6::R6Class(
             ### For values unspecified for this language, get the value
             ### from the primary language
             curLang_questionText <-
-              ifelse(currentLanguage %in% names(convenienceQ$questionTexts),
+              ifelse(currentLanguage %in% names(convenienceQ$questionTexts) &&
+                       (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0),
                      convenienceQ$questionTexts[[currentLanguage]],
                      convenienceQ$questionTexts[[self$language]]);
             curLang_questionHelp <-
-              ifelse(currentLanguage %in% names(convenienceQ$helpTexts),
+              ifelse(currentLanguage %in% names(convenienceQ$helpTexts) &&
+                       (nchar(trimws(convenienceQ$helpTexts[[currentLanguage]])) > 0),
                      convenienceQ$helpTexts[[currentLanguage]],
                      convenienceQ$helpTexts[[self$language]]);
 
@@ -924,6 +928,24 @@ Survey <- R6::R6Class(
             if (length(convenienceQ$otherOptions) > 0) {
               dat[nrow(dat), names(convenienceQ$otherOptions)] <-
                 convenienceQ$otherOptions;
+            }
+
+            ###-----------------------------------------------------------------
+            ### Work some question-type-specific magic
+            ###-----------------------------------------------------------------
+
+            if (convenienceQ$lsType == "M") {
+              ### For multiple-choice questions, the options are stored as
+              ### subquestions, not as answer options.
+              if (!is.null(convenienceQ$answerOptions)) {
+                if ((length(convenienceQ$subquestions) == 0) &&
+                    (length(convenienceQ$answerOptions) > 0)) {
+                  convenienceQ$subquestions <-
+                    convenienceQ$answerOptions;
+                  convenienceQ$subquestions$subquestionTexts <-
+                    convenienceQ$subquestions$optionTexts;
+                }
+              }
             }
 
             ###-----------------------------------------------------------------
@@ -974,11 +996,13 @@ Survey <- R6::R6Class(
                 ### For values unspecified for this language, get the value
                 ### from the primary language
                 curLang_subquestionText <-
-                  ifelse(currentLanguage %in% names(convenienceSQ$subquestionTexts),
+                  ifelse(currentLanguage %in% names(convenienceSQ$subquestionTexts) &&
+                           (nchar(trimws(convenienceSQ$subquestionTexts[[currentLanguage]])) > 0),
                          convenienceSQ$subquestionTexts[[currentLanguage]],
                          convenienceSQ$subquestionTexts[[self$language]]);
                 curLang_subquestionHelp <-
-                  ifelse(currentLanguage %in% names(convenienceSQ$helpTexts),
+                  ifelse(currentLanguage %in% names(convenienceSQ$helpTexts) &&
+                           (nchar(trimws(convenienceSQ$helpTexts[[currentLanguage]])) > 0),
                          convenienceSQ$helpTexts[[currentLanguage]],
                          convenienceSQ$helpTexts[[self$language]]);
 
@@ -1031,9 +1055,11 @@ Survey <- R6::R6Class(
                 ### For values unspecified for this language, get the value
                 ### from the primary language
                 curLang_optionText <-
-                  ifelse(currentLanguage %in% names(convenienceA$optionTexts),
+                  ifelse(currentLanguage %in% names(convenienceA$optionTexts) &&
+                           (nchar(convenienceA$optionTexts[[currentLanguage]]) > 0),
                          convenienceA$optionTexts[[currentLanguage]],
                          convenienceA$optionTexts[[self$language]]);
+
                 ### Specify this new row
                 newRow <-
                   data.frame(
