@@ -633,21 +633,24 @@ Survey <- R6::R6Class(
       ### Note that since only a few columns are quoted anyway, which
       ### is done 'manually' by `ls_write_tsv()`, we can just set all
       ### columns to character
-      dat <- data.frame(id = character(),
-                        related_id = character(),
-                        class = character(),
-                        type.scale = character(),
-                        name = character(),
-                        relevance = character(),
-                        text = character(),
-                        help = character(),
-                        language = character(),
-                        validation = character(),
-                        mandatory = character(),
-                        other = character(),
-                        default = character(),
-                        same_default = character(),
-                        stringsAsFactors = FALSE);
+      dat <-
+        data.frame(
+          id = character(),
+          related_id = character(),
+          class = character(),
+          type.scale = character(),
+          name = character(),
+          relevance = character(),
+          text = character(),
+          help = character(),
+          language = character(),
+          validation = character(),
+          mandatory = character(),
+          other = character(),
+          default = character(),
+          same_default = character(),
+          stringsAsFactors = FALSE
+        );
 
       selfAsList <- as.list(self);
 
@@ -669,23 +672,28 @@ Survey <- R6::R6Class(
           text <- "";
         }
 
-        dat <-
-          rbind(dat,
-                data.frame(id = "",
-                           related_id = "",
-                           class="S",
-                           type.scale = "",
-                           name = name,
-                           relevance = "",
-                           text = text,
-                           help = "",
-                           language = "",
-                           validation = "",
-                           mandatory = "",
-                           other = "",
-                           default = "",
-                           same_default = "",
-                           stringsAsFactors = FALSE));
+        newRow <-
+          data.frame(
+            id = "",
+            related_id = "",
+            class="S",
+            type.scale = "",
+            name = name,
+            relevance = "",
+            text = text,
+            help = "",
+            language = "",
+            validation = "",
+            mandatory = "",
+            other = "",
+            default = "",
+            same_default = "",
+            stringsAsFactors = FALSE
+          );
+
+        ### Add row using our homerolled version of plyr::rbind.fill
+        dat <- append_lsdf_row(dat, newRow);
+
       }
 
       ###-----------------------------------------------------------------------
@@ -709,23 +717,27 @@ Survey <- R6::R6Class(
 
       for (currentLanguage in languageList) {
 
-        dat <-
-          rbind(dat,
-                data.frame(id = rep("", 2),
-                           related_id = rep("", 2),
-                           class = rep("SL", 2),
-                           type.scale = rep("", 2),
-                           name = c("surveyls_survey_id", "surveyls_language"),
-                           relevance = rep("", 2),
-                           text = c(self$sid, currentLanguage),
-                           help = rep("", 2),
-                           language = rep(currentLanguage, 2),
-                           validation = rep("", 2),
-                           mandatory = rep("", 2),
-                           other = rep("", 2),
-                           default = rep("", 2),
-                           same_default = rep("", 2),
-                           stringsAsFactors = FALSE));
+        newRow <-
+          data.frame(
+            id = rep("", 2),
+            related_id = rep("", 2),
+            class = rep("SL", 2),
+            type.scale = rep("", 2),
+            name = c("surveyls_survey_id", "surveyls_language"),
+            relevance = rep("", 2),
+            text = c(self$sid, currentLanguage),
+            help = rep("", 2),
+            language = rep(currentLanguage, 2),
+            validation = rep("", 2),
+            mandatory = rep("", 2),
+            other = rep("", 2),
+            default = rep("", 2),
+            same_default = rep("", 2),
+            stringsAsFactors = FALSE
+          );
+
+        ### Add row using our homerolled version of plyr::rbind.fill
+        dat <- append_lsdf_row(dat, newRow);
 
         for (i in seq_along(private$languageSpecificSurveySettings)) {
 
@@ -740,23 +752,28 @@ Survey <- R6::R6Class(
             text <- "\"\"";
           }
 
-          dat <-
-            rbind(dat,
-                  data.frame(id = "",
-                             related_id = "",
-                             class="SL",
-                             type.scale = "",
-                             name = name,
-                             relevance = "",
-                             text = text,
-                             help = "",
-                             language = currentLanguage,
-                             validation = "",
-                             mandatory = "",
-                             other = "",
-                             default = "",
-                             same_default = "",
-                             stringsAsFactors = FALSE));
+          newRow <-
+            data.frame(
+              id = "",
+              related_id = "",
+              class="SL",
+              type.scale = "",
+              name = name,
+              relevance = "",
+              text = text,
+              help = "",
+              language = currentLanguage,
+              validation = "",
+              mandatory = "",
+              other = "",
+              default = "",
+              same_default = "",
+              stringsAsFactors = FALSE
+            );
+
+          ### Add row using our homerolled version of plyr::rbind.fill
+          dat <- append_lsdf_row(dat, newRow);
+
         }
       }
 
@@ -765,13 +782,41 @@ Survey <- R6::R6Class(
       ### answer options
       ###-----------------------------------------------------------------------
 
+      ### As per
+      ### https://manual.limesurvey.org/Tab_Separated_Value_survey_structure,
+      ### identifiers should count questions and subquestions, so we map
+      ### unique identifiers based on the codes onto these numeric identifiers.
+
+      exportGroupIdMapping <- c();
+      exportQuestionIdMapping <- c();
+
       for (currentLanguage in languageList) {
 
         for (currentGroup in seq_along(self$groups)) {
 
+          ### Check whether this group already has a new, 'remapped'
+          ### numeric identifier for exporting. If not, create it.
+          if (!(self$groups[[currentGroup]]$id
+                %in%
+                names(exportGroupIdMapping))) {
+            if (length(exportGroupIdMapping) == 0) {
+              exportGroupIdMapping <- 1;
+            } else {
+              exportGroupIdMapping <-
+                c(exportGroupIdMapping,
+                  max(exportGroupIdMapping) + 1);
+            }
+            names(exportGroupIdMapping)[length(exportGroupIdMapping)] <-
+              self$groups[[currentGroup]]$id;
+          }
+
+          ### Then assign this new identifier
+          currentGroupId <-
+            exportGroupIdMapping[self$groups[[currentGroup]]$id];
+
           newRow <-
             data.frame(
-              id = self$groups[[currentGroup]]$id,
+              id = currentGroupId,
               related_id = "",
               class="G",
               type.scale = "0",
@@ -788,19 +833,44 @@ Survey <- R6::R6Class(
               stringsAsFactors = FALSE
             );
 
-          ### Add group row
-          dat <-
-            rbind(dat,
-                  newRow);
+          ### Add row using our homerolled version of plyr::rbind.fill
+          dat <- append_lsdf_row(dat, newRow);
 
+          ###-------------------------------------------------------------------
           ### Loop through questions
-          for (currentQuestionIndex in seq_along(self$groups[[currentGroup]]$questions)) {
+          ###-------------------------------------------------------------------
 
-            convenienceQ <- self$groups[[currentGroup]]$questions[[currentQuestionIndex]];
+          for (currentQuestionIndex in
+               seq_along(self$groups[[currentGroup]]$questions)) {
+
+            convenienceQ <-
+              self$groups[[currentGroup]]$questions[[currentQuestionIndex]];
+
+            ### Check whether this question already has a new, 'remapped'
+            ### numeric identifier for exporting. If not, create it.
+            uniqueQuestionCodeId <- convenienceQ$code;
+
+            if (!(uniqueQuestionCodeId
+                  %in%
+                  names(exportQuestionIdMapping))) {
+              if (length(exportQuestionIdMapping) == 0) {
+                exportQuestionIdMapping <- 1;
+              } else {
+                exportQuestionIdMapping <-
+                  c(exportQuestionIdMapping,
+                    max(exportQuestionIdMapping) + 1);
+              }
+              names(exportQuestionIdMapping)[length(exportQuestionIdMapping)] <-
+                uniqueQuestionCodeId;
+            }
+
+            ### Then assign this new identifier
+            currentQuestionId <-
+              exportQuestionIdMapping[uniqueQuestionCodeId];
 
             newRow <-
               data.frame(
-                id = convenienceQ$id,
+                id = currentQuestionId,
                 related_id = "",
                 class="Q",
                 type.scale = convenienceQ$lsType,
@@ -817,55 +887,132 @@ Survey <- R6::R6Class(
                 stringsAsFactors = FALSE
               );
 
-            ### Add question row
-            dat <-
-              rbind(dat,
-                    newRow);
+            ### Add row using our homerolled version of plyr::rbind.fill
+            dat <- append_lsdf_row(dat, newRow);
 
+            ### Set additional options for this question
+            dat[nrow(dat), "array_filter"] <- convenienceQ$array_filter;
+            dat[nrow(dat), "cssclass"] <- convenienceQ$cssclass;
+            dat[nrow(dat), "hide_tip"] <- convenienceQ$hide_tip;
+            if (length(convenienceQ$otherOptions) > 0) {
+              dat[nrow(dat), names(convenienceQ$otherOptions)] <-
+                convenienceQ$otherOptions;
+            }
+
+            ###-----------------------------------------------------------------
             ### Loop through subquestions
-            if (!is.null(convenienceQ$subquestions)) {
-              for (currentSubquestionIndex in seq_along(convenienceQ$subquestions)) {
+            ###-----------------------------------------------------------------
 
-                convenienceSQ <- convenienceQ$subquestions[[currentSubquestionIndex]];
-                ### Add subquestions
+            if (!is.null(convenienceQ$subquestions)) {
+              for (currentSubquestionIndex in
+                   seq_along(convenienceQ$subquestions)) {
+
+                convenienceSQ <-
+                  convenienceQ$subquestions[[currentSubquestionIndex]];
+
+                ### Check whether this question already has a new, 'remapped'
+                ### numeric identifier for exporting. If not, create it. Note
+                ### that in this system, LimeSurvey numbers subquestions
+                ### like questions.
+                uniqueSubQuestionCodeId <-
+                  paste0(convenienceQ$code,
+                         "_",
+                         convenienceSQ$code);
+
+                if (!(uniqueSubQuestionCodeId
+                      %in%
+                      names(exportQuestionIdMapping))) {
+                  exportQuestionIdMapping <-
+                    c(exportQuestionIdMapping,
+                      max(exportQuestionIdMapping) + 1);
+                  names(exportQuestionIdMapping)[length(exportQuestionIdMapping)] <-
+                    uniqueSubQuestionCodeId;
+                }
+
+                ### Then assign this new identifier
+                currentSubQuestionId <-
+                  exportQuestionIdMapping[uniqueSubQuestionCodeId];
+
+                ### Check and potentially correct type/scale
+                typeScale <- convenienceSQ$type.scale;
+                if (!(convenienceSQ$type.scale %in% 0:1)) {
+                  warning("The type/scale (`type.scale`) for subquestion ",
+                          "with code '", convenienceSQ$code, "' in question ",
+                          "with code '", convenienceQ$code, "' is not 0 or ",
+                          "1, but ", typeScale,
+                          ". I'm setting it to 0 while saving.");
+                  typeScale <- 0;
+                }
+
+                newRow <-
+                  data.frame(
+                    id = currentSubQuestionId,
+                    related_id = "",
+                    class="SQ",
+                    type.scale = typeScale,
+                    name = convenienceSQ$code,
+                    relevance = convenienceSQ$relevance,
+                    text = convenienceSQ$subquestionTexts[[currentLanguage]],
+                    help = convenienceSQ$helpTexts[[currentLanguage]],
+                    language = currentLanguage,
+                    validation = convenienceSQ$validation,
+                    mandatory = convenienceSQ$mandatory,
+                    other = "",
+                    default = convenienceSQ$default,
+                    same_default = convenienceSQ$same_default,
+                    stringsAsFactors = FALSE
+                  );
+
+                ### Add row using our homerolled version of plyr::rbind.fill
+                dat <- append_lsdf_row(dat, newRow);
 
               }
             }
 
+            ###-----------------------------------------------------------------
             ### Loop through answer options
+            ###-----------------------------------------------------------------
+
             if (!is.null(convenienceQ$answerOptions)) {
               for (currentAnswerOptionIndex in seq_along(convenienceQ$answerOptions)) {
 
                 convenienceA <-
                   convenienceQ$answerOptions[[currentAnswerOptionIndex]];
 
-                ### Add answer option row
-                dat <-
-                  rbind(dat,
-                        data.frame(
-                          id = convenienceQ$id,  ### Id of Q, not of A!
-                          related_id = "",
-                          class="A",
-                          type.scale = 0,
-                          name = convenienceA$code,
-                          relevance = "",
-                          text = convenienceA$optionTexts[[currentLanguage]],
-                          help = "",
-                          language = currentLanguage,
-                          validation = "",
-                          mandatory = "",
-                          other = "",
-                          default = "",
-                          same_default = "",
-                          stringsAsFactors = FALSE
-                        )
-                      );
+                typeScale <- convenienceA$type.scale;
+                if (!(convenienceA$type.scale %in% 0:1)) {
+                  warning("The type/scale (`type.scale`) for answer option ",
+                          "with code '", convenienceA$code, "' in question ",
+                          "with code '", convenienceQ$code, "' is not 0 or ",
+                          "1, but ", typeScale,
+                          ". I'm setting it to 0 while saving.");
+                  typeScale <- 0;
+                }
+
+                newRow <-
+                  data.frame(
+                    id = currentQuestionId,  ### Id of Q, not of A!
+                    related_id = "",
+                    class="A",
+                    type.scale = typeScale,
+                    name = convenienceA$code,
+                    relevance = convenienceA$relevance,
+                    text = convenienceA$optionTexts[[currentLanguage]],
+                    help = "",
+                    language = currentLanguage,
+                    validation = "",
+                    mandatory = "",
+                    other = "",
+                    default = "",
+                    same_default = "",
+                    stringsAsFactors = FALSE
+                  );
+
+                ### Add row using our homerolled version of plyr::rbind.fill
+                dat <- append_lsdf_row(dat, newRow);
 
               }
             }
-
-
-
 
           }
 

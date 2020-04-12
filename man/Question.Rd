@@ -64,6 +64,7 @@ by assigning \code{as.list(...)}.}
 \itemize{
 \item \href{#method-new}{\code{Question$new()}}
 \item \href{#method-add_answer_option}{\code{Question$add_answer_option()}}
+\item \href{#method-add_subquestion}{\code{Question$add_subquestion()}}
 \item \href{#method-clone}{\code{Question$clone()}}
 }
 }
@@ -71,7 +72,10 @@ by assigning \code{as.list(...)}.}
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new question object.
+Create a new question object. Most of this text comes directly
+from the TSV manual page at
+https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+please see that page for more details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Question$new(
   code,
@@ -124,7 +128,8 @@ label if the default label should be overwritten (multilingual).}
 
 \item{\code{default}}{The default value.}
 
-\item{\code{same_default}}{Not entirely sure what this does.}
+\item{\code{same_default}}{\code{Y} for true, in which case any default value set
+for the primary language applies to other languages.}
 
 \item{\code{array_filter}}{The question code of the array filter question
 to apply.}
@@ -148,9 +153,12 @@ A new \code{Survey} object.
 \if{html}{\out{<a id="method-add_answer_option"></a>}}
 \if{latex}{\out{\hypertarget{method-add_answer_option}{}}}
 \subsection{Method \code{add_answer_option()}}{
-Add an answer option to a question.
+Add an answer option to a question. Most of this text comes directly
+from the TSV manual page at
+https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+please see that page for more details.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Question$add_answer_option(code, optionTexts)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Question$add_answer_option(code, optionTexts, type.scale = 0, relevance = "")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -159,11 +167,74 @@ Add an answer option to a question.
 \item{\code{code}}{The answer option code.}
 
 \item{\code{optionTexts}}{The answer option text(s).}
+
+\item{\code{type.scale}}{\code{0} or \code{1} (e.g. for dual-scale; 'scale_id').}
+
+\item{\code{relevance}}{If using assessment option, this is the assessment
+value for the answer ('assessment_value').}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Invisible, the question object.
+Invisibly, the question object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-add_subquestion"></a>}}
+\if{latex}{\out{\hypertarget{method-add_subquestion}{}}}
+\subsection{Method \code{add_subquestion()}}{
+Add a subquestion to a question. Most of this text comes directly from
+the TSV manual page at
+https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+please see that page for more details.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Question$add_subquestion(
+  code,
+  subquestionTexts,
+  relevance = 1,
+  helpTexts = NULL,
+  type.scale = 0,
+  validation = "",
+  mandatory = "",
+  default = "",
+  same_default = ""
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{The subquestions code.}
+
+\item{\code{subquestionTexts}}{The subquestion text(s).}
+
+\item{\code{relevance}}{When to show this subquestion.}
+
+\item{\code{helpTexts}}{As far as I know not yet implemented in LimeSurvey;
+but the TSV help page says "(Future) to support subquestion-level help".}
+
+\item{\code{type.scale}}{\code{0} or \code{1}, depending upon question type (e.g. array
+text will have two scales)0 or 1, depending upon question type (e.g.
+array text will have two scales)."}
+
+\item{\code{validation}}{As far as I know not yet implemented in LimeSurvey;
+but the TSV help page says "(Future) to support subquestion-level
+regular expression validation (e.g. for address parts)"}
+
+\item{\code{mandatory}}{As far as I know not yet implemented in LimeSurvey;
+but the TSV help page says "(Future) to support subquestion-level
+mandatory (e.g. make only a few subquestions mandatory)"}
+
+\item{\code{default}}{If set, then this is the default value for the
+subquestion (inserted into defaultvalues table).}
+
+\item{\code{same_default}}{If set, then the default for the primary language
+is used for all other languages.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Invisibly, the question object.
 }
 }
 \if{html}{\out{<hr>}}

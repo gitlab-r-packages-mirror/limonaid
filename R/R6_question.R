@@ -83,7 +83,10 @@ Question <- R6::R6Class(
     ###-------------------------------------------------------------------------
 
     #' @description
-    #' Create a new question object.
+    #' Create a new question object. Most of this text comes directly
+    #' from the TSV manual page at
+    #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+    #' please see that page for more details.
     #' @param code The question code.
     #' @param type The human-readable question type.
     #' @param lsType The type as LimeSurvey type (see
@@ -98,7 +101,8 @@ Question <- R6::R6Class(
     #' @param other_replace_text If the question has an 'other' option, its
     #' label if the default label should be overwritten (multilingual).
     #' @param default The default value.
-    #' @param same_default Not entirely sure what this does.
+    #' @param same_default `Y` for true, in which case any default value set
+    #' for the primary language applies to other languages.
     #' @param array_filter The question code of the array filter question
     #' to apply.
     #' @param cssclass The CSS class(es) to apply to this question.
@@ -215,12 +219,20 @@ Question <- R6::R6Class(
     ###-------------------------------------------------------------------------
 
     #' @description
-    #' Add an answer option to a question.
+    #' Add an answer option to a question. Most of this text comes directly
+    #' from the TSV manual page at
+    #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+    #' please see that page for more details.
     #' @param code The answer option code.
     #' @param optionTexts The answer option text(s).
-    #' @return Invisible, the question object.
+    #' @param type.scale `0` or `1` (e.g. for dual-scale; 'scale_id').
+    #' @param relevance If using assessment option, this is the assessment
+    #' value for the answer ('assessment_value').
+    #' @return Invisibly, the question object.
     add_answer_option = function(code,
-                                 optionTexts) {
+                                 optionTexts,
+                                 type.scale = 0,
+                                 relevance = "") {
 
       ###-----------------------------------------------------------------------
       ### Check code
@@ -233,25 +245,12 @@ Question <- R6::R6Class(
       }
 
       ###-----------------------------------------------------------------------
-      ### Check and fix option texts
+      ### Check whether the multilingual fields have been passed properly
       ###-----------------------------------------------------------------------
 
-      if (!is.character(optionTexts) || (length(optionTexts) == 0)) {
-        stop("The option text or texts specified as `optionTexts` ",
-             "must be a character vector with at least one element!");
-      }
-
-      if (length(optionTexts) == 1) {
-        optionTexts <-
-          stats::setNames(optionTexts,
-                          nm = self$language);
-      } else {
-        if (!(self$language %in% names(optionTexts))) {
-          stop("When providing multiple option texts, at least one ",
-               "of them has to be in the question's primary language (",
-               self$language, "').");
-        }
-      }
+      optionTexts <-
+        checkMultilingualFields(optionTexts,
+                                language = self$language);
 
       ###-----------------------------------------------------------------------
       ### Set the answer options
@@ -260,7 +259,9 @@ Question <- R6::R6Class(
       self$answerOptions <-
         c(self$answerOptions,
           list(list(code = code,
-                    optionTexts = optionTexts)));
+                    optionTexts = optionTexts,
+                    type.scale = type.scale,
+                    relevance = relevance)));
 
       ### Set name of this new option
       names(self$answerOptions)[
@@ -268,11 +269,90 @@ Question <- R6::R6Class(
 
       ### Return self invisibly
       return(invisible(self));
-    }
+    },
 
     ###-------------------------------------------------------------------------
     ### Add a subquestion
     ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Add a subquestion to a question. Most of this text comes directly from
+    #' the TSV manual page at
+    #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+    #' please see that page for more details.
+    #' @param code The subquestions code.
+    #' @param subquestionTexts The subquestion text(s).
+    #' @param relevance When to show this subquestion.
+    #' @param helpTexts As far as I know not yet implemented in LimeSurvey;
+    #' but the TSV help page says "(Future) to support subquestion-level help".
+    #' @param type.scale `0` or `1`, depending upon question type (e.g. array
+    #' text will have two scales)0 or 1, depending upon question type (e.g.
+    #' array text will have two scales)."
+    #' @param validation As far as I know not yet implemented in LimeSurvey;
+    #' but the TSV help page says "(Future) to support subquestion-level
+    #' regular expression validation (e.g. for address parts)"
+    #' @param mandatory As far as I know not yet implemented in LimeSurvey;
+    #' but the TSV help page says "(Future) to support subquestion-level
+    #' mandatory (e.g. make only a few subquestions mandatory)"
+    #' @param default If set, then this is the default value for the
+    #' subquestion (inserted into defaultvalues table).
+    #' @param same_default If set, then the default for the primary language
+    #' is used for all other languages.
+    #' @return Invisibly, the question object.
+    add_subquestion = function(code,
+                               subquestionTexts,
+                               relevance = 1,
+                               helpTexts = NULL,
+                               type.scale = 0,
+                               validation = "",
+                               mandatory = "",
+                               default = "",
+                               same_default = "") {
+
+      ###-----------------------------------------------------------------------
+      ### Check code
+      ###-----------------------------------------------------------------------
+
+      if (!grepl("^[a-zA-Z0-9]*$",
+                 code)) {
+        stop("Subquestion codes may only consist of digits and ",
+             "letters!");
+      }
+
+      ###-----------------------------------------------------------------------
+      ### Check whether the multilingual fields have been passed properly
+      ###-----------------------------------------------------------------------
+
+      subquestionTexts <-
+        checkMultilingualFields(subquestionTexts,
+                                language = language);
+
+      if (!is.null(helpTexts)) {
+        helpTexts <-
+          checkMultilingualFields(helpTexts,
+                                  language = language);
+      } else {
+        helpTexts <- stats::setNames(rep("", length(subquestionTexts)),
+                                     nm = names(subquestionTexts));
+      }
+
+      ###-----------------------------------------------------------------------
+      ### Set the subquestions
+      ###-----------------------------------------------------------------------
+
+      self$subQuestions <-
+        c(self$subQuestions,
+          list(list(code = code,
+                    subquestionTexts = optionTexts,
+                    relevance = relevance)));
+
+      ### Set name of this new subquestion
+      names(self$subQuestions)[
+        length(self$subQuestions)] <- code;
+
+      ### Return self invisibly
+      return(invisible(self));
+    }
 
   )
 )
