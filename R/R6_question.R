@@ -158,13 +158,13 @@ Question <- R6::R6Class(
         } else if (type %in% c("radio", "radiobuttons")) {
           lsType <- "L";
 
-        } else if (type == c("multiple choice", "checkboxes")) {
+        } else if (type %in% c("multiple choice", "checkboxes")) {
           lsType <- "M";
 
-        } else if (type == c("dropdown")) {
+        } else if (type %in% c("dropdown")) {
           lsType <- "!";
 
-        } else if (type == c("equation")) {
+        } else if (type %in% c("equation")) {
           lsType <- "*";
 
         } else {
