@@ -870,7 +870,7 @@ Survey <- R6::R6Class(
           parallel::parLapply(
             cl,
             self$additional_languages,
-            lsdf_for_language,
+            limonaid::lsdf_for_language,
             groups = groups,
             exportGroupIdMapping = exportGroupIdMapping,
             exportQuestionIdMapping = exportQuestionIdMapping,
