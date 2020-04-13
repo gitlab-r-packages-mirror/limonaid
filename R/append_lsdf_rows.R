@@ -1,3 +1,16 @@
+#' Create an empty dataframe
+#'
+#' This function is used by [append_lsdf_rows()], and you normally
+#' should not use it directly.
+#'
+#' @param colnames The column names for the dataframe.
+#' @param nrow The number of rows.
+#' @param fillWith What to fill the dataframe with.
+#'
+#' @return The data.frame.
+#' @export
+#'
+#' @examples limonaid::emptyDf(c("x", "y"), 3);
 emptyDf <- function(colnames,
                     nrow,
                     fillWith = "") {
@@ -19,8 +32,20 @@ emptyDf <- function(colnames,
   );
 }
 
-append_lsdf_row <- function(data,
-                            row) {
+
+#' A home-rolled version of plyr::rbind.fill
+#'
+#' This is used when creating dataframes for TSV exports.
+#'
+#' @param data The first dataframe.
+#' @param row The second dataframe.
+#'
+#' @return A merged dataframe.
+#' @export
+#'
+#' @examples limonaid::append_lsdf_rows(mtcars, iris);
+append_lsdf_rows <- function(data,
+                             row) {
   dataCols <- names(data);
   rowCols <- names(row);
   extraDataCols <- dataCols[!(dataCols %in% rowCols)];

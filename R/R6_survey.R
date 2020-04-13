@@ -617,12 +617,14 @@ Survey <- R6::R6Class(
     #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
     #' @param file The filename to which to save the file.
     #' @param preventOverwriting Whether to prevent overwritting.
+    #' @param parallel Whether to work serially or in parallel.
     #' @param encoding The encoding to use
     #' @param silent Whether to be silent or chatty.
     #' @return Invisibly, the `Survey` object.
     export_to_tsv = function(file,
-                             encoding = limonaid::opts$get("encoding"),
                              preventOverwriting = limonaid::opts$get("preventOverwriting"),
+                             parallel = TRUE,
+                             encoding = limonaid::opts$get("encoding"),
                              silent = limonaid::opts$get("silent")) {
 
       ###-----------------------------------------------------------------------
@@ -696,7 +698,7 @@ Survey <- R6::R6Class(
           );
 
         ### Add row using our homerolled version of plyr::rbind.fill
-        dat <- append_lsdf_row(dat, newRow);
+        dat <- append_lsdf_rows(dat, newRow);
 
       }
 
@@ -745,7 +747,7 @@ Survey <- R6::R6Class(
           );
 
         ### Add row using our homerolled version of plyr::rbind.fill
-        dat <- append_lsdf_row(dat, newRow);
+        dat <- append_lsdf_rows(dat, newRow);
 
         for (i in seq_along(private$languageSpecificSurveySettings)) {
 
@@ -784,7 +786,7 @@ Survey <- R6::R6Class(
             );
 
           ### Add row using our homerolled version of plyr::rbind.fill
-          dat <- append_lsdf_row(dat, newRow);
+          dat <- append_lsdf_rows(dat, newRow);
 
         }
       }
@@ -799,333 +801,124 @@ Survey <- R6::R6Class(
       ### identifiers should count questions and subquestions, so we map
       ### unique identifiers based on the codes onto these numeric identifiers.
 
-      exportGroupIdMapping <- c();
-      exportQuestionIdMapping <- c();
+      ### First for primary language
 
-      for (currentLanguage in languageList) {
+      if (!silent) {
+        cat0("\n\nProcessing survey for language: ", self$language);
+        if (length(self$additional_languages) > 0) {
+          cat0(" (primary language; 1 of ", length(languageList), ")\n");
+        } else {
+          cat0(" (primary and only language in this survey)\n");
+        }
+      }
 
-        if (!silent) {
-          cat0("\n\nProcessing survey for language: ", currentLanguage,
-               " (",
-               which(languageList == currentLanguage),
-               " out of ",
-               length(languageList),
-               ")\n");
+      lsdf_for_language_list <-
+        lsdf_for_language(
+          language = self$language,
+          groups = self$groups,
+          exportGroupIdMapping = private$exportGroupIdMapping,
+          exportQuestionIdMapping = private$exportQuestionIdMapping,
+          primaryLanguage = self$language,
+          silent = silent
+        );
+
+      ### Store potentially updated mappings
+      private$exportGroupIdMapping <-
+        lsdf_for_language_list$exportGroupIdMapping;
+      private$exportQuestionIdMapping <-
+        lsdf_for_language_list$exportQuestionIdMapping;
+
+      ### Add row using our homerolled version of plyr::rbind.fill
+      dat <- append_lsdf_rows(dat,
+                              lsdf_for_language_list$dat);
+
+      ### Then, if need be, for the secondary languages, either serially
+      ### or in parallel.
+
+      if (parallel) {
+
+        ### Then for all other languages in parallel; detect number of cores
+        ### and create a cluster
+        nCores <- parallel::detectCores();
+        cl <- parallel::makeCluster(nCores);
+
+        ### Prepare objects to export to each cluster
+        groups <- self$groups;
+        exportGroupIdMapping <- private$exportGroupIdMapping;
+        exportQuestionIdMapping <- private$exportQuestionIdMapping;
+        primaryLanguage <- self$language;
+
+        ### Export the functions, these specially prepared objects,
+        ### and the 'silent' setting
+        parallel::clusterExport(
+          cl,
+          c('lsdf_for_language',
+            'emptyDf',
+            'append_lsdf_rows')
+        );
+        parallel::clusterExport(
+          cl,
+          c('groups',
+            'exportGroupIdMapping',
+            'exportQuestionIdMapping',
+            'primaryLanguage',
+            'silent'),
+          envir = environment()
+        );
+
+        ### Perform the parallel computations
+        parallelOutput <-
+          parallel::parLapply(
+            cl,
+            self$additional_languages,
+            lsdf_for_language,
+            groups = groups,
+            exportGroupIdMapping = exportGroupIdMapping,
+            exportQuestionIdMapping = exportQuestionIdMapping,
+            primaryLanguage = primaryLanguage
+          );
+
+        ### Stop the cluster
+        parallel::stopCluster(cl);
+
+        ### Extract the dataframes
+        for (i in seq_along(parallelOutput)) {
+          dat <- append_lsdf_rows(dat,
+                                  parallelOutput[[i]]$dat);
         }
 
-        for (currentGroup in seq_along(self$groups)) {
+      } else {
 
-          ### Check whether this group already has a new, 'remapped'
-          ### numeric identifier for exporting. If not, create it.
-          if (!(self$groups[[currentGroup]]$id
-                %in%
-                names(exportGroupIdMapping))) {
-            if (length(exportGroupIdMapping) == 0) {
-              exportGroupIdMapping <- 1;
-            } else {
-              exportGroupIdMapping <-
-                c(exportGroupIdMapping,
-                  max(exportGroupIdMapping) + 1);
-            }
-            names(exportGroupIdMapping)[length(exportGroupIdMapping)] <-
-              self$groups[[currentGroup]]$id;
-          }
-
-          ### Then assign this new identifier
-          currentGroupId <-
-            exportGroupIdMapping[self$groups[[currentGroup]]$id];
-
-          ### For values unspecified for this language, get the value
-          ### from the primary language
-          curLang_surveyTitle <-
-            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$titles) &&
-                     (nchar(trimws(self$groups[[currentGroup]]$titles[[currentLanguage]])) > 0),
-                   self$groups[[currentGroup]]$titles[[currentLanguage]],
-                   self$groups[[currentGroup]]$titles[[self$language]]);
-          curLang_surveyDescription <-
-            ifelse(currentLanguage %in% names(self$groups[[currentGroup]]$descriptions) &&
-                     (nchar(trimws(self$groups[[currentGroup]]$descriptions[[currentLanguage]])) > 0),
-                   self$groups[[currentGroup]]$descriptions[[currentLanguage]],
-                   self$groups[[currentGroup]]$descriptions[[self$language]]);
+        for (currentLanguage in self$additional_languages) {
 
           if (!silent) {
-            cat0("  Processing group: ", curLang_surveyTitle, "\n");
+            cat0("\n\nProcessing survey for language: ", currentLanguage,
+                 " (",
+                 which(self$additional_languages == currentLanguage) + 1,
+                 " out of ",
+                 length(self$additional_languages) + 1,
+                 ")\n");
           }
 
-          newRow <-
-            data.frame(
-              id = currentGroupId,
-              related_id = "",
-              class="G",
-              type.scale = "0",
-              name = curLang_surveyTitle,
-              relevance = self$groups[[currentGroup]]$relevance,
-              text = curLang_surveyDescription,
-              help = "",
+          lsdf_for_language_list <-
+            lsdf_for_language(
               language = currentLanguage,
-              validation = "",
-              mandatory = "",
-              other = "",
-              default = "",
-              same_default = "",
-              stringsAsFactors = FALSE
+              groups = self$groups,
+              exportGroupIdMapping = private$exportGroupIdMapping,
+              exportQuestionIdMapping = private$exportQuestionIdMapping,
+              primaryLanguage = self$language,
+              silent = silent
             );
 
+          ### Store potentially updated mappings
+          private$exportGroupIdMapping <-
+            lsdf_for_language_list$exportGroupIdMapping;
+          private$exportQuestionIdMapping <-
+            lsdf_for_language_list$exportQuestionIdMapping;
+
           ### Add row using our homerolled version of plyr::rbind.fill
-          dat <- append_lsdf_row(dat, newRow);
-
-          ###-------------------------------------------------------------------
-          ### Loop through questions
-          ###-------------------------------------------------------------------
-
-          for (currentQuestionIndex in
-               seq_along(self$groups[[currentGroup]]$questions)) {
-
-            convenienceQ <-
-              self$groups[[currentGroup]]$questions[[currentQuestionIndex]];
-
-            ### Check whether this question already has a new, 'remapped'
-            ### numeric identifier for exporting. If not, create it.
-            uniqueQuestionCodeId <- convenienceQ$code;
-
-            if (!(uniqueQuestionCodeId
-                  %in%
-                  names(exportQuestionIdMapping))) {
-              if (length(exportQuestionIdMapping) == 0) {
-                exportQuestionIdMapping <- 1;
-              } else {
-                exportQuestionIdMapping <-
-                  c(exportQuestionIdMapping,
-                    max(exportQuestionIdMapping) + 1);
-              }
-              names(exportQuestionIdMapping)[length(exportQuestionIdMapping)] <-
-                uniqueQuestionCodeId;
-            }
-
-            ### Then assign this new identifier
-            currentQuestionId <-
-              exportQuestionIdMapping[uniqueQuestionCodeId];
-
-            ### For values unspecified for this language, get the value
-            ### from the primary language
-            curLang_questionText <-
-              ifelse(currentLanguage %in% names(convenienceQ$questionTexts) &&
-                       (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0),
-                     convenienceQ$questionTexts[[currentLanguage]],
-                     convenienceQ$questionTexts[[self$language]]);
-            curLang_questionHelp <-
-              ifelse(currentLanguage %in% names(convenienceQ$helpTexts) &&
-                       (nchar(trimws(convenienceQ$helpTexts[[currentLanguage]])) > 0),
-                     convenienceQ$helpTexts[[currentLanguage]],
-                     convenienceQ$helpTexts[[self$language]]);
-
-            ### Specify this new row
-            newRow <-
-              data.frame(
-                id = currentQuestionId,
-                related_id = "",
-                class="Q",
-                type.scale = convenienceQ$lsType,
-                name = convenienceQ$code,
-                relevance = convenienceQ$relevance,
-                text = curLang_questionText,
-                help = curLang_questionHelp,
-                language = currentLanguage,
-                validation = convenienceQ$validation,
-                mandatory = convenienceQ$mandatory,
-                other = convenienceQ$other,
-                default = convenienceQ$default,
-                same_default = convenienceQ$same_default,
-                stringsAsFactors = FALSE
-              );
-
-            ### Add row using our homerolled version of plyr::rbind.fill
-            dat <- append_lsdf_row(dat, newRow);
-
-            ### Set additional options for this question
-            dat[nrow(dat), "array_filter"] <- convenienceQ$array_filter;
-            dat[nrow(dat), "cssclass"] <- convenienceQ$cssclass;
-            dat[nrow(dat), "hide_tip"] <- convenienceQ$hide_tip;
-            if (length(convenienceQ$otherOptions) > 0) {
-              dat[nrow(dat), names(convenienceQ$otherOptions)] <-
-                convenienceQ$otherOptions;
-            }
-
-            ###-----------------------------------------------------------------
-            ### Work some question-type-specific magic
-            ###-----------------------------------------------------------------
-
-            if (convenienceQ$lsType == "M") {
-              ### For multiple-choice questions, the options are stored as
-              ### subquestions, not as answer options.
-              if ((!is.null(convenienceQ$answerOptions)) &&
-                  (length(convenienceQ$answerOptions) > 0) &&
-                  (length(convenienceQ$subquestions) == 0)) {
-                convenienceQ$subquestions <-
-                  lapply(
-                    convenienceQ$answerOptions,
-                    function(x) {
-                      return(
-                        list(
-                          code = x$code,
-                          subquestionTexts = x$optionTexts,
-                          relevance = x$relevance,
-                          type.scale = x$type.scale,
-                          helpTexts = stats::setNames(rep("",
-                                                          length(x$optionTexts)),
-                                                      nm = names(x$optionTexts)),
-                          validation = "",
-                          mandatory = "",
-                          default = "",
-                          same_default = ""
-                        )
-                      );
-                    }
-                  );
-                names(convenienceQ$subquestions) <-
-                  names(convenienceQ$answerOptions);
-              }
-            }
-
-            ###-----------------------------------------------------------------
-            ### Loop through subquestions
-            ###-----------------------------------------------------------------
-
-            if (!is.null(convenienceQ$subquestions)) {
-              for (currentSubquestionIndex in
-                   seq_along(convenienceQ$subquestions)) {
-
-                convenienceSQ <-
-                  convenienceQ$subquestions[[currentSubquestionIndex]];
-
-                ### Check whether this question already has a new, 'remapped'
-                ### numeric identifier for exporting. If not, create it. Note
-                ### that in this system, LimeSurvey numbers subquestions
-                ### like questions.
-                uniqueSubQuestionCodeId <-
-                  paste0(convenienceQ$code,
-                         "_",
-                         convenienceSQ$code);
-
-                if (!(uniqueSubQuestionCodeId
-                      %in%
-                      names(exportQuestionIdMapping))) {
-                  exportQuestionIdMapping <-
-                    c(exportQuestionIdMapping,
-                      max(exportQuestionIdMapping) + 1);
-                  names(exportQuestionIdMapping)[length(exportQuestionIdMapping)] <-
-                    uniqueSubQuestionCodeId;
-                }
-
-                ### Then assign this new identifier
-                currentSubQuestionId <-
-                  exportQuestionIdMapping[uniqueSubQuestionCodeId];
-
-                ### Check and potentially correct type/scale
-                typeScale <- convenienceSQ$type.scale;
-                if (!(convenienceSQ$type.scale %in% 0:1)) {
-                  warning("The type/scale (`type.scale`) for subquestion ",
-                          "with code '", convenienceSQ$code, "' in question ",
-                          "with code '", convenienceQ$code, "' is not 0 or ",
-                          "1, but ", typeScale,
-                          ". I'm setting it to 0 while saving.");
-                  typeScale <- 0;
-                }
-
-                ### For values unspecified for this language, get the value
-                ### from the primary language
-                curLang_subquestionText <-
-                  ifelse(currentLanguage %in% names(convenienceSQ$subquestionTexts) &&
-                           (nchar(trimws(convenienceSQ$subquestionTexts[[currentLanguage]])) > 0),
-                         convenienceSQ$subquestionTexts[[currentLanguage]],
-                         convenienceSQ$subquestionTexts[[self$language]]);
-                curLang_subquestionHelp <-
-                  ifelse(currentLanguage %in% names(convenienceSQ$helpTexts) &&
-                           (nchar(trimws(convenienceSQ$helpTexts[[currentLanguage]])) > 0),
-                         convenienceSQ$helpTexts[[currentLanguage]],
-                         convenienceSQ$helpTexts[[self$language]]);
-
-                ### Specify this new row
-                newRow <-
-                  data.frame(
-                    id = currentSubQuestionId,
-                    related_id = "",
-                    class="SQ",
-                    type.scale = typeScale,
-                    name = convenienceSQ$code,
-                    relevance = convenienceSQ$relevance,
-                    text = curLang_subquestionText,
-                    help = curLang_subquestionHelp,
-                    language = currentLanguage,
-                    validation = convenienceSQ$validation,
-                    mandatory = convenienceSQ$mandatory,
-                    other = "",
-                    default = convenienceSQ$default,
-                    same_default = convenienceSQ$same_default,
-                    stringsAsFactors = FALSE
-                  );
-
-                ### Add row using our homerolled version of plyr::rbind.fill
-                dat <- append_lsdf_row(dat, newRow);
-
-              }
-            }
-
-            ###-----------------------------------------------------------------
-            ### Loop through answer options
-            ###-----------------------------------------------------------------
-
-            if (!is.null(convenienceQ$answerOptions)) {
-              for (currentAnswerOptionIndex in seq_along(convenienceQ$answerOptions)) {
-
-                convenienceA <-
-                  convenienceQ$answerOptions[[currentAnswerOptionIndex]];
-
-                typeScale <- convenienceA$type.scale;
-                if (!(convenienceA$type.scale %in% 0:1)) {
-                  warning("The type/scale (`type.scale`) for answer option ",
-                          "with code '", convenienceA$code, "' in question ",
-                          "with code '", convenienceQ$code, "' is not 0 or ",
-                          "1, but ", typeScale,
-                          ". I'm setting it to 0 while saving.");
-                  typeScale <- 0;
-                }
-
-                ### For values unspecified for this language, get the value
-                ### from the primary language
-                curLang_optionText <-
-                  ifelse(currentLanguage %in% names(convenienceA$optionTexts) &&
-                           (nchar(convenienceA$optionTexts[[currentLanguage]]) > 0),
-                         convenienceA$optionTexts[[currentLanguage]],
-                         convenienceA$optionTexts[[self$language]]);
-
-                ### Specify this new row
-                newRow <-
-                  data.frame(
-                    id = currentQuestionId,  ### Id of Q, not of A!
-                    related_id = "",
-                    class="A",
-                    type.scale = typeScale,
-                    name = convenienceA$code,
-                    relevance = convenienceA$relevance,
-                    text = curLang_optionText,
-                    help = "",
-                    language = currentLanguage,
-                    validation = "",
-                    mandatory = "",
-                    other = "",
-                    default = "",
-                    same_default = "",
-                    stringsAsFactors = FALSE
-                  );
-
-                ### Add row using our homerolled version of plyr::rbind.fill
-                dat <- append_lsdf_row(dat, newRow);
-
-              }
-            }
-
-          }
+          dat <- append_lsdf_rows(dat,
+                                  lsdf_for_language_list$dat);
 
         }
 
@@ -1224,6 +1017,10 @@ Survey <- R6::R6Class(
     ### Unique numeric identifiers for groups and questions in this survey
     groupIdCounter = 0,
     questionIdCounter = 1000,
+
+    ### Counters for exporting
+    exportGroupIdMapping = c(),
+    exportQuestionIdMapping = c(),
 
     generalSurveySettings =
       c("sid",

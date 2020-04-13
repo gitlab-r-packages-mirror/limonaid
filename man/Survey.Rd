@@ -179,6 +179,7 @@ tab separated values.}
 \item \href{#method-add_group}{\code{Survey$add_group()}}
 \item \href{#method-add_question}{\code{Survey$add_question()}}
 \item \href{#method-export_to_tsv}{\code{Survey$export_to_tsv()}}
+\item \href{#method-find_group_id}{\code{Survey$find_group_id()}}
 \item \href{#method-clone}{\code{Survey$clone()}}
 }
 }
@@ -469,8 +470,9 @@ https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Survey$export_to_tsv(
   file,
-  encoding = limonaid::opts$get("encoding"),
   preventOverwriting = limonaid::opts$get("preventOverwriting"),
+  parallel = TRUE,
+  encoding = limonaid::opts$get("encoding"),
   silent = limonaid::opts$get("silent")
 )}\if{html}{\out{</div>}}
 }
@@ -480,11 +482,35 @@ https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
 \describe{
 \item{\code{file}}{The filename to which to save the file.}
 
-\item{\code{encoding}}{The encoding to use}
-
 \item{\code{preventOverwriting}}{Whether to prevent overwritting.}
 
+\item{\code{parallel}}{Whether to work serially or in parallel.}
+
+\item{\code{encoding}}{The encoding to use}
+
 \item{\code{silent}}{Whether to be silent or chatty.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Invisibly, the \code{Survey} object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-find_group_id"></a>}}
+\if{latex}{\out{\hypertarget{method-find_group_id}{}}}
+\subsection{Method \code{find_group_id()}}{
+Find the numeric group identifier by group title.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Survey$find_group_id(title, titleLanguage = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{title}}{The survey title.}
+
+\item{\code{titleLanguage}}{The language in which to search.}
 }
 \if{html}{\out{</div>}}
 }

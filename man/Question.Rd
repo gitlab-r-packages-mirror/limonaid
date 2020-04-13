@@ -191,7 +191,7 @@ please see that page for more details.
 \if{html}{\out{<div class="r">}}\preformatted{Question$add_subquestion(
   code,
   subquestionTexts,
-  relevance = 1,
+  relevance = "",
   helpTexts = NULL,
   type.scale = 0,
   validation = "",

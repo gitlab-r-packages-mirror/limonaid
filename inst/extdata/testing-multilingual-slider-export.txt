@@ -97,11 +97,11 @@ id	related_id	class	type/scale	name	relevance	text	help	language	validation	mand
 1		A	0	2		"Q1, A2, in English"		en																																																																																																																																									
 2		G	0	"Second group"	1	"Second group description"		en																																																																																																																																									
 2		Q	K	sliderQuestion	1	"Q2 question text"	Q2 help text	en		N	N		0				1	25	5	1	1	2																																																																																																																											
-3		SQ	0	nr	1	"subquestion text"		en																																																																																																																																									
+3		SQ	0	nr		"subquestion text"		en																																																																																																																																									
 1		G	0	"Eerste groep"	1	"Beschrijving van de eerste groep"		nl																																																																																																																																									
 1		Q	L	q1	1	"Q1 vraagtekst"	Q1 hulptekst	nl		N	N		0																																																																																																																																				
 1		A	0	1		"Q1, A1, in Dutch"		nl																																																																																																																																									
 1		A	0	2		"Q1, A2, in Dutch"		nl																																																																																																																																									
 2		G	0	"Tweede groep"	1	"Beschrijving van de tweede groep"		nl																																																																																																																																									
 2		Q	K	sliderQuestion	1	"Q2 vraagtekst"	Q2 hulptekst	nl		N	N		0				1	25	5	1	1	2																																																																																																																											
-3		SQ	0	nr	1	"subquestion text"		nl																																																																																																																																									
+3		SQ	0	nr		"subquestion text"		nl																																																																																																																																									

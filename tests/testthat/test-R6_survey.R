@@ -161,8 +161,8 @@ testthat::test_that("exporting an en/nl survey with a slider works", {
 
   cat(tmpFile);
 
-  testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
-                         "onlyQuestion");
+  testthat::expect_equal(ls$groups$`1`$questions$q1$answerOptions$`1`$code,
+                         1);
 })
 
 ###-----------------------------------------------------------------------------
