@@ -95,11 +95,7 @@ id	related_id	class	type/scale	name	relevance	text	help	language	validation	mand
 1		Q	M	q1	1	"Q1 question text"	Q1 help text	en		N	N		0																																																																																																																																				
 2		SQ	0	1		"Q1, A1, in English"		en																																																																																																																																									
 3		SQ	0	2		"Q1, A2, in English"		en																																																																																																																																									
-1		A	0	1		"Q1, A1, in English"		en																																																																																																																																									
-1		A	0	2		"Q1, A2, in English"		en																																																																																																																																									
 1		G	0	"Eerste groep"	1			nl																																																																																																																																									
 1		Q	M	q1	1	"Q1 vraagtekst"	Q1 hulptekst	nl		N	N		0																																																																																																																																				
 2		SQ	0	1		"Q1, A1, in Dutch"		nl																																																																																																																																									
 3		SQ	0	2		"Q1, A2, in Dutch"		nl																																																																																																																																									
-1		A	0	1		"Q1, A1, in Dutch"		nl																																																																																																																																									
-1		A	0	2		"Q1, A2, in Dutch"		nl																																																																																																																																									

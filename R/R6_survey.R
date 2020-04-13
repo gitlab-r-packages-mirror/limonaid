@@ -848,17 +848,20 @@ Survey <- R6::R6Class(
         exportQuestionIdMapping <- private$exportQuestionIdMapping;
         primaryLanguage <- self$language;
 
+        ### Maybe also make this package's functions available?
+
         ### Export the functions, these specially prepared objects,
         ### and the 'silent' setting
+        # parallel::clusterExport(
+        #   cl,
+        #   c()
+        # );
         parallel::clusterExport(
           cl,
           c('lsdf_for_language',
             'emptyDf',
-            'append_lsdf_rows')
-        );
-        parallel::clusterExport(
-          cl,
-          c('groups',
+            'append_lsdf_rows',
+            'groups',
             'exportGroupIdMapping',
             'exportQuestionIdMapping',
             'primaryLanguage',

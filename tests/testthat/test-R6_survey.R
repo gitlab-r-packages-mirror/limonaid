@@ -207,6 +207,7 @@ testthat::test_that("autofixing multiple choice questions works", {
 
   cat(tmpFile);
 
-  testthat::expect_equal(ls$groups$`1`$questions$onlyQuestion$code,
-                         "onlyQuestion");
+  testthat::expect_equal(ls$groups$`1`$questions$q1$code,
+                         "q1");
+
 })
