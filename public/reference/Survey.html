@@ -285,6 +285,7 @@ tab separated values.</p></dd>
 <li><p><a href='#method-add_group'><code>Survey$add_group()</code></a></p></li>
 <li><p><a href='#method-add_question'><code>Survey$add_question()</code></a></p></li>
 <li><p><a href='#method-export_to_tsv'><code>Survey$export_to_tsv()</code></a></p></li>
+<li><p><a href='#method-find_group_id'><code>Survey$find_group_id()</code></a></p></li>
 <li><p><a href='#method-clone'><code>Survey$clone()</code></a></p></li>
 </ul>
 <p><hr>
@@ -547,8 +548,9 @@ character value, in which case the survey's primary language is used.</p></dd>
 https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Survey$export_to_tsv(
   file,
-  encoding = limonaid::opts$get("encoding"),
   preventOverwriting = limonaid::opts$get("preventOverwriting"),
+  parallel = TRUE,
+  encoding = limonaid::opts$get("encoding"),
   silent = limonaid::opts$get("silent")
 )</pre><p></div></p>
 
@@ -556,11 +558,27 @@ https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).</p><h3>Usag
 <p><div class="arguments"></p><dl class='dl-horizontal'>
 <dt><code>file</code></dt><dd><p>The filename to which to save the file.</p></dd>
 
-<dt><code>encoding</code></dt><dd><p>The encoding to use</p></dd>
-
 <dt><code>preventOverwriting</code></dt><dd><p>Whether to prevent overwritting.</p></dd>
 
+<dt><code>parallel</code></dt><dd><p>Whether to work serially or in parallel.</p></dd>
+
+<dt><code>encoding</code></dt><dd><p>The encoding to use</p></dd>
+
 <dt><code>silent</code></dt><dd><p>Whether to be silent or chatty.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>Invisibly, the <code>Survey</code> object.</p>
+<p><hr>
+<a id="method-find_group_id"></a></p><h3>Method <code>find_group_id()</code></h3>
+<p>Find the numeric group identifier by group title.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>Survey$find_group_id(title, titleLanguage = NULL)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>title</code></dt><dd><p>The survey title.</p></dd>
+
+<dt><code>titleLanguage</code></dt><dd><p>The language in which to search.</p></dd>
 
 </dl><p></div></p>
 <h3>Returns</h3>
