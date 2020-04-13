@@ -843,8 +843,10 @@ Survey <- R6::R6Class(
         cl <- parallel::makeCluster(nCores);
 
         ### Load the limonaid package in each cluster
-        parallel::clusterApply(cl,
-                               library(limonaid));
+        parallel::clusterEvalQ(
+          cl,
+          library(limonaid)
+        );
 
         ### Prepare objects to export to each cluster
         groups <- self$groups;
