@@ -842,26 +842,20 @@ Survey <- R6::R6Class(
         nCores <- parallel::detectCores();
         cl <- parallel::makeCluster(nCores);
 
+        ### Load the limonaid package in each cluster
+        parallel::clusterApply(cl,
+                               library(limonaid));
+
         ### Prepare objects to export to each cluster
         groups <- self$groups;
         exportGroupIdMapping <- private$exportGroupIdMapping;
         exportQuestionIdMapping <- private$exportQuestionIdMapping;
         primaryLanguage <- self$language;
 
-        ### Maybe also make this package's functions available?
-
-        ### Export the functions, these specially prepared objects,
-        ### and the 'silent' setting
-        # parallel::clusterExport(
-        #   cl,
-        #   c()
-        # );
+        ### Export these objects and the 'silent' setting
         parallel::clusterExport(
           cl,
-          c('lsdf_for_language',
-            'emptyDf',
-            'append_lsdf_rows',
-            'groups',
+          c('groups',
             'exportGroupIdMapping',
             'exportQuestionIdMapping',
             'primaryLanguage',
