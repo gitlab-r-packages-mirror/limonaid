@@ -29,7 +29,7 @@
 #' ### No examples provided yet; this would require data to be included,
 #' ### and that's not available yet.
 #'
-#' @export processLSvarLabels
+#' @export
 ls_process_labels <- function(dat,
                               varnameRegExPairs = NULL,
                               lengthToWrap = 50,
