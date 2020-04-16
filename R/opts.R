@@ -111,13 +111,63 @@ opts$defaults <-
 
     preventOverwriting=TRUE,
 
-    encoding = "UTF-8"
+    encoding = "UTF-8",
 
-    # ### For keeping track of unique identifiers (default value is zero,
-    # ### because they're incremented by 1 before new_id() returns them)
-    # group_idCounter = 0,
-    # question_idCounter = 0,
-    # answer_idCounter = 0
+    data_import_RegEx_varNames =
+      "names\\(data\\)\\[\\d*\\] <- ",
+
+    data_import_RegEx_toChar =
+      "data\\[, \\d*\\] <- as.character\\(data\\[, \\d*\\]\\)",
+
+    data_import_RegEx_varLabels =
+      "attributes\\(data\\)\\$variable.labels\\[\\d*\\] <- \".*\"",
+
+    data_import_RegEx_toFactor =
+      paste0("data\\[, \\d*\\] <- factor\\(data\\[, \\d*\\], ",
+             "levels=c\\(.*\\),.*labels=c\\(.*\\)\\)"),
+
+    data_import_RegEx_varNameSanitizing =
+      list(list(pattern = "#", replacement = "."),
+           list(pattern = "\\$", replacement = ".")),
+
+    ### Regular expressions to use when parsing LimeSurvey
+    ### labels in processLSvarLabels
+
+    labelExtractionRegExPair = c("\\[(.*)\\].*", "\\1"),
+
+    leftAnchorRegExPairs = list(
+      c(".*[[:graph:]]\\s*([A-Z][a-z][^|]*)\\s*\\|\\s*(.+)",
+        "\\1"),
+      c(".*\\S\\.\\.\\.(\\S[^|]+)\\|(.+)",
+        "\\1"),
+      c(".*\\.([^|]+)\\|(.+)",
+        "\\1"),
+      c(".*…(\\S[^|]+)\\s*\\|\\s*(.+)",
+        "\\1"),
+      c(".*:([^|]+)\\s*\\|\\s*(.+)",
+        "\\1"),
+      c(".*\\?([^|]+)\\s*\\|\\s*(.+)",
+        "\\1"),
+      c(".*\\S\u2026(\\S[^|]+)\\|(.+)",
+        "\\1")
+    ),
+
+    rightAnchorRegExPairs = list(
+      c(".*[[:graph:]]\\s*([A-Z][a-z][^|]*)\\s*\\|\\s*(.+)",
+        "\\2"),
+      c(".*\\.\\.\\.([^|]+)\\|(.+)",
+        "\\2"),
+      c(".*\\.([^|]+)\\|(.+)",
+        "\\2"),
+      c(".*:([^|]+)\\s*\\|\\s*(.+)",
+        "\\2"),
+      c(".*…([^|]+)\\s*\\|\\s*(.+)",
+        "\\2"),
+      c(".*\\?([^|]+)\\s*\\|\\s*(.+)",
+        "\\2"),
+      c(".*\\S\u2026(\\S[^|]+)\\|(.+)",
+        "\\2")
+    )
 
   )
 
