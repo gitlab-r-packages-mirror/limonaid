@@ -110,6 +110,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>ls_import_data</span>(
+  <span class='kw'>sid</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>dataPath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>datafileRegEx</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -128,6 +130,13 @@
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>sid, path</th>
+      <td><p>The easiest way to load data is to not rename the datafile
+and script file downloaded from LimeSurvey (so that both contain the Survey
+Identifier, the <code>sid</code>) and simply specify that <code>sid</code> and the path where both
+files are stored.</p></td>
+    </tr>
     <tr>
       <th>datafile</th>
       <td><p>The path and filename of the file containing the data (comma
@@ -227,7 +236,7 @@ and this function provides a bit more control.</p>
 <span class='co'>### and that you only want variables 'informedConsent', 'gender', 'hasJob',</span>
 <span class='co'>### 'currentEducation', 'prevEducation', and 'country' to be converted to</span>
 <span class='co'>### factors.</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='fu'>ls_import_data</span>(
+<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/limonaid/man/ls_import_data.html'>ls_import_data</a></span>(
   <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>dataPath</span>, <span class='no'>dataFileName</span>),
   <span class='kw'>scriptfile</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>dataPath</span>, <span class='no'>dataLoadScriptName</span>),
   <span class='kw'>categoricalQuestions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'informedConsent'</span>,

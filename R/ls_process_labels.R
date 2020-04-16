@@ -9,7 +9,7 @@
 #' expressions to automatically extract subquestions and left and right
 #' anchors.
 #'
-#' @param dat The dataframe as produced by [ls_import_data()].
+#' @param data The dataframe as produced by [ls_import_data()].
 #' @param varnameRegExPairs Pairs of regular expressions to replace in the
 #' variable names. This is useful when some pattern can be applied to the
 #' variable names to, for example, add underscores te denote different parts of
@@ -30,13 +30,15 @@
 #' ### and that's not available yet.
 #'
 #' @export
-ls_process_labels <- function(dat,
+ls_process_labels <- function(data,
                               varnameRegExPairs = NULL,
                               lengthToWrap = 50,
                               lengthToWrapAnchors = 20,
                               labelExtractionRegExPair = limonaid::opts$get(labelExtractionRegExPair),
                               leftAnchorRegExPairs = limonaid::opts$get(leftAnchorRegExPairs),
                               rightAnchorRegExPairs = limonaid::opts$get(rightAnchorRegExPairs)) {
+
+  dat <- data;
 
   labelDat <- data.frame(varNames.raw = names(dat),
                          varLabels.raw = attributes(dat)$variable.labels,

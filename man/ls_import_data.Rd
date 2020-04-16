@@ -5,6 +5,8 @@
 \title{Reading LimeSurvey data exported to R}
 \usage{
 ls_import_data(
+  sid = NULL,
+  path = NULL,
   datafile = NULL,
   dataPath = NULL,
   datafileRegEx = NULL,
@@ -21,6 +23,11 @@ ls_import_data(
 )
 }
 \arguments{
+\item{sid, path}{The easiest way to load data is to not rename the datafile
+and script file downloaded from LimeSurvey (so that both contain the Survey
+Identifier, the \code{sid}) and simply specify that \code{sid} and the path where both
+files are stored.}
+
 \item{datafile}{The path and filename of the file containing the data (comma
 separated values).}
 

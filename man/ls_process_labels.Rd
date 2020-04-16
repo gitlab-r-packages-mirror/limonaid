@@ -5,7 +5,7 @@
 \title{A function to conveniently process LimeSurvey labels}
 \usage{
 ls_process_labels(
-  dat,
+  data,
   varnameRegExPairs = NULL,
   lengthToWrap = 50,
   lengthToWrapAnchors = 20,
@@ -15,7 +15,7 @@ ls_process_labels(
 )
 }
 \arguments{
-\item{dat}{The dataframe as produced by \code{\link[=ls_import_data]{ls_import_data()}}.}
+\item{data}{The dataframe as produced by \code{\link[=ls_import_data]{ls_import_data()}}.}
 
 \item{varnameRegExPairs}{Pairs of regular expressions to replace in the
 variable names. This is useful when some pattern can be applied to the

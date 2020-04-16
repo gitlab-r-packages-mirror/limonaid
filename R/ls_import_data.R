@@ -6,6 +6,10 @@
 #' easier. The default settings used by LimeSurvey are not always convenient,
 #' and this function provides a bit more control.
 #'
+#' @param sid,path The easiest way to load data is to not rename the datafile
+#' and script file downloaded from LimeSurvey (so that both contain the Survey
+#' Identifier, the `sid`) and simply specify that `sid` and the path where both
+#' files are stored.
 #' @param datafile The path and filename of the file containing the data (comma
 #' separated values).
 #' @param dataPath,datafileRegEx Path containing datafiles: this can be used to
@@ -69,19 +73,22 @@
 #' }
 #'
 #' @export
-ls_import_data <- function(datafile = NULL,
-                           dataPath = NULL,
-                           datafileRegEx = NULL,
-                           scriptfile = NULL,
-                           setVarNames = TRUE,
-                           setLabels = TRUE,
-                           convertToCharacter = FALSE,
-                           convertToFactor = FALSE,
-                           categoricalQuestions = NULL,
-                           massConvertToNumeric = TRUE,
-                           dataHasVarNames = TRUE,
-                           dataEncoding=NULL, #'UTF-8', 'unknown',
-                           scriptEncoding=NULL) { # 'ASCII'
+ls_import_data <- function(
+  sid = NULL,
+  path = NULL,
+  datafile = NULL,
+  dataPath = NULL,
+  datafileRegEx = NULL,
+  scriptfile = NULL,
+  setVarNames = TRUE,
+  setLabels = TRUE,
+  convertToCharacter = FALSE,
+  convertToFactor = FALSE,
+  categoricalQuestions = NULL,
+  massConvertToNumeric = TRUE,
+  dataHasVarNames = TRUE,
+  dataEncoding=NULL, #'UTF-8', 'unknown',
+  scriptEncoding=NULL) { # 'ASCII'
 
   limeSurveyRegEx.varNames <-
     limonaid::opts$get("data_import_RegEx_varNames");
@@ -99,6 +106,19 @@ ls_import_data <- function(datafile = NULL,
   }
   if (is.null(scriptEncoding)) {
     scriptEncoding <- limonaid::opts$get("encoding");
+  }
+
+  if (!is.null(sid) && !is.null(path)) {
+    dataPath <- path;
+    datafileRegEx <- paste0(".*", sid, ".*\\.csv$");
+    scriptFile <-
+      file.path(
+        path,
+        list.files(
+          path = path,
+          pattern = paste0(".*", sid, ".*\\.R$")
+        )[1]
+      );
   }
 
   ### Set filename(s) to read
