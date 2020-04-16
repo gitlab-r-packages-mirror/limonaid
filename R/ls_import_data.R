@@ -88,7 +88,8 @@ ls_import_data <- function(
   massConvertToNumeric = TRUE,
   dataHasVarNames = TRUE,
   dataEncoding=NULL, #'UTF-8', 'unknown',
-  scriptEncoding=NULL) { # 'ASCII'
+  scriptEncoding=NULL,
+  silent=limonaid::opts$get("silent")) { # 'ASCII'
 
   limeSurveyRegEx.varNames <-
     limonaid::opts$get("data_import_RegEx_varNames");
@@ -109,9 +110,13 @@ ls_import_data <- function(
   }
 
   if (!is.null(sid) && !is.null(path)) {
+    if (!silent) {
+      cat0("\nReading data and analysis script for survey ",
+           sid, " from path '", path, "'.");
+    }
     dataPath <- path;
     datafileRegEx <- paste0(".*", sid, ".*\\.csv$");
-    scriptFile <-
+    scriptfile <-
       file.path(
         path,
         list.files(
@@ -143,6 +148,10 @@ ls_import_data <- function(
   data <- NULL;
   for (currentDatafile in files) {
     if (dataHasVarNames) {
+      if (!silent) {
+        cat0("\nReading datafile (with variable names) from '",
+             currentDatafile, "'.");
+      }
       currentData <-
         utils::read.csv(currentDatafile,
                         quote = "'\"",
@@ -151,6 +160,10 @@ ls_import_data <- function(
                         encoding=dataEncoding,
                         header=TRUE);
     } else {
+      if (!silent) {
+        cat0("\nReading datafile (without variable names) from '",
+             currentDatafile, "'.");
+      }
       currentData <-
         utils::read.csv(currentDatafile,
                         quote = "'\"",
@@ -171,10 +184,20 @@ ls_import_data <- function(
     if (!file.exists(scriptfile)) {
       stop("File specified as scriptfile ('", scriptfile, "') does not exist!");
     }
+    if (!silent) {
+      cat0("\nReading script file from '",
+           scriptfile, "'.");
+    }
     ### Use separate connection to make sure proper encoding is selected
     con <- file(scriptfile, encoding=scriptEncoding)
     datascript <- readLines(con);
     close(con);
+
+    if (!silent) {
+      cat0("\nApplying regular expressions to script file contents to ",
+           "extract lines to set variable names, labels, convert to ",
+           "character values, and convert to factors.");
+    }
 
     varNamesScript <- datascript[grepl(limeSurveyRegEx.varNames,
                                        datascript)];
@@ -185,16 +208,36 @@ ls_import_data <- function(
     toFactorScript <- datascript[grepl(limeSurveyRegEx.toFactor,
                                        datascript)];
 
+    if (!silent) {
+      cat0("\nProcessing scripts depensing on values of `setVarNames` (",
+           setVarNames, "), `setLabels` (", setLabels,
+           "), `convertToCharacter` (", convertToCharacter,
+           "), `convertToFactor` (", convertToFactor,
+           "), and `categoricalQuestions` (", categoricalQuestions, ").");
+    }
+
     if (setVarNames) {
+      if (!silent) {
+        cat0("\nSetting variable names.");
+      }
       eval(parse(text=varNamesScript));
     }
     if (setLabels) {
+      if (!silent) {
+        cat0("\nSetting variable labels.");
+      }
       eval(parse(text=varLabelsScript));
     }
     if (convertToCharacter) {
+      if (!silent) {
+        cat0("\nConverting columns to character.");
+      }
       eval(parse(text=toCharScript));
     }
     if (convertToFactor || (!is.null(categoricalQuestions))) {
+      if (!silent) {
+        cat0("\nConverting columns to factors.");
+      }
       if (massConvertToNumeric) {
         data <- massConvertToNumeric(data);
       }
@@ -224,6 +267,9 @@ ls_import_data <- function(
     }
   }
   if (length(limeSurveyRegEx.varNameSanitizing)) {
+    if (!silent) {
+      cat0("\nSanitizing variable names.");
+    }
     for (currentRegexPair in limeSurveyRegEx.varNameSanitizing) {
       names(data) <- gsub(currentRegexPair$pattern,
                           currentRegexPair$replacement,

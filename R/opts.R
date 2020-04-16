@@ -127,7 +127,7 @@ opts$defaults <-
              "levels=c\\(.*\\),.*labels=c\\(.*\\)\\)"),
 
     data_import_RegEx_varNameSanitizing =
-      list(list(pattern = "#", replacement = "."),
+      list(list(pattern = "#", replacement = "_"),
            list(pattern = "\\$", replacement = ".")),
 
     ### Regular expressions to use when parsing LimeSurvey
