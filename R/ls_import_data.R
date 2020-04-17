@@ -87,7 +87,7 @@ ls_import_data <- function(
   categoricalQuestions = NULL,
   massConvertToNumeric = TRUE,
   dataHasVarNames = TRUE,
-  dataEncoding=NULL, #'UTF-8', 'unknown',
+  dataEncoding="UTF-8-BOM", #'UTF-8', 'unknown',
   scriptEncoding=NULL,
   silent=limonaid::opts$get("silent")) { # 'ASCII'
 
@@ -222,12 +222,6 @@ ls_import_data <- function(
       }
       eval(parse(text=varNamesScript));
     }
-    if (setLabels) {
-      if (!silent) {
-        cat0("\nSetting variable labels.");
-      }
-      eval(parse(text=varLabelsScript));
-    }
     if (convertToCharacter) {
       if (!silent) {
         cat0("\nConverting columns to character.");
@@ -275,6 +269,21 @@ ls_import_data <- function(
                           currentRegexPair$replacement,
                           names(data));
     }
+  }
+
+  ### Labels are set as last action, because other actions
+  ### sometimes erase attributes
+  if (setLabels) {
+    if (!silent) {
+      cat0("\nSetting variable labels.");
+    }
+    ### This is the default attribute
+    eval(parse(text=varLabelsScript));
+    ### Also apply to `labels`, to be consistent with e.g. haven etc
+    varLabelsScript <- gsub("variable\\.labels",
+                            "label",
+                            varLabelsScript);
+    eval(parse(text=varLabelsScript));
   }
 
   return(data);
