@@ -56,7 +56,7 @@ Question <- R6::R6Class(
 
     #' @field other_replace_text If the question has an 'other' option, its
     #' label if the default label should be overwritten (multilingual).
-    other_replace_text = NULL,
+    otherReplaceTexts = NULL,
 
     #' @field default The default value.
     default = NULL,
@@ -121,7 +121,7 @@ Question <- R6::R6Class(
                           validation = "",
                           mandatory = "N",
                           other = "N",
-                          other_replace_text = "",
+                          otherReplaceTexts = "",
                           default = "",
                           same_default = "0",
                           array_filter = "",
@@ -140,6 +140,10 @@ Question <- R6::R6Class(
 
       helpTexts <-
         checkMultilingualFields(helpTexts,
+                                language = language);
+
+      otherReplaceTexts <-
+        checkMultilingualFields(otherReplaceTexts,
                                 language = language);
 
       ###-----------------------------------------------------------------------
@@ -217,7 +221,9 @@ Question <- R6::R6Class(
       self$validation <- validation;
       self$mandatory <- mandatory;
       self$other <- other;
-      self$other_replace_text <- other_replace_text;
+
+      self$otherReplaceTexts <- otherReplaceTexts;
+
       self$default <- default;
       self$same_default <- same_default;
       self$array_filter <- array_filter;

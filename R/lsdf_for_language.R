@@ -131,6 +131,11 @@ lsdf_for_language <- function(language,
                  (nchar(trimws(convenienceQ$helpTexts[[currentLanguage]])) > 0),
                convenienceQ$helpTexts[[currentLanguage]],
                convenienceQ$helpTexts[[primaryLanguage]]);
+      curLang_otherReplaceText <-
+        ifelse(currentLanguage %in% names(convenienceQ$otherReplaceTexts) &&
+                 (nchar(trimws(convenienceQ$otherReplaceTexts[[currentLanguage]])) > 0),
+               convenienceQ$otherReplaceTexts[[currentLanguage]],
+               convenienceQ$otherReplaceTexts[[primaryLanguage]]);
 
       ### Specify this new row
       newRow <-
@@ -143,6 +148,7 @@ lsdf_for_language <- function(language,
           relevance = convenienceQ$relevance,
           text = curLang_questionText,
           help = curLang_questionHelp,
+          other_replace_text = curLang_otherReplaceText,
           language = currentLanguage,
           validation = convenienceQ$validation,
           mandatory = convenienceQ$mandatory,

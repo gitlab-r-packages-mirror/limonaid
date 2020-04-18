@@ -30,7 +30,8 @@ ls_recodeTable_to_equations <- function(data,
                                         valueCol = limonaid::opts$get("recTab2Eq_valueCol"),
                                         recodeToCol = limonaid::opts$get("recTab2Eq_recodeToCol"),
                                         operatorCol = limonaid::opts$get("recTab2Eq_operatorCol"),
-                                        elseExpr = limonaid::opts$get("eq_elseExpr")) {
+                                        elseExpr = limonaid::opts$get("eq_elseExpr"),
+                                        naok = TRUE) {
   if (is.null(operatorCol)) {
     operatorCol <- "operatorCol";
     data[, operatorCol] <- "==";
@@ -42,9 +43,11 @@ ls_recodeTable_to_equations <- function(data,
   for (i in 1:nrow(data)) {
     exprList[[i]] <-
       ls_eq_build(
-        data[i, varCodeCol],
+        ifelse(rep(naok, nrow(data)),
+               paste0(data[i, varCodeCol], ".NAOK"),
+               data[i, varCodeCol])
         data[i, operatorCol],
-        data[i, valueCol]
+        paste0("'", data[i, valueCol], "'")
       );
     recodeToList[[i]] <- data[i, recodeToCol];
   }
