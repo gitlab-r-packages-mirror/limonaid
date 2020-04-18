@@ -47,7 +47,7 @@ ls_eq_is <- function(varCode,
                      value) {
   ls_eq_build(varCode,
               "==",
-              paste0("\"", value, "\""));
+              paste0("'", value, "'"));
 }
 
 #' @rdname lsem_equations
