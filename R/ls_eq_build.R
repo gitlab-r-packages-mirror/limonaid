@@ -23,6 +23,7 @@
 #' @param rhs The right-hand side expression.
 #' @param varCode A LimeSurvey variable code.
 #' @param value A value.
+#' @param naok Whether to append ".NAOK" to the variable code.
 #' @param cond A condition, for example created by `ls_eq_build()`
 #' or `ls_eq_is()`.
 #' @param ifExpr,elseExpr,expr An expression.
@@ -44,8 +45,11 @@ ls_eq_build <- function(lhs,
 #' @rdname lsem_equations
 #' @export
 ls_eq_is <- function(varCode,
-                     value) {
-  ls_eq_build(varCode,
+                     value,
+                     naok = TRUE) {
+  ls_eq_build(ifelse(naok,
+                     paste0(varCode, ".NAOK"),
+                     varCode),
               "==",
               paste0("'", value, "'"));
 }
