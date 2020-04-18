@@ -88,8 +88,8 @@ ls_import_data <- function(
   massConvertToNumeric = TRUE,
   dataHasVarNames = TRUE,
   dataEncoding="UTF-8-BOM", #'UTF-8', 'unknown',
-  scriptEncoding=NULL,
-  silent=limonaid::opts$get("silent")) { # 'ASCII'
+  scriptEncoding=NULL, # 'ASCII'
+  silent=limonaid::opts$get("silent")) {
 
   limeSurveyRegEx.varNames <-
     limonaid::opts$get("data_import_RegEx_varNames");

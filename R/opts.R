@@ -113,6 +113,15 @@ opts$defaults <-
 
     encoding = "UTF-8",
 
+    recTab2Eq_varCodeCol = "varCode",
+    recTab2Eq_valueCol = "value",
+    recTab2Eq_recodeToCol = "recode",
+    recTab2Eq_operatorCol = NULL,
+
+    eq_elseExpr = "",
+
+    ### For importing LimeSurvey files
+
     data_import_RegEx_varNames =
       "names\\(data\\)\\[\\d*\\] <- ",
 

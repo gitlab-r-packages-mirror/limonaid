@@ -18,8 +18,9 @@ ls_import_data(
   categoricalQuestions = NULL,
   massConvertToNumeric = TRUE,
   dataHasVarNames = TRUE,
-  dataEncoding = NULL,
-  scriptEncoding = NULL
+  dataEncoding = "UTF-8-BOM",
+  scriptEncoding = NULL,
+  silent = limonaid::opts$get("silent")
 )
 }
 \arguments{
