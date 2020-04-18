@@ -45,7 +45,7 @@ ls_recodeTable_to_equations <- function(data,
       ls_eq_build(
         ifelse(rep(naok, nrow(data)),
                paste0(data[i, varCodeCol], ".NAOK"),
-               data[i, varCodeCol])
+               data[i, varCodeCol]),
         data[i, operatorCol],
         paste0("'", data[i, valueCol], "'")
       );
