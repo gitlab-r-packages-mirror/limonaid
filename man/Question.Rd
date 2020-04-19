@@ -40,7 +40,7 @@ A question has at least a code and a primary language.
 
 \item{\code{other}}{Whether the question has an 'other' option (\code{Y} or \code{N}).}
 
-\item{\code{other_replace_text}}{If the question has an 'other' option, its
+\item{\code{otherReplaceTexts}}{If the question has an 'other' option, its
 label if the default label should be overwritten (multilingual).}
 
 \item{\code{default}}{The default value.}
@@ -88,7 +88,7 @@ please see that page for more details.
   validation = "",
   mandatory = "N",
   other = "N",
-  other_replace_text = "",
+  otherReplaceTexts = "",
   default = "",
   same_default = "0",
   array_filter = "",
@@ -123,7 +123,7 @@ https://manual.limesurvey.org/Question_object_types).}
 
 \item{\code{other}}{Whether the question has an 'other' option (\code{Y} or \code{N}).}
 
-\item{\code{other_replace_text}}{If the question has an 'other' option, its
+\item{\code{otherReplaceTexts}}{If the question has an 'other' option, its
 label if the default label should be overwritten (multilingual).}
 
 \item{\code{default}}{The default value.}

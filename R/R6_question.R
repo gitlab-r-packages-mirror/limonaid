@@ -54,7 +54,7 @@ Question <- R6::R6Class(
     #' @field other Whether the question has an 'other' option (`Y` or `N`).
     other = NULL,
 
-    #' @field other_replace_text If the question has an 'other' option, its
+    #' @field otherReplaceTexts If the question has an 'other' option, its
     #' label if the default label should be overwritten (multilingual).
     otherReplaceTexts = NULL,
 
@@ -98,7 +98,7 @@ Question <- R6::R6Class(
     #' @param validation The question's validation.
     #' @param mandatory Whether the question is mandatory (`Y` or `N`);.
     #' @param other Whether the question has an 'other' option (`Y` or `N`).
-    #' @param other_replace_text If the question has an 'other' option, its
+    #' @param otherReplaceTexts If the question has an 'other' option, its
     #' label if the default label should be overwritten (multilingual).
     #' @param default The default value.
     #' @param same_default `Y` for true, in which case any default value set

@@ -9,7 +9,7 @@
 \usage{
 ls_eq_build(lhs, operator, rhs)
 
-ls_eq_is(varCode, value)
+ls_eq_is(varCode, value, naok = TRUE)
 
 ls_eq_if(cond, ifExpr, elseExpr)
 
@@ -25,6 +25,8 @@ ls_eq_brace(expr)
 \item{varCode}{A LimeSurvey variable code.}
 
 \item{value}{A value.}
+
+\item{naok}{Whether to append ".NAOK" to the variable code.}
 
 \item{cond}{A condition, for example created by \code{ls_eq_build()}
 or \code{ls_eq_is()}.}

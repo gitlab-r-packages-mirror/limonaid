@@ -10,7 +10,8 @@ ls_recodeTable_to_equations(
   valueCol = limonaid::opts$get("recTab2Eq_valueCol"),
   recodeToCol = limonaid::opts$get("recTab2Eq_recodeToCol"),
   operatorCol = limonaid::opts$get("recTab2Eq_operatorCol"),
-  elseExpr = limonaid::opts$get("eq_elseExpr")
+  elseExpr = limonaid::opts$get("eq_elseExpr"),
+  naok = TRUE
 )
 }
 \arguments{
