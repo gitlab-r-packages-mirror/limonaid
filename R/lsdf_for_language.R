@@ -169,9 +169,12 @@ lsdf_for_language <- function(language,
         otherOptionLengths <- unlist(lapply(convenienceQ$otherOptions,
                                             length));
         if (any(otherOptionLengths > 1)) {
-          cat0("\nQuestion with is '", currentQuestionId,
+          cat0("\nQuestion with code '", convenienceQ$code,
                "' has at least one 'other option' with length > 1: ",
-               vecTxtQ(names(convenienceQ$otherOptions)[otherOptionLengths > 1]), ".");
+               vecTxtQ(names(convenienceQ$otherOptions)[otherOptionLengths > 1]),
+               ". That may not be a problem (e.g. for multilingual optiosn, ",
+               "which are processed separately), but those options will ",
+               "not be processed here.\n");
         }
         otherOptionsToProcess <-
           convenienceQ$otherOptions[otherOptionLengths==1];
