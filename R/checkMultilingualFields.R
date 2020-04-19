@@ -2,7 +2,7 @@ checkMultilingualFields <- function(x,
                                     language,
                                     classCheck = is.character,
                                     className = "character") {
-  xName <- substitute(deparse(x));
+  xName <- deparse(substitute(x));
 
   if (!classCheck(x) || (length(x) == 0)) {
     stop("For `", xName, "`, you must pass ",
@@ -14,9 +14,10 @@ checkMultilingualFields <- function(x,
   } else {
     if (!(language %in% names(x))) {
       stop("When providing `", xName, "` in multiple languages ",
-           "simultaneously, exactly one of them must be the primary ",
-           "language (",
-           language, ").");
+           "simultaneously (i.e. if you provide a vector with length > 1), ",
+           "exactly one of them must be the primary language (",
+           language, "). However, the names of `", xName, "` are ",
+           vecTxtQ(names(xName)), ".");
     }
   }
 

@@ -59,7 +59,17 @@ ls_eq_is <- function(varCode,
 ls_eq_if <- function(cond,
                      ifExpr,
                      elseExpr) {
-  return(paste0("if(", cond, ", ", ifExpr, ", ", elseExpr, ")"));
+  if (length(cond) == length(ifExpr) == length(elseExpr)) {
+    return(paste0("if(", cond, ", ", ifExpr, ", ", elseExpr, ")"));
+  } else {
+    stop("The lengths of the three arguments are not the same:\n",
+         "the length of `cond` (", deparse(substitute(cond)),
+         ") is ", length(cond), ";\n",
+         "the length of `ifExpr` (", deparse(substitute(ifExpr)),
+         ") is ", length(ifExpr), ";\n",
+         "the length of `elseExpr` (", deparse(substitute(elseExpr)),
+         ") is ", length(elseExpr), ";\n");
+  }
 }
 
 #' @rdname lsem_equations
