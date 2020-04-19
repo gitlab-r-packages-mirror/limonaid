@@ -166,8 +166,17 @@ lsdf_for_language <- function(language,
       dat[nrow(dat), "cssclass"] <- convenienceQ$cssclass;
       dat[nrow(dat), "hide_tip"] <- convenienceQ$hide_tip;
       if (length(convenienceQ$otherOptions) > 0) {
-        dat[nrow(dat), names(convenienceQ$otherOptions)] <-
-          convenienceQ$otherOptions;
+        otherOptionLengths <- unlist(lapply(convenienceQ$otherOptions,
+                                            length));
+        if (any(otherOptionLengths > 1)) {
+          cat0("\nQuestion with is '", currentQuestionId,
+               "' has at least one 'other option' with length > 1: ",
+               vecTxtQ(names(convenienceQ$otherOptions)[otherOptionLengths > 1]), ".");
+        }
+        otherOptionsToProcess <-
+          convenienceQ$otherOptions[otherOptionLengths==1];
+        dat[nrow(dat), names(otherOptionsToProcess)] <-
+          otherOptionsToProcess;
       }
 
       ###-----------------------------------------------------------------
