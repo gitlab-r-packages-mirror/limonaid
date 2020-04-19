@@ -41,14 +41,22 @@ ls_recodeTable_to_equations <- function(data,
   exprList <- list();
   recodeToList <- list();
   for (i in 1:nrow(data)) {
-    exprList[[i]] <-
-      ls_eq_build(
-        ifelse(naok,
-               paste0(data[i, varCodeCol], ".NAOK"),
-               data[i, varCodeCol]),
-        data[i, operatorCol],
-        paste0("'", data[i, valueCol], "'")
-      );
+    if (data[i, operatorCol] == "CHECKED") {
+      exprList[[i]] <- ls_eq_isChecked(data[i, varCodeCol],
+                                       naok=naok);
+    } else if (data[i, operatorCol] == "UNCHECKED") {
+      exprList[[i]] <- ls_eq_isUnchecked(data[i, varCodeCol],
+                                         naok=naok);
+    } else {
+      exprList[[i]] <-
+        ls_eq_build(
+          ifelse(naok,
+                 paste0(data[i, varCodeCol], ".NAOK"),
+                 data[i, varCodeCol]),
+          data[i, operatorCol],
+          paste0("'", data[i, valueCol], "'")
+        );
+    }
     recodeToList[[i]] <- ls_eq_quote(data[i, recodeToCol]);
   }
   ### Then loop through these again, building the if statements;

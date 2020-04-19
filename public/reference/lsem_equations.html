@@ -115,9 +115,15 @@ building LimeSurvey Expression Manager (LSEM) equations.</p>
 
 <span class='fu'>ls_eq_is</span>(<span class='no'>varCode</span>, <span class='no'>value</span>, <span class='kw'>naok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
+<span class='fu'>ls_eq_isChecked</span>(<span class='no'>varCode</span>, <span class='kw'>naok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>ls_eq_isUnchecked</span>(<span class='no'>varCode</span>, <span class='kw'>naok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
 <span class='fu'>ls_eq_if</span>(<span class='no'>cond</span>, <span class='no'>ifExpr</span>, <span class='no'>elseExpr</span>)
 
-<span class='fu'>ls_eq_brace</span>(<span class='no'>expr</span>)</pre>
+<span class='fu'>ls_eq_brace</span>(<span class='no'>expr</span>)
+
+<span class='fu'>ls_eq_quote</span>(<span class='no'>expr</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,8 +177,12 @@ expression that is true when <code>varCode</code> equals <code>value</code>.</p>
 <p><code>ls_eq_if()</code> builds an if/then/else expression; if
 <code>cond</code> evaluates to TRUE, the LSEM uses <code>ifExpr</code>;
 otherwise, it uses <code>elseExpr</code>.</p>
+<p><code>ls_eq_isChecked()</code> and <code>ls_eq_isUnchecked()</code> return an
+expression evaluating whether a checkbox is checked (or not).</p>
 <p><code>ls_eq_brace()</code> simply embraces <code>expr</code>, an expression
 (i.e. it prepends <code>{</code> and appends <code>}</code>).</p>
+<p><code>ls_eq_quote()</code> simply embraces <code>expr</code>, an expression
+(i.e. it prepends <code>'</code> and appends <code>'</code>).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>ls_eq_build</span>(<span class='st'>"questionCode"</span>, <span class='st'>"=="</span>, <span class='st'>"Y"</span>);</div><div class='output co'>#&gt; [1] "questionCode == Y"</div><div class='input'>

@@ -15,6 +15,9 @@
 #' `cond` evaluates to TRUE, the LSEM uses `ifExpr`;
 #' otherwise, it uses `elseExpr`.
 #'
+#' `ls_eq_isChecked()` and `ls_eq_isUnchecked()` return an
+#' expression evaluating whether a checkbox is checked (or not).
+#'
 #' `ls_eq_brace()` simply embraces `expr`, an expression
 #' (i.e. it prepends `{` and appends `}`).
 #'
@@ -34,7 +37,7 @@
 #' @return A character vector.
 #'
 #' @rdname lsem_equations
-#' @aliases ls_eq_build ls_eq_is ls_eq_if ls_eq_brace ls_eq_quote
+#' @aliases ls_eq_build ls_eq_is ls_eq_if ls_eq_brace ls_eq_quote ls_eq_isChecked ls_eq_isUnchecked
 #'
 #' @examples ls_eq_build("questionCode", "==", "Y");
 #'
@@ -56,6 +59,33 @@ ls_eq_is <- function(varCode,
               "==",
               paste0("'", value, "'"));
 }
+
+
+#' @rdname lsem_equations
+#' @export
+ls_eq_isChecked <- function(varCode,
+                            naok = TRUE) {
+  ls_eq_build(ifelse(naok,
+                     paste0(varCode, ".NAOK"),
+                     varCode),
+              "==",
+              "'Y'");
+}
+
+
+#' @rdname lsem_equations
+#' @export
+ls_eq_isUnchecked <- function(varCode,
+                              naok = TRUE) {
+  return(
+    paste0("(is_empty(",
+           ifelse(naok,
+                  paste0(varCode, ".NAOK"),
+                  varCode),
+           "))")
+  );
+}
+
 
 #' @rdname lsem_equations
 #' @export

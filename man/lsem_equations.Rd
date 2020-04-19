@@ -5,15 +5,24 @@
 \alias{ls_eq_is}
 \alias{ls_eq_if}
 \alias{ls_eq_brace}
+\alias{ls_eq_quote}
+\alias{ls_eq_isChecked}
+\alias{ls_eq_isUnchecked}
 \title{Building LimeSurvey Expression Manager equations}
 \usage{
 ls_eq_build(lhs, operator, rhs)
 
 ls_eq_is(varCode, value, naok = TRUE)
 
+ls_eq_isChecked(varCode, naok = TRUE)
+
+ls_eq_isUnchecked(varCode, naok = TRUE)
+
 ls_eq_if(cond, ifExpr, elseExpr)
 
 ls_eq_brace(expr)
+
+ls_eq_quote(expr)
 }
 \arguments{
 \item{lhs}{The left-hand side expression.}
@@ -53,8 +62,14 @@ expression that is true when \code{varCode} equals \code{value}.
 \code{cond} evaluates to TRUE, the LSEM uses \code{ifExpr};
 otherwise, it uses \code{elseExpr}.
 
+\code{ls_eq_isChecked()} and \code{ls_eq_isUnchecked()} return an
+expression evaluating whether a checkbox is checked (or not).
+
 \code{ls_eq_brace()} simply embraces \code{expr}, an expression
 (i.e. it prepends \verb{\{} and appends \verb{\}}).
+
+\code{ls_eq_quote()} simply embraces \code{expr}, an expression
+(i.e. it prepends \verb{'} and appends \verb{'}).
 }
 \examples{
 ls_eq_build("questionCode", "==", "Y");
