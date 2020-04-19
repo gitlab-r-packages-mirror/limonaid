@@ -18,6 +18,9 @@
 #' `ls_eq_brace()` simply embraces `expr`, an expression
 #' (i.e. it prepends `{` and appends `}`).
 #'
+#' `ls_eq_quote()` simply embraces `expr`, an expression
+#' (i.e. it prepends `'` and appends `'`).
+#'
 #' @param lhs The left-hand side expression.
 #' @param operator The operator.
 #' @param rhs The right-hand side expression.
@@ -31,7 +34,7 @@
 #' @return A character vector.
 #'
 #' @rdname lsem_equations
-#' @aliases ls_eq_build ls_eq_is ls_eq_if ls_eq_brace
+#' @aliases ls_eq_build ls_eq_is ls_eq_if ls_eq_brace ls_eq_quote
 #'
 #' @examples ls_eq_build("questionCode", "==", "Y");
 #'
@@ -76,4 +79,10 @@ ls_eq_if <- function(cond,
 #' @export
 ls_eq_brace <- function(expr) {
   return(paste0("{", expr, "}"));
+}
+
+#' @rdname lsem_equations
+#' @export
+ls_eq_quote <- function(expr) {
+  return(paste0("'", expr, "'"));
 }

@@ -43,13 +43,13 @@ ls_recodeTable_to_equations <- function(data,
   for (i in 1:nrow(data)) {
     exprList[[i]] <-
       ls_eq_build(
-        ifelse(rep(naok, nrow(data)),
+        ifelse(naok,
                paste0(data[i, varCodeCol], ".NAOK"),
                data[i, varCodeCol]),
         data[i, operatorCol],
         paste0("'", data[i, valueCol], "'")
       );
-    recodeToList[[i]] <- data[i, recodeToCol];
+    recodeToList[[i]] <- ls_eq_quote(data[i, recodeToCol]);
   }
   ### Then loop through these again, building the if statements;
   ### we start at the beginning and keep track of our depth to
