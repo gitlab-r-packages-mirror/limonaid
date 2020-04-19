@@ -59,7 +59,7 @@ ls_eq_is <- function(varCode,
 ls_eq_if <- function(cond,
                      ifExpr,
                      elseExpr) {
-  if (length(cond) == length(ifExpr) == length(elseExpr)) {
+  if (length(unique(length(cond), length(ifExpr), length(elseExpr))) == 1) {
     return(paste0("if(", cond, ", ", ifExpr, ", ", elseExpr, ")"));
   } else {
     stop("The lengths of the three arguments are not the same:\n",
