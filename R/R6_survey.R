@@ -1008,9 +1008,29 @@ Survey <- R6::R6Class(
       } else {
         stop("You cannot directly set group ids.");
       }
+    },
+
+    #' @field get_group_titles A list of all group ids.
+    get_group_titles = function(value) {
+      if (missing(value)) {
+        if (length(self$groups) == 1) {
+          return(NULL);
+        }
+        allTitles <-
+          lapply(self$groups,
+                 function(x) return(x$titles));
+        res <- data.frame(allTitles,
+                          row.names = names(preRes[[1]]));
+        res <-
+          apply(res, 1, function(row) return(list(row)));
+        return(unlist(res,
+                      recursive = FALSE));
+      } else {
+        stop("You cannot set group titles this way.");
+      }
     }
 
-  ), ### End of private properties and methods
+  ), ### End of active fields
 
   ###---------------------------------------------------------------------------
   ### Private properties & methods
