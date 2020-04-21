@@ -758,12 +758,11 @@ Survey <- R6::R6Class(
           if ((!is.null(text)) &&
               (currentLanguage %in% names(text))) {
             text <- selfAsList[[propertyName]][[currentLanguage]];
+          } else if (name %in% names(private$emailDefaults)) {
+            text <- private$emailDefaults[name];
           } else {
-            if (name %in% names(private$emailDefaults)) {
-              text <- private$emailDefaults[name];
-            } else {
-              text <- "";
-            }
+            ### Set primary language for everything unspecified in this language
+            text <- selfAsList[[propertyName]][[self$language]];
           }
 
           newRow <-

@@ -60,3 +60,21 @@ testthat::test_that("a more extensive LimeSurvey TSV file can be imported", {
 
 })
 
+###-----------------------------------------------------------------------------
+
+### For convenience
+dontRun <- expression({
+
+  yourCOVID19riskPath <-
+    "B:/Data/ABC/your-risk.com/your-covid-19-risk/operationalizations/limesurvey/during-development";
+
+  lsrv <-
+    limonaid::ls_read_tsv(
+      file.path(yourCOVID19riskPath,
+                "test-of-survey-with-hidden-equation.txt")
+    );
+
+  limonaid::ls_tsv_get_rows(lsrv, class = "Q");
+
+})
+
