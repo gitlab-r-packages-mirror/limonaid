@@ -1020,9 +1020,9 @@ Survey <- R6::R6Class(
           lapply(self$groups,
                  function(x) return(x$titles));
         res <- data.frame(allTitles,
-                          row.names = names(preRes[[1]]));
+                          row.names = names(allTitles[[1]]));
         res <-
-          apply(res, 1, function(row) return(list(row)));
+          apply(res, 1, function(row) return(list(unname(row))));
         return(unlist(res,
                       recursive = FALSE));
       } else {
