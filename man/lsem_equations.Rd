@@ -8,6 +8,7 @@
 \alias{ls_eq_quote}
 \alias{ls_eq_isChecked}
 \alias{ls_eq_isUnchecked}
+\alias{ls_eq_ifRegex}
 \title{Building LimeSurvey Expression Manager equations}
 \usage{
 ls_eq_build(lhs, operator, rhs)
@@ -19,6 +20,8 @@ ls_eq_isChecked(varCode, naok = TRUE)
 ls_eq_isUnchecked(varCode, naok = TRUE)
 
 ls_eq_if(cond, ifExpr, elseExpr)
+
+ls_eq_ifRegex(regex, varCode, ifExpr, elseExpr, naok = TRUE)
 
 ls_eq_brace(expr)
 
@@ -41,6 +44,8 @@ ls_eq_quote(expr)
 or \code{ls_eq_is()}.}
 
 \item{ifExpr, elseExpr, expr}{An expression.}
+
+\item{regex}{A regular expression.}
 }
 \value{
 A character vector.
@@ -61,6 +66,8 @@ expression that is true when \code{varCode} equals \code{value}.
 \code{ls_eq_if()} builds an if/then/else expression; if
 \code{cond} evaluates to TRUE, the LSEM uses \code{ifExpr};
 otherwise, it uses \code{elseExpr}.
+
+\code{ls_eq_ifRegex} checks a question against a regular expression.
 
 \code{ls_eq_isChecked()} and \code{ls_eq_isUnchecked()} return an
 expression evaluating whether a checkbox is checked (or not).

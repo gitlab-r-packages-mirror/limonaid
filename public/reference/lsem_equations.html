@@ -121,6 +121,8 @@ building LimeSurvey Expression Manager (LSEM) equations.</p>
 
 <span class='fu'>ls_eq_if</span>(<span class='no'>cond</span>, <span class='no'>ifExpr</span>, <span class='no'>elseExpr</span>)
 
+<span class='fu'>ls_eq_ifRegex</span>(<span class='no'>regex</span>, <span class='no'>varCode</span>, <span class='no'>ifExpr</span>, <span class='no'>elseExpr</span>, <span class='kw'>naok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
 <span class='fu'>ls_eq_brace</span>(<span class='no'>expr</span>)
 
 <span class='fu'>ls_eq_quote</span>(<span class='no'>expr</span>)</pre>
@@ -161,6 +163,10 @@ or <code>ls_eq_is()</code>.</p></td>
       <th>ifExpr, elseExpr, expr</th>
       <td><p>An expression.</p></td>
     </tr>
+    <tr>
+      <th>regex</th>
+      <td><p>A regular expression.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -177,6 +183,7 @@ expression that is true when <code>varCode</code> equals <code>value</code>.</p>
 <p><code>ls_eq_if()</code> builds an if/then/else expression; if
 <code>cond</code> evaluates to TRUE, the LSEM uses <code>ifExpr</code>;
 otherwise, it uses <code>elseExpr</code>.</p>
+<p><code>ls_eq_ifRegex</code> checks a question against a regular expression.</p>
 <p><code>ls_eq_isChecked()</code> and <code>ls_eq_isUnchecked()</code> return an
 expression evaluating whether a checkbox is checked (or not).</p>
 <p><code>ls_eq_brace()</code> simply embraces <code>expr</code>, an expression

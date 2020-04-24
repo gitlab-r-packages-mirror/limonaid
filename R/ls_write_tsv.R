@@ -86,6 +86,23 @@ ls_write_tsv <- function(data,
     "type/scale";
 
   ###-----------------------------------------------------------------------
+  ### 'Manually' prepare
+  ###-----------------------------------------------------------------------
+
+
+  ### Using
+  ### https://kevinushey.github.io/blog/2018/02/21/string-encoding-and-r/
+
+  # enc2utf8
+  #
+  # con <- file(currentFilenamePre,
+  #             open = "w",
+  #             encoding="native.enc"); #"UTF-8");
+  # writeLines(merged_i18n_utf8[[currentLanguage]], con = con, useBytes=TRUE);
+  # close(con);
+  #
+
+  ###-----------------------------------------------------------------------
   ### Writing file
   ###-----------------------------------------------------------------------
 

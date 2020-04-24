@@ -169,6 +169,8 @@ tab separated values.}
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{get_group_ids}}{A list of all group ids.}
+
+\item{\code{get_group_titles}}{A list of all group ids.}
 }
 \if{html}{\out{</div>}}
 }

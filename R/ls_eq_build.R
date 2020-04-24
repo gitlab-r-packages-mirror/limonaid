@@ -15,6 +15,8 @@
 #' `cond` evaluates to TRUE, the LSEM uses `ifExpr`;
 #' otherwise, it uses `elseExpr`.
 #'
+#' `ls_eq_ifRegex` checks a question against a regular expression.
+#'
 #' `ls_eq_isChecked()` and `ls_eq_isUnchecked()` return an
 #' expression evaluating whether a checkbox is checked (or not).
 #'
@@ -33,11 +35,13 @@
 #' @param cond A condition, for example created by `ls_eq_build()`
 #' or `ls_eq_is()`.
 #' @param ifExpr,elseExpr,expr An expression.
+#' @param regex A regular expression.
 #'
 #' @return A character vector.
 #'
 #' @rdname lsem_equations
-#' @aliases ls_eq_build ls_eq_is ls_eq_if ls_eq_brace ls_eq_quote ls_eq_isChecked ls_eq_isUnchecked
+#' @aliases ls_eq_build ls_eq_is ls_eq_if ls_eq_brace
+#' @aliases ls_eq_quote ls_eq_isChecked ls_eq_isUnchecked ls_eq_ifRegex
 #'
 #' @examples ls_eq_build("questionCode", "==", "Y");
 #'
@@ -104,6 +108,31 @@ ls_eq_if <- function(cond,
          ") is ", length(elseExpr), ";\n");
   }
 }
+
+#' @rdname lsem_equations
+#' @export
+ls_eq_ifRegex <- function(regex,
+                          varCode,
+                          ifExpr,
+                          elseExpr,
+                          naok = TRUE) {
+  if (length(varCode) != 1) {
+    stop("You have to provide exactly one `varCode`.");
+  }
+  if (length(regex) != 1) {
+    stop("You have to provide exactly one `regex`.");
+  }
+  return(ls_eq_if(paste0("regexMatch('/", regex, "/', ",
+                         ifelse(naok,
+                                paste0(varCode, ".NAOK"),
+                                varCode), ")"),
+                  ifExpr,
+                  elseExpr));
+}
+
+
+
+
 
 #' @rdname lsem_equations
 #' @export
