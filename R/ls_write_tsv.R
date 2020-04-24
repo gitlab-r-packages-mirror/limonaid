@@ -85,39 +85,56 @@ ls_write_tsv <- function(data,
   colNames[colNames == "type.scale"] <-
     "type/scale";
 
-  ###-----------------------------------------------------------------------
-  ### 'Manually' prepare
-  ###-----------------------------------------------------------------------
+  if (trimws(tolower(encoding)) == "utf-8") {
 
+    ###-------------------------------------------------------------------------
+    ### 'Manually' glue all columns together with tabs and rows with newlines
+    ###-------------------------------------------------------------------------
 
-  ### Using
-  ### https://kevinushey.github.io/blog/2018/02/21/string-encoding-and-r/
+    fileToWrite <-
+      paste(apply(data, 1, paste, collapse="\t"), collapse="\n");
 
-  # enc2utf8
-  #
-  # con <- file(currentFilenamePre,
-  #             open = "w",
-  #             encoding="native.enc"); #"UTF-8");
-  # writeLines(merged_i18n_utf8[[currentLanguage]], con = con, useBytes=TRUE);
-  # close(con);
-  #
+    ### Add the column names
+    fileToWrite <-
+      paste(paste(colNames, collapse="\t"),
+            "\n",
+            fileToWrite);
 
-  ###-----------------------------------------------------------------------
-  ### Writing file
-  ###-----------------------------------------------------------------------
+    ### Using
+    ### https://kevinushey.github.io/blog/2018/02/21/string-encoding-and-r/
 
-  ### Write file
-  utils::write.table(
-    data,
-    file = file,
-    col.names = colNames,
-    sep = "\t",
-    na = "",
-    quote = FALSE,
-    row.names = FALSE,
-    qmethod = "double",
-    fileEncoding = encoding
-  );
+    fileToWrite <- enc2utf8(fileToWrite);
+
+    con <- file(file,
+                open = "w",
+                encoding="native.enc"); #"UTF-8");
+    writeLines(fileToWrite, con = con, useBytes=TRUE);
+    close(con);
+
+  } else {
+
+    if (trimws(tolower(encoding)) == "default-utf-8") {
+      encoding <- "UTF-8";
+    }
+
+    ###-------------------------------------------------------------------------
+    ### Writing file
+    ###-------------------------------------------------------------------------
+
+    ### Write file
+    utils::write.table(
+      data,
+      file = file,
+      col.names = colNames,
+      sep = "\t",
+      na = "",
+      quote = FALSE,
+      row.names = FALSE,
+      qmethod = "double",
+      fileEncoding = encoding
+    );
+
+  }
 
   return(invisible(data));
 
