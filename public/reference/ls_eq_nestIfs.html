@@ -142,8 +142,17 @@ same order!).</p></td>
     <p>A character value.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>### Provide later
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'>### Relatively simple example with four levels of nesting</span>
+<span class='fu'>ls_eq_nestIfs</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"age.NAOK &gt; 80"</span>,
+                <span class='st'>"age.NAOK &gt; 65"</span>,
+                <span class='st'>"age.NAOK &gt; 40"</span>,
+                <span class='st'>"age.NAOK &gt; 20"</span>),
+              <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Respectable"</span>,
+                <span class='st'>"Roughly retired"</span>,
+                <span class='st'>"Roughly middle-aged"</span>,
+                <span class='st'>"Quite young"</span>),
+              <span class='st'>"Very young"</span>,
+              <span class='kw'>quoteValue</span><span class='kw'>=</span><span class='fl'>TRUE</span>);</div><div class='output co'>#&gt; [1] "if(age.NAOK &gt; 80, \"Respectable\", if(age.NAOK &gt; 65, \"Roughly retired\", if(age.NAOK &gt; 40, \"Roughly middle-aged\", if(age.NAOK &gt; 20, \"Quite young\", \"Very young\"))))"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -26,5 +26,15 @@ This function takes a series of conditions and corresponding values,
 and builds an equation consisting of nested if statements.
 }
 \examples{
-### Provide later
+### Relatively simple example with four levels of nesting
+ls_eq_nestIfs(c("age.NAOK > 80",
+                "age.NAOK > 65",
+                "age.NAOK > 40",
+                "age.NAOK > 20"),
+              c("Respectable",
+                "Roughly retired",
+                "Roughly middle-aged",
+                "Quite young"),
+              "Very young",
+              quoteValue=TRUE);
 }

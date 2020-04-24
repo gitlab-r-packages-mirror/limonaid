@@ -14,11 +14,28 @@
 #' @return A character value.
 #' @export
 #'
-#' @examples ### Provide later
+#' @examples ### Relatively simple example with four levels of nesting
+#' ls_eq_nestIfs(c("age.NAOK > 80",
+#'                 "age.NAOK > 65",
+#'                 "age.NAOK > 40",
+#'                 "age.NAOK > 20"),
+#'               c("Respectable",
+#'                 "Roughly retired",
+#'                 "Roughly middle-aged",
+#'                 "Quite young"),
+#'               "Very young",
+#'               quoteValue=TRUE);
 ls_eq_nestIfs <- function(conditions,
                           values,
                           elseExpr,
                           quoteValues = FALSE) {
+
+  if (!(length(conditions) == length(values))) {
+    stop("The `conditions` and `values` must have the exact ",
+         "same length - but you specified ", length(conditions),
+         " conditions (", vecTxtQ(conditions), ") and ", length(values),
+         " values (", vecTxtQ(values), ")!");
+  }
 
   if (quoteValues) {
     values <- paste0("\"", values, "\"");
