@@ -145,7 +145,6 @@ lsdf_for_language <- function(language,
             );
         }
         cat(msg);
-        debugLog <- c(debugLog, msg);
       }
 
       curLang_questionHelp <-
