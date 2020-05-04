@@ -62,7 +62,7 @@ lsdf_for_language <- function(language,
              groups[[currentGroup]]$descriptions[[primaryLanguage]]);
 
     if (!silent) {
-      cat0("  Processing group: ", curLang_surveyTitle, "\n");
+      cat0("\n  Processing group: ", curLang_surveyTitle, "\n");
     }
 
     newRow <-
@@ -132,14 +132,14 @@ lsdf_for_language <- function(language,
             (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0)) {
           msg <-
             paste0(
-              "\n - For question `", convenienceQ$code,
+              "\n    For question `", convenienceQ$code,
               "`, found question text in language `", currentLanguage,
               "` and used that."
             );
         } else {
           msg <-
             paste0(
-              "\n - For question `", convenienceQ$code,
+              "\n    For question `", convenienceQ$code,
               "`, did NOT find question text in language `", currentLanguage,
               "`, so used English question text instead."
             );
