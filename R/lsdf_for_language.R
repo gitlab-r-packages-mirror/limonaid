@@ -122,22 +122,30 @@ lsdf_for_language <- function(language,
       ### For values unspecified for this language, get the value
       ### from the primary language
       curLang_questionText <-
-        ifelse(currentLanguage %in% names(convenienceQ$questionTexts) &&
+        ifelse((currentLanguage %in% names(convenienceQ$questionTexts)) &&
                  (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0),
                convenienceQ$questionTexts[[currentLanguage]],
                convenienceQ$questionTexts[[primaryLanguage]]);
 
       if (limonaid::opts$get("debug")) {
-        if (currentLanguage %in% names(convenienceQ$questionTexts) &&
+        if ((currentLanguage %in% names(convenienceQ$questionTexts)) &&
             (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0)) {
-          cat("\n - For question `", convenienceQ$code,
+          msg <-
+            paste0(
+              "\n - For question `", convenienceQ$code,
               "`, found question text in language `", currentLanguage,
-              "` and used that.", sep="");
+              "` and used that."
+            );
         } else {
-          cat("\n - For question `", convenienceQ$code,
+          msg <-
+            paste0(
+              "\n - For question `", convenienceQ$code,
               "`, did NOT find question text in language `", currentLanguage,
-              "`, so used English question text instead.", sep="");
+              "`, so used English question text instead."
+            );
         }
+        cat(msg);
+        debugLog <- c(debugLog, msg);
       }
 
       curLang_questionHelp <-
