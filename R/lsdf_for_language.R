@@ -126,6 +126,20 @@ lsdf_for_language <- function(language,
                  (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0),
                convenienceQ$questionTexts[[currentLanguage]],
                convenienceQ$questionTexts[[primaryLanguage]]);
+
+      if (limonaid::opts$get("debug")) {
+        if (currentLanguage %in% names(convenienceQ$questionTexts) &&
+            (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0)) {
+          cat("\n - For question `", convenienceQ$code,
+              "`, found question text in language `", currentLang,
+              "` and used that.", sep="");
+        } else {
+          cat("\n - For question `", convenienceQ$code,
+              "`, did NOT find question text in language `", currentLang,
+              "`, so used English question text instead.", sep="");
+        }
+      }
+
       curLang_questionHelp <-
         ifelse(currentLanguage %in% names(convenienceQ$helpTexts) &&
                  (nchar(trimws(convenienceQ$helpTexts[[currentLanguage]])) > 0),

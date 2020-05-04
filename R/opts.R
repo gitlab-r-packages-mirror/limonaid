@@ -113,6 +113,8 @@ opts$defaults <-
 
     encoding = "UTF-8",
 
+    debug = FALSE,
+
     recTab2Eq_varCodeCol = "varCode",
     recTab2Eq_valueCol = "value",
     recTab2Eq_recodeToCol = "recode",
