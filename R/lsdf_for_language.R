@@ -81,6 +81,7 @@ lsdf_for_language <- function(language,
         other = "",
         default = "",
         same_default = "",
+        random_group = groups[[currentGroup]]$random_group,
         stringsAsFactors = FALSE
       );
 
