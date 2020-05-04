@@ -131,11 +131,11 @@ lsdf_for_language <- function(language,
         if (currentLanguage %in% names(convenienceQ$questionTexts) &&
             (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0)) {
           cat("\n - For question `", convenienceQ$code,
-              "`, found question text in language `", currentLang,
+              "`, found question text in language `", currentLanguage,
               "` and used that.", sep="");
         } else {
           cat("\n - For question `", convenienceQ$code,
-              "`, did NOT find question text in language `", currentLang,
+              "`, did NOT find question text in language `", currentLanguage,
               "`, so used English question text instead.", sep="");
         }
       }
