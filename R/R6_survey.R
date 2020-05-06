@@ -720,6 +720,13 @@ Survey <- R6::R6Class(
         languageList <- self$language;
       }
 
+      if (!silent) {
+        cat0("\n\nWill now start processing the survey with ",
+             "primary language '", self$language, "' and additional ",
+             "languages ", vecTxtQ(self$additional_languages),
+             ", using '", backupLanguage, "' as a backup language.\n\n");
+      }
+
       ###-----------------------------------------------------------------------
       ### Add language-specific survey settings
       ###-----------------------------------------------------------------------
@@ -824,7 +831,7 @@ Survey <- R6::R6Class(
           groups = self$groups,
           exportGroupIdMapping = private$exportGroupIdMapping,
           exportQuestionIdMapping = private$exportQuestionIdMapping,
-          primaryLanguage = self$language,
+          backupLanguage = self$language,
           silent = silent
         );
 
