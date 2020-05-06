@@ -831,7 +831,7 @@ Survey <- R6::R6Class(
           groups = self$groups,
           exportGroupIdMapping = private$exportGroupIdMapping,
           exportQuestionIdMapping = private$exportQuestionIdMapping,
-          backupLanguage = self$language,
+          backupLanguage = backupLanguage,
           silent = silent
         );
 
@@ -890,7 +890,7 @@ Survey <- R6::R6Class(
                   groups = groups,
                   exportGroupIdMapping = exportGroupIdMapping,
                   exportQuestionIdMapping = exportQuestionIdMapping,
-                  primaryLanguage = primaryLanguage,
+                  backupLanguage = backupLanguage,
                   silent=silent)
               );
             }
