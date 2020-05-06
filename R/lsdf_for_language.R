@@ -6,7 +6,8 @@
 #' @param groups The groups object in the Survey object.
 #' @param exportGroupIdMapping,exportQuestionIdMapping Used to map Survey
 #' object identifier onto the identifier model used in the LimeSurvey TSV.
-#' @param primaryLanguage The primary language of the survey
+#' @param backupLanguage The language to get content from if not available in
+#' the primary language
 #' @param silent Whether to be silent or chatty.
 #'
 #' @return Invisibly, the `Survey` object.
@@ -15,7 +16,7 @@ lsdf_for_language <- function(language,
                               groups,
                               exportGroupIdMapping,
                               exportQuestionIdMapping,
-                              primaryLanguage,
+                              backupLanguage,
                               silent = limonaid::opts$get("silent")) {
 
   currentLanguage <- language;
@@ -54,12 +55,12 @@ lsdf_for_language <- function(language,
       ifelse(currentLanguage %in% names(groups[[currentGroup]]$titles) &&
                (nchar(trimws(groups[[currentGroup]]$titles[[currentLanguage]])) > 0),
              groups[[currentGroup]]$titles[[currentLanguage]],
-             groups[[currentGroup]]$titles[[primaryLanguage]]);
+             groups[[currentGroup]]$titles[[backupLanguage]]);
     curLang_surveyDescription <-
       ifelse(currentLanguage %in% names(groups[[currentGroup]]$descriptions) &&
                (nchar(trimws(groups[[currentGroup]]$descriptions[[currentLanguage]])) > 0),
              groups[[currentGroup]]$descriptions[[currentLanguage]],
-             groups[[currentGroup]]$descriptions[[primaryLanguage]]);
+             groups[[currentGroup]]$descriptions[[backupLanguage]]);
 
     if (!silent) {
       cat0("\n  Processing group: ", curLang_surveyTitle, "\n");
@@ -126,7 +127,7 @@ lsdf_for_language <- function(language,
         ifelse((currentLanguage %in% names(convenienceQ$questionTexts)) &&
                  (nchar(trimws(convenienceQ$questionTexts[[currentLanguage]])) > 0),
                convenienceQ$questionTexts[[currentLanguage]],
-               convenienceQ$questionTexts[[primaryLanguage]]);
+               convenienceQ$questionTexts[[backupLanguage]]);
 
       if (limonaid::opts$get("debug")) {
         if ((currentLanguage %in% names(convenienceQ$questionTexts)) &&
@@ -152,12 +153,12 @@ lsdf_for_language <- function(language,
         ifelse(currentLanguage %in% names(convenienceQ$helpTexts) &&
                  (nchar(trimws(convenienceQ$helpTexts[[currentLanguage]])) > 0),
                convenienceQ$helpTexts[[currentLanguage]],
-               convenienceQ$helpTexts[[primaryLanguage]]);
+               convenienceQ$helpTexts[[backupLanguage]]);
       curLang_otherReplaceText <-
         ifelse(currentLanguage %in% names(convenienceQ$otherReplaceTexts) &&
                  (nchar(trimws(convenienceQ$otherReplaceTexts[[currentLanguage]])) > 0),
                convenienceQ$otherReplaceTexts[[currentLanguage]],
-               convenienceQ$otherReplaceTexts[[primaryLanguage]]);
+               convenienceQ$otherReplaceTexts[[backupLanguage]]);
 
       ### Specify this new row
       newRow <-
@@ -292,12 +293,12 @@ lsdf_for_language <- function(language,
             ifelse(currentLanguage %in% names(convenienceSQ$subquestionTexts) &&
                      (nchar(trimws(convenienceSQ$subquestionTexts[[currentLanguage]])) > 0),
                    convenienceSQ$subquestionTexts[[currentLanguage]],
-                   convenienceSQ$subquestionTexts[[primaryLanguage]]);
+                   convenienceSQ$subquestionTexts[[backupLanguage]]);
           curLang_subquestionHelp <-
             ifelse(currentLanguage %in% names(convenienceSQ$helpTexts) &&
                      (nchar(trimws(convenienceSQ$helpTexts[[currentLanguage]])) > 0),
                    convenienceSQ$helpTexts[[currentLanguage]],
-                   convenienceSQ$helpTexts[[primaryLanguage]]);
+                   convenienceSQ$helpTexts[[backupLanguage]]);
 
           ### Specify this new row
           newRow <-
@@ -351,7 +352,7 @@ lsdf_for_language <- function(language,
             ifelse(currentLanguage %in% names(convenienceA$optionTexts) &&
                      (nchar(convenienceA$optionTexts[[currentLanguage]]) > 0),
                    convenienceA$optionTexts[[currentLanguage]],
-                   convenienceA$optionTexts[[primaryLanguage]]);
+                   convenienceA$optionTexts[[backupLanguage]]);
 
           ### Specify this new row
           newRow <-

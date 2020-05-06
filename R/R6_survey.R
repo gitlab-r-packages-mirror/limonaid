@@ -620,12 +620,15 @@ Survey <- R6::R6Class(
     #' @param parallel Whether to work serially or in parallel.
     #' @param encoding The encoding to use
     #' @param silent Whether to be silent or chatty.
+    #' @param backupLanguage The language to get content from if not from
+    #' the primary langage.
     #' @return Invisibly, the `Survey` object.
     export_to_tsv = function(file,
                              preventOverwriting = limonaid::opts$get("preventOverwriting"),
                              parallel = TRUE,
                              encoding = limonaid::opts$get("encoding"),
-                             silent = limonaid::opts$get("silent")) {
+                             silent = limonaid::opts$get("silent"),
+                             backupLanguage = self$language) {
 
       ###-----------------------------------------------------------------------
       ### First we create the right dataframe; then we write that dataframe
@@ -727,6 +730,10 @@ Survey <- R6::R6Class(
 
       for (currentLanguage in languageList) {
 
+        if (!silent) {
+          cat0("\n\n  Processing language `", currentLanguage, "`.\n\n");
+        }
+
         newRow <-
           data.frame(
             id = rep("", 2),
@@ -762,7 +769,7 @@ Survey <- R6::R6Class(
             text <- private$emailDefaults[name];
           } else {
             ### Set primary language for everything unspecified in this language
-            text <- selfAsList[[propertyName]][[self$language]];
+            text <- selfAsList[[propertyName]][[backupLanguage]];
           }
 
           newRow <-
@@ -910,7 +917,7 @@ Survey <- R6::R6Class(
               groups = self$groups,
               exportGroupIdMapping = private$exportGroupIdMapping,
               exportQuestionIdMapping = private$exportQuestionIdMapping,
-              primaryLanguage = self$language,
+              backupLanguage = backupLanguage,
               silent = silent
             );
 
