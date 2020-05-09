@@ -778,14 +778,15 @@ Survey <- R6::R6Class(
             ### Set primary language for everything unspecified in this language
 
             if (!backupLanguage %in% names(selfAsList[[propertyName]])) {
-              stop("The backup language, `", backupLanguage,
-                   "`, is not available in property `", propertyName,
+              stop("Neither the language I am processing, `", currentLanguage,
+                   "`, nor the backup language, `", backupLanguage,
+                   "`, is available in property `", propertyName,
                    "`. The only available languages are: ",
                    vecTxt(names(selfAsList[[propertyName]]), useQuote="`"),
                    ".");
+            } else {
+              text <- selfAsList[[propertyName]][[backupLanguage]];
             }
-
-            text <- selfAsList[[propertyName]][[backupLanguage]];
           }
 
           newRow <-

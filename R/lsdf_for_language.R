@@ -143,7 +143,8 @@ lsdf_for_language <- function(language,
             paste0(
               "\n    For question `", convenienceQ$code,
               "`, did NOT find question text in language `", currentLanguage,
-              "`, so used English question text instead."
+              "`, so used question text from the backup language instead (`",
+              backupLanguage, "`)."
             );
         }
         cat(msg);
