@@ -44,7 +44,7 @@ export_with_languages <-
              "You requested ", vecTxt(additional_languages, useQuote = "`"),
              ", but the survey you passed only has languages ",
              vecTxt(c(res$additional_languages, res$languages),
-                    useQuote = "`").
+                    useQuote = "`"),
              ".");
       } else {
         res$additional_languages <- additional_languages;
