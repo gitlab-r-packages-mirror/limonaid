@@ -776,6 +776,15 @@ Survey <- R6::R6Class(
             text <- private$emailDefaults[name];
           } else {
             ### Set primary language for everything unspecified in this language
+
+            if (!backupLanguage %in% names(selfAsList[[propertyName]])) {
+              stop("The backup language, `", backupLanguage,
+                   "`, is not available in property `", propertyName,
+                   "`. The only available languages are: ",
+                   vecTxt(names(selfAsList[[propertyName]]), useQuote="`"),
+                   ".");
+            }
+
             text <- selfAsList[[propertyName]][[backupLanguage]];
           }
 
