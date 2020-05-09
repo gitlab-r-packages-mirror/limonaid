@@ -9,7 +9,7 @@ lsdf_for_language(
   groups,
   exportGroupIdMapping,
   exportQuestionIdMapping,
-  primaryLanguage,
+  backupLanguage,
   silent = limonaid::opts$get("silent")
 )
 }
@@ -21,7 +21,8 @@ lsdf_for_language(
 \item{exportGroupIdMapping, exportQuestionIdMapping}{Used to map Survey
 object identifier onto the identifier model used in the LimeSurvey TSV.}
 
-\item{primaryLanguage}{The primary language of the survey}
+\item{backupLanguage}{The language to get content from if not available in
+the primary language}
 
 \item{silent}{Whether to be silent or chatty.}
 }

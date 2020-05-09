@@ -475,7 +475,8 @@ https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
   preventOverwriting = limonaid::opts$get("preventOverwriting"),
   parallel = TRUE,
   encoding = limonaid::opts$get("encoding"),
-  silent = limonaid::opts$get("silent")
+  silent = limonaid::opts$get("silent"),
+  backupLanguage = self$language
 )}\if{html}{\out{</div>}}
 }
 
@@ -491,6 +492,9 @@ https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
 \item{\code{encoding}}{The encoding to use}
 
 \item{\code{silent}}{Whether to be silent or chatty.}
+
+\item{\code{backupLanguage}}{The language to get content from if not from
+the primary langage.}
 }
 \if{html}{\out{</div>}}
 }
