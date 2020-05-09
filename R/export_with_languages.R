@@ -67,6 +67,6 @@ export_with_languages <-
                       parallel = parallel,
                       backupLanguage = backupLanguage);
 
-    return(invisible(survey));
+    return(invisible(res));
 
   }
