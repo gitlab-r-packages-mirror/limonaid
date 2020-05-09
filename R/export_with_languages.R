@@ -35,15 +35,15 @@ export_with_languages <-
 
     if (is.null(additional_languages)) {
       res$additional_languages <-
-        setdiff(c(res$additional_languages, res$languages),
+        setdiff(c(res$additional_languages, res$language),
                 language);
     } else {
       if ((additional_languages != "") &&
-          !all(additional_languages %in% c(res$additional_languages, res$languages))) {
+          !all(additional_languages %in% c(res$additional_languages, res$language))) {
         stop("You requested additional languages that are not in the provided survey! ",
              "You requested ", vecTxt(additional_languages, useQuote = "`"),
              ", but the survey you passed only has languages ",
-             vecTxt(c(res$additional_languages, res$languages),
+             vecTxt(c(res$additional_languages, res$language),
                     useQuote = "`"),
              ".");
       } else {
