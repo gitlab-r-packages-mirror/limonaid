@@ -4,11 +4,12 @@
 #' different primary language, and/or less additional languages. This
 #' function allows that.
 #'
-#' @param survey The Survey object.
+#' @param x The Survey object.
 #' @param language The desired primary language.
 #' @param path The path where to save the .TSV file.
 #' @param additional_languages If specified, the selection of additional
-#' languages. If not specifies
+#' languages. If not specified, the survey's primary language will just be
+#' switched to `language`, and all original languages will be retained.
 #' @param new_sid If specified, a new sid to use.
 #' @param backupLanguage The language to use if an element is not specified
 #' in one of the languages.
@@ -21,39 +22,39 @@
 #'
 #' @examples ### Add later
 export_with_languages <-
-  function(survey,
+  function(x,
            language,
            path,
            additional_languages = NULL,
-           new_sid = survey$sid,
-           backupLanguage = language,
+           new_sid = x$sid,
+           backupLanguage = x$language,
            prefix = "limesurvey--",
            suffix = "",
            parallel = TRUE) {
 
-    res <- survey$clone();
+    res <- x$clone();
+
+    res$sid <- new_sid;
+
+    res$language <- language;
 
     if (is.null(additional_languages)) {
       res$additional_languages <-
-        setdiff(c(res$additional_languages, res$language),
+        setdiff(c(x$additional_languages, x$language),
                 language);
     } else {
       if ((additional_languages != "") &&
-          !all(additional_languages %in% c(res$additional_languages, res$language))) {
+          !all(additional_languages %in% c(x$additional_languages, x$language))) {
         stop("You requested additional languages that are not in the provided survey! ",
              "You requested ", vecTxt(additional_languages, useQuote = "`"),
              ", but the survey you passed only has languages ",
-             vecTxt(c(res$additional_languages, res$language),
+             vecTxt(c(x$additional_languages, x$language),
                     useQuote = "`"),
              ".");
       } else {
         res$additional_languages <- additional_languages;
       }
     }
-
-    res$sid <- new_sid;
-
-    res$language <- language;
 
     fullSurveyFilename <-
       file.path(limesurveyPath,
