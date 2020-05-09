@@ -857,99 +857,119 @@ Survey <- R6::R6Class(
 
       ### Then, if need be, for the secondary languages, either serially
       ### or in parallel.
-
-      if (parallel) {
-
-        ### Then for all other languages in parallel; detect number of cores
-        ### and create a cluster
-        nCores <- parallel::detectCores();
-        cl <- parallel::makeCluster(nCores);
-
-        ### Load the limonaid package in each cluster
-        parallel::clusterEvalQ(
-          cl,
-          library(limonaid)
-        );
-
-        ### Prepare objects to export to each cluster
-        groups <- self$groups;
-        exportGroupIdMapping <- private$exportGroupIdMapping;
-        exportQuestionIdMapping <- private$exportQuestionIdMapping;
-        primaryLanguage <- self$language;
-
-        ### Export these objects and the 'silent' setting
-        parallel::clusterExport(
-          cl,
-          c('groups',
-            'exportGroupIdMapping',
-            'exportQuestionIdMapping',
-            'primaryLanguage',
-            'silent'),
-          envir = environment()
-        );
-
-        ### Perform the parallel computations
-        parallelOutput <-
-          parallel::parLapply(
-            cl,
-            self$additional_languages,
-            function(language) {
-              return(
-                limonaid::lsdf_for_language(
-                  language = language,
-                  groups = groups,
-                  exportGroupIdMapping = exportGroupIdMapping,
-                  exportQuestionIdMapping = exportQuestionIdMapping,
-                  backupLanguage = backupLanguage,
-                  silent=silent)
-              );
-            }
-          );
-
-        ### Stop the cluster
-        parallel::stopCluster(cl);
-
-        ### Extract the dataframes
-        for (i in seq_along(parallelOutput)) {
-          dat <- append_lsdf_rows(dat,
-                                  parallelOutput[[i]]$dat);
+      if (
+        (length(self$additional_languages) == 0) ||
+        (
+          (length(self$additional_languages) == 1) &&
+          self$additional_languages == ""
+         )
+      ) {
+        if (!silent) {
+          cat0("\n\nNo additional langues specified in this survey.\n\n");
         }
-
       } else {
 
-        for (currentLanguage in self$additional_languages) {
-
-          if (!silent) {
-            cat0("\n\nProcessing survey for language: ", currentLanguage,
-                 " (",
-                 which(self$additional_languages == currentLanguage) + 1,
-                 " out of ",
-                 length(self$additional_languages) + 1,
-                 ")\n");
-          }
-
-          lsdf_for_language_list <-
-            lsdf_for_language(
-              language = currentLanguage,
-              groups = self$groups,
-              exportGroupIdMapping = private$exportGroupIdMapping,
-              exportQuestionIdMapping = private$exportQuestionIdMapping,
-              backupLanguage = backupLanguage,
-              silent = silent
-            );
-
-          ### Store potentially updated mappings
-          private$exportGroupIdMapping <-
-            lsdf_for_language_list$exportGroupIdMapping;
-          private$exportQuestionIdMapping <-
-            lsdf_for_language_list$exportQuestionIdMapping;
-
-          ### Add row using our homerolled version of plyr::rbind.fill
-          dat <- append_lsdf_rows(dat,
-                                  lsdf_for_language_list$dat);
-
+        if (!silent) {
+          cat0("\n\nStarting to process ", length(self$additional_languages),
+               " additional languages (",
+               vecTxt(self$additional_languages, useQuote="`"),
+               "), ", ifelse(parallel, "", "not "), "using parallel ",
+               "computing to utilize all CPU cores.\n\n");
         }
 
+        if (parallel) {
+
+          ### Then for all other languages in parallel; detect number of cores
+          ### and create a cluster
+          nCores <- parallel::detectCores();
+          cl <- parallel::makeCluster(nCores);
+
+          ### Load the limonaid package in each cluster
+          parallel::clusterEvalQ(
+            cl,
+            library(limonaid)
+          );
+
+          ### Prepare objects to export to each cluster
+          groups <- self$groups;
+          exportGroupIdMapping <- private$exportGroupIdMapping;
+          exportQuestionIdMapping <- private$exportQuestionIdMapping;
+          primaryLanguage <- self$language;
+
+          ### Export these objects and the 'silent' setting
+          parallel::clusterExport(
+            cl,
+            c('groups',
+              'exportGroupIdMapping',
+              'exportQuestionIdMapping',
+              'primaryLanguage',
+              'silent'),
+            envir = environment()
+          );
+
+          ### Perform the parallel computations
+          parallelOutput <-
+            parallel::parLapply(
+              cl,
+              self$additional_languages,
+              function(language) {
+                return(
+                  limonaid::lsdf_for_language(
+                    language = language,
+                    groups = groups,
+                    exportGroupIdMapping = exportGroupIdMapping,
+                    exportQuestionIdMapping = exportQuestionIdMapping,
+                    backupLanguage = backupLanguage,
+                    silent=silent)
+                );
+              }
+            );
+
+          ### Stop the cluster
+          parallel::stopCluster(cl);
+
+          ### Extract the dataframes
+          for (i in seq_along(parallelOutput)) {
+            dat <- append_lsdf_rows(dat,
+                                    parallelOutput[[i]]$dat);
+          }
+
+        } else {
+
+          for (currentLanguage in self$additional_languages) {
+
+            if (!silent) {
+              cat0("\n\nProcessing survey for language: ", currentLanguage,
+                   " (",
+                   which(self$additional_languages == currentLanguage) + 1,
+                   " out of ",
+                   length(self$additional_languages) + 1,
+                   ")\n");
+            }
+
+            lsdf_for_language_list <-
+              lsdf_for_language(
+                language = currentLanguage,
+                groups = self$groups,
+                exportGroupIdMapping = private$exportGroupIdMapping,
+                exportQuestionIdMapping = private$exportQuestionIdMapping,
+                backupLanguage = backupLanguage,
+                silent = silent
+              );
+
+            ### Store potentially updated mappings
+            private$exportGroupIdMapping <-
+              lsdf_for_language_list$exportGroupIdMapping;
+            private$exportQuestionIdMapping <-
+              lsdf_for_language_list$exportQuestionIdMapping;
+
+            ### Add row using our homerolled version of plyr::rbind.fill
+            dat <- append_lsdf_rows(dat,
+                                    lsdf_for_language_list$dat);
+
+          }
+
+        }
       }
 
       if (!silent) {
