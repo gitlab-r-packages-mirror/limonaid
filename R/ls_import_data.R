@@ -49,6 +49,7 @@
 #' @param dataEncoding,scriptEncoding The encoding of the files; can be used
 #' to override the setting in the `limonaid` options (i.e. in `opts`) in the
 #' `encoding` field (the default value is "`UTF-8`").
+#' @param silent Whether to be silent or verbose ('chatty').
 #' @return The dataframe.
 #' @examples
 #'
@@ -91,14 +92,14 @@ ls_import_data <- function(
   scriptEncoding=NULL, # 'ASCII'
   silent=limonaid::opts$get("silent")) {
 
-  limeSurveyRegEx.varNames <-
-    limonaid::opts$get("data_import_RegEx_varNames");
-  limeSurveyRegEx.toChar <-
-    limonaid::opts$get("data_import_RegEx_toChar");
-  limeSurveyRegEx.varLabels <-
-    limonaid::opts$get("data_import_RegEx_varLabels");
-  limeSurveyRegEx.toFactor <-
-    limonaid::opts$get("data_import_RegEx_toFactor");
+  # limeSurveyRegEx.varNames <-
+  #   limonaid::opts$get("data_import_RegEx_varNames");
+  # limeSurveyRegEx.toChar <-
+  #   limonaid::opts$get("data_import_RegEx_toChar");
+  # limeSurveyRegEx.varLabels <-
+  #   limonaid::opts$get("data_import_RegEx_varLabels");
+  # limeSurveyRegEx.toFactor <-
+  #   limonaid::opts$get("data_import_RegEx_toFactor");
   limeSurveyRegEx.varNameSanitizing <-
     limonaid::opts$get("data_import_RegEx_varNameSanitizing");
 
@@ -181,85 +182,39 @@ ls_import_data <- function(
 
   ### Load scriptfile
   if (!is.null(scriptfile)) {
-    if (!file.exists(scriptfile)) {
-      stop("File specified as scriptfile ('", scriptfile, "') does not exist!");
-    }
-    if (!silent) {
-      cat0("\nReading script file from '",
-           scriptfile, "'.");
-    }
-    ### Use separate connection to make sure proper encoding is selected
-    con <- file(scriptfile, encoding=scriptEncoding)
-    datascript <- readLines(con);
-    close(con);
+
+    scriptBits <-
+      ls_parse_data_import_script(
+        scriptfile = scriptfile,
+        scriptEncoding=scriptEncoding,
+        silent=silent
+      );
 
     if (!silent) {
-      cat0("\nApplying regular expressions to script file contents to ",
-           "extract lines to set variable names, labels, convert to ",
-           "character values, and convert to factors.");
-    }
-
-    varNamesScript <- datascript[grepl(limeSurveyRegEx.varNames,
-                                       datascript)];
-    varLabelsScript <- datascript[grepl(limeSurveyRegEx.varLabels,
-                                        datascript)];
-    toCharScript <- datascript[grepl(limeSurveyRegEx.toChar,
-                                     datascript)];
-    toFactorScript <- datascript[grepl(limeSurveyRegEx.toFactor,
-                                       datascript)];
-
-    if (!silent) {
-      cat0("\nProcessing scripts depensing on values of `setVarNames` (",
+      cat0("\nProcessing scripts depending on values of `setVarNames` (",
            setVarNames, "), `setLabels` (", setLabels,
            "), `convertToCharacter` (", convertToCharacter,
            "), `convertToFactor` (", convertToFactor,
            "), and `categoricalQuestions` (", categoricalQuestions, ").");
     }
 
-    if (setVarNames) {
-      if (!silent) {
-        cat0("\nSetting variable names.");
-      }
-      eval(parse(text=varNamesScript));
-    }
-    if (convertToCharacter) {
-      if (!silent) {
-        cat0("\nConverting columns to character.");
-      }
-      eval(parse(text=toCharScript));
-    }
-    if (convertToFactor || (!is.null(categoricalQuestions))) {
-      if (!silent) {
-        cat0("\nConverting columns to factors.");
-      }
-      if (massConvertToNumeric) {
-        data <- massConvertToNumeric(data);
-      }
-      if (!is.null(categoricalQuestions)) {
-        if (setVarNames) {
-          varNames <- names(data);
-        } else {
-          stop("You can't set setVarNames to FALSE and also set ",
-               "categoricalQuestions to anything else than NULL, ",
-               "because the content of categoricalQuestions should ",
-               "be the LimeSurvey variables names!");
-        }
-        toFactorScript <- unlist(lapply(as.list(categoricalQuestions),
-                                        function(x, string=toFactorScript,
-                                                 varNms=varNames) {
-                                          return(grep(paste0("data\\[, ",
-                                                             which(varNms==x),
-                                                             "\\] <-"),
-                                                      string, value=TRUE));
-                                        }));
-      }
-      eval(parse(text=toFactorScript));
-    }
+    data <-
+      ls_apply_script_bits(data = data,
+                           scriptBits = scriptBits,
+                           setVarNames = setVarNames,
+                           setLabels = setLabels,
+                           convertToCharacter = convertToCharacter,
+                           convertToFactor = convertToFactor,
+                           categoricalQuestions = categoricalQuestions,
+                           massConvertToNumeric = massConvertToNumeric,
+                           silent = silent);
+
   } else {
     if (massConvertToNumeric) {
       data <- massConvertToNumeric(data);
     }
   }
+
   if (length(limeSurveyRegEx.varNameSanitizing)) {
     if (!silent) {
       cat0("\nSanitizing variable names.");
@@ -269,21 +224,6 @@ ls_import_data <- function(
                           currentRegexPair$replacement,
                           names(data));
     }
-  }
-
-  ### Labels are set as last action, because other actions
-  ### sometimes erase attributes
-  if (setLabels) {
-    if (!silent) {
-      cat0("\nSetting variable labels.");
-    }
-    ### This is the default attribute
-    eval(parse(text=varLabelsScript));
-    ### Also apply to `labels`, to be consistent with e.g. haven etc
-    varLabelsScript <- gsub("variable\\.labels",
-                            "label",
-                            varLabelsScript);
-    eval(parse(text=varLabelsScript));
   }
 
   return(data);

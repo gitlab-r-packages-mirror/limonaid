@@ -1,0 +1,64 @@
+#' Extract specific code bits from LimeSurvey data import R script
+#'
+#' This function extracts specific code bits from the LimeSurvey data
+#' import R script, which can then be applied to imported data using
+#' [ls_apply_script_bits()], for example to update variable names, set
+#' labels, etc.
+#'
+#' @param scriptfile The path and filename of the script file.
+#' @param scriptEncoding The encoding of the script file; can be used
+#' to override the setting in the `limonaid` options (i.e. in `opts`) in the
+#' `encoding` field (the default value is "`UTF-8`").
+#' @param silent Whether to be silent or verbose ('chatty').
+#'
+#' @return A list with four components.
+#' @export
+ls_parse_data_import_script <- function(scriptfile = NULL,
+                                        scriptEncoding=limonaid::opts$get("encoding"),
+                                        silent=limonaid::opts$get("silent")) {
+
+  limeSurveyRegEx.varNames <-
+    limonaid::opts$get("data_import_RegEx_varNames");
+  limeSurveyRegEx.toChar <-
+    limonaid::opts$get("data_import_RegEx_toChar");
+  limeSurveyRegEx.varLabels <-
+    limonaid::opts$get("data_import_RegEx_varLabels");
+  limeSurveyRegEx.toFactor <-
+    limonaid::opts$get("data_import_RegEx_toFactor");
+
+  if (!file.exists(scriptfile)) {
+    stop("File specified as scriptfile ('", scriptfile, "') does not exist!");
+  }
+  if (!silent) {
+    cat0("\nReading script file from '",
+         scriptfile, "'.");
+  }
+
+  ### Use separate connection to make sure proper encoding is selected
+  con <- file(scriptfile, encoding=scriptEncoding)
+  datascript <- readLines(con);
+  close(con);
+
+  if (!silent) {
+    cat0("\nApplying regular expressions to script file contents to ",
+         "extract lines to set variable names, labels, convert to ",
+         "character values, and convert to factors.");
+  }
+
+  res <-
+    list(
+      varNamesScript = datascript[grepl(limeSurveyRegEx.varNames,
+                                        datascript)],
+      varLabelsScript = datascript[grepl(limeSurveyRegEx.varLabels,
+                                         datascript)],
+      toCharScript = datascript[grepl(limeSurveyRegEx.toChar,
+                                      datascript)],
+      toFactorScript = datascript[grepl(limeSurveyRegEx.toFactor,
+                                        datascript)]
+    );
+
+  class(res) <- c("lsScriptBits", "list");
+
+  return(res);
+
+}
