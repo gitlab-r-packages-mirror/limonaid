@@ -5,26 +5,27 @@
 \title{Export a survey with a specific primary and additional languages}
 \usage{
 export_with_languages(
-  survey,
+  x,
   language,
   path,
   additional_languages = NULL,
-  new_sid = survey$sid,
-  backupLanguage = language,
+  new_sid = x$sid,
+  backupLanguage = x$language,
   prefix = "limesurvey--",
   suffix = "",
   parallel = TRUE
 )
 }
 \arguments{
-\item{survey}{The Survey object.}
+\item{x}{The Survey object.}
 
 \item{language}{The desired primary language.}
 
 \item{path}{The path where to save the .TSV file.}
 
 \item{additional_languages}{If specified, the selection of additional
-languages. If not specifies}
+languages. If not specified, the survey's primary language will just be
+switched to \code{language}, and all original languages will be retained.}
 
 \item{new_sid}{If specified, a new sid to use.}
 

@@ -63,6 +63,8 @@ using \code{\link{massConvertToNumeric}}.}
 to override the setting in the \code{limonaid} options (i.e. in \code{opts}) in the
 \code{encoding} field (the default value is "\code{UTF-8}").}
 
+\item{silent}{Whether to be silent or verbose ('chatty').}
+
 \item{limeSurveyRegEx.varNames}{The regular expression used to extract the
 variable names from the script file. The first regex expression (i.e. the
 first expression between parentheses) will be extracted as variable name.}
