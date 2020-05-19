@@ -1,3 +1,24 @@
+#' Apply specific code bits from LimeSurvey data import R script
+#'
+#' This function applies specific code bits from the LimeSurvey data
+#' import R script, read by [ls_parse_data_import_script()], for example
+#' to update variable names, set labels, etc.
+#'
+#' @param data The dataframe.
+#' @param scriptBits The object returned by the call
+#' to [ls_parse_data_import_script()].
+#' @param setVarNames,setLabels,convertToCharacter,convertToFactor Whether to
+#' set variable names or labels, or convert to character or factor, using the
+#' code isolated using the specified regular expression.
+#' @param categoricalQuestions Which variables (specified using LimeSurvey
+#' variable names) are considered categorical questions; for these, the script
+#' to convert the variables to factors, as extracted from the LimeSurvey import
+#' file, is applied.
+#' @param massConvertToNumeric Whether to convert all variables to numeric
+#' using \code{\link{massConvertToNumeric}}.
+#' @param silent Whether to be silent or verbose ('chatty').
+#' @return The dataframe.
+#' @export
 ls_apply_script_bits <- function(data,
                                  scriptBits,
                                  setVarNames = TRUE,
