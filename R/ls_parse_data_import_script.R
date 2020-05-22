@@ -59,10 +59,10 @@ ls_parse_data_import_script <- function(scriptfile = NULL,
 
   res$valueLabels <-
     regmatches(
-      scriptBits$toFactorScript,
+      res$toFactorScript,
       regexec(
         data_import_RegEx_toFactor,
-        scriptBits$toFactorScript
+        res$toFactorScript
       )
     );
 
@@ -86,10 +86,10 @@ ls_parse_data_import_script <- function(scriptfile = NULL,
 
   res$varLabels <-
     regmatches(
-      scriptBits$varLabelsScript,
+      res$varLabelsScript,
       regexec(
         limeSurveyRegEx.varLabels,
-        scriptBits$varLabelsScript
+        res$varLabelsScript
       )
     );
 
