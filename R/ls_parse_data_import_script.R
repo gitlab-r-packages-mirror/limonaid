@@ -89,6 +89,7 @@ ls_parse_data_import_script <- function(scriptfile = NULL,
       res$varLabelsScript,
       regexec(
         limeSurveyRegEx.varLabels,
+        res$varLabelsScript
       )
     );
 
