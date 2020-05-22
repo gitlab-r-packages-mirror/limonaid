@@ -57,6 +57,58 @@ ls_parse_data_import_script <- function(scriptfile = NULL,
                                         datascript)]
     );
 
+  res$valueLabels <-
+    regmatches(
+      scriptBits$toFactorScript,
+      regexec(
+        data_import_RegEx_toFactor,
+        scriptBits$toFactorScript
+      )
+    );
+
+  res$valueLabels <-
+    stats::setNames(
+      lapply(
+        res$valueLabels,
+        function(x) {
+          eval(parse(text = paste0("y<-", x[[4]])));
+          eval(parse(text = paste0("z<-", x[[3]])));
+          return(stats::setNames(y, nm = z));
+        }),
+      nm = unlist(
+        lapply(
+          res$valueLabels,
+          function(x) {
+            return(x[[2]]);
+          })
+      )
+    );
+
+  res$varLabels <-
+    regmatches(
+      scriptBits$varLabelsScript,
+      regexec(
+        limeSurveyRegEx.varLabels,
+        scriptBits$varLabelsScript
+      )
+    );
+
+  res$varLabels <-
+    stats::setNames(
+      lapply(
+        res$varLabels,
+        function(x) {
+          return(x[[3]]);
+        }),
+      nm = unlist(
+        lapply(
+          res$varLabels,
+          function(x) {
+            return(x[[2]]);
+          })
+      )
+    );
+
   class(res) <- c("lsScriptBits", "list");
 
   return(res);

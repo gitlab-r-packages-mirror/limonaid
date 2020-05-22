@@ -41,6 +41,7 @@ ls_apply_script_bits <- function(data,
   varLabelsScript <- scriptBits$varLabelsScript;
   toCharScript <- scriptBits$toCharScript;
   toFactorScript <- scriptBits$toFactorScript;
+  valueLabels <- scriptBits$valueLabels;
 
   if (setVarNames) {
     if (!silent) {
@@ -97,11 +98,19 @@ ls_apply_script_bits <- function(data,
     }
     ### This is the default attribute
     eval(parse(text=varLabelsScript));
-    ### Also apply to `labels`, to be consistent with e.g. haven etc
+    ### Also apply to `label`, to be consistent with e.g. haven etc
     varLabelsScript <- gsub("variable\\.labels",
                             "label",
                             varLabelsScript);
     eval(parse(text=varLabelsScript));
+
+    if (!silent) {
+      cat0("\nStoring value labels.");
+    }
+    for (i in names(valueLabels)) {
+      attr(data[, as.numeric(i)], "labels") <-
+        valueLabels[[i]];
+    }
   }
 
   return(data);

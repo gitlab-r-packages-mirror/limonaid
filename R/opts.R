@@ -131,11 +131,12 @@ opts$defaults <-
       "data\\[, \\d*\\] <- as.character\\(data\\[, \\d*\\]\\)",
 
     data_import_RegEx_varLabels =
-      "attributes\\(data\\)\\$variable.labels\\[\\d*\\] <- \".*\"",
+      "attributes\\(data\\)\\$variable.labels\\[(\\d*)\\] <- \"(.*)\"",
 
     data_import_RegEx_toFactor =
-      paste0("data\\[, \\d*\\] <- factor\\(data\\[, \\d*\\], ",
-             "levels=c\\(.*\\),.*labels=c\\(.*\\)\\)"),
+      paste0("data\\[, (\\d*)\\] <- ",
+             "factor\\(data\\[, \\d*\\], ",
+             "levels=(c\\(.*\\)),.*labels=(c\\(.*\\))\\)"),
 
     data_import_RegEx_varNameSanitizing =
       list(list(pattern = "#", replacement = "_"),
