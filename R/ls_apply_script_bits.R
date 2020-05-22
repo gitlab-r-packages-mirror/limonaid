@@ -105,7 +105,15 @@ ls_apply_script_bits <- function(data,
     eval(parse(text=varLabelsScript));
 
     if (!silent) {
-      cat0("\nStoring value labels.");
+      cat0("\nStoring variable labels as variable attributes following `labeler` convention.");
+    }
+    for (i in names(varLabels)) {
+      attr(data[, as.numeric(i)], "label") <-
+        varLabels[[i]];
+    }
+
+    if (!silent) {
+      cat0("\nStoring value labels as variable attributes following `labeler` convention.");
     }
     for (i in names(valueLabels)) {
       attr(data[, as.numeric(i)], "labels") <-
