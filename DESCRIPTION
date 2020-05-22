@@ -26,5 +26,6 @@ Imports:
   R6 (>= 2.4)
 Suggests: 
     knitr,
+    sticky,
     testthat
     

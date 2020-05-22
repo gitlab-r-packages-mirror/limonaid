@@ -27,7 +27,8 @@ ls_apply_script_bits <- function(data,
                                  convertToFactor = FALSE,
                                  categoricalQuestions = NULL,
                                  massConvertToNumeric = TRUE,
-                                 silent=limonaid::opts$get("silent")) {
+                                 silent=limonaid::opts$get("silent"),
+                                 sticky = limonaid::opts$get("sticky")) {
 
   if (!is.data.frame(data)) {
     stop("`data` must be a data.frame, but has class `", class(data), "`.");
@@ -89,6 +90,22 @@ ls_apply_script_bits <- function(data,
 
     eval(parse(text=toFactorScript));
 
+  }
+
+  if (sticky) {
+    if ("sticky" %in% installed.packages()) {
+      sticky::sticky_all(data);
+    } else {
+      warning("The `sticky` package is not installed. Without this ",
+              "package, the variable and value labels that will be ",
+              "attached to every variable (i.e. data frame column) ",
+              "will be lost when the data frame is subset, for example ",
+              "when selecting specific rows or columns.\n\n",
+              "You can install the `sticky` package (34KB) with:\n\n",
+              "  install.packages('sticky');\n\n",
+              "You can disable this warning by setting the `sticky` ",
+              "argument to `FALSE`.");
+    }
   }
 
   ### Labels are set as last action, because other actions
