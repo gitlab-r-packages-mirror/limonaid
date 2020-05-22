@@ -94,7 +94,7 @@ ls_apply_script_bits <- function(data,
 
   if (sticky) {
     if ("sticky" %in% installed.packages()) {
-      sticky::sticky_all(data);
+      data <- sticky::sticky_all(data);
     } else {
       warning("The `sticky` package is not installed. Without this ",
               "package, the variable and value labels that will be ",
