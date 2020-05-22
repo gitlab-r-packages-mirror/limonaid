@@ -42,6 +42,7 @@ ls_apply_script_bits <- function(data,
   toCharScript <- scriptBits$toCharScript;
   toFactorScript <- scriptBits$toFactorScript;
   valueLabels <- scriptBits$valueLabels;
+  varLabels <- scriptBits$varLabels;
 
   if (setVarNames) {
     if (!silent) {
