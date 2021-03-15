@@ -1,6 +1,6 @@
 Package: limonaid
 Title: Working With LimeSurvey Surveys and Responses
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: 
     person(given = "Gjalt-Jorn",
            family = "Peters",
@@ -23,6 +23,7 @@ RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
+  jsonlite (>= 1.7),
   R6 (>= 2.4)
 Suggests: 
     knitr,
