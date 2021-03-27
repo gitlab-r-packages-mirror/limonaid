@@ -107,8 +107,6 @@ opts$reset <- function(...) {
 opts$defaults <-
   list(
 
-    silent=TRUE,
-
     preventOverwriting=TRUE,
 
     encoding = "UTF-8",
@@ -181,7 +179,9 @@ opts$defaults <-
         "\\2")
     ),
 
-    sticky = TRUE
+    sticky = TRUE,
+
+    silent=TRUE
 
   )
 

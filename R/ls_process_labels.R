@@ -34,9 +34,9 @@ ls_process_labels <- function(data,
                               varnameRegExPairs = NULL,
                               lengthToWrap = 50,
                               lengthToWrapAnchors = 20,
-                              labelExtractionRegExPair = limonaid::opts$get(labelExtractionRegExPair),
-                              leftAnchorRegExPairs = limonaid::opts$get(leftAnchorRegExPairs),
-                              rightAnchorRegExPairs = limonaid::opts$get(rightAnchorRegExPairs)) {
+                              labelExtractionRegExPair = limonaid::opts$get('labelExtractionRegExPair'),
+                              leftAnchorRegExPairs = limonaid::opts$get('leftAnchorRegExPairs'),
+                              rightAnchorRegExPairs = limonaid::opts$get('rightAnchorRegExPairs')) {
 
   dat <- data;
 

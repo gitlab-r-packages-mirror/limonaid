@@ -23,11 +23,12 @@ get_session_key <- function(username = getOption('lime_username'),
   #   params = list(admin = unbox("username"), password = unbox("password"))
   # But that's a lot of extra work. So auto_unbox suffices here.
   # More details and debate: https://github.com/hadley/httr/issues/159
-  r <- POST(getOption('lime_api'), content_type_json(),
+  r <- httr::POST(getOption('lime_api'), httr::content_type_json(),
             body = jsonlite::toJSON(body.json, auto_unbox = TRUE))
 
-  session_key <- as.character(jsonlite::fromJSON(content(r, encoding="utf-8"))$result)
+  session_key <- as.character(jsonlite::fromJSON(httr::content(r, encoding="utf-8"))$result)
   session_cache$session_key <- session_key
+  options(limonaid_cache_session_key = session_key);
   session_key
 }
 

@@ -7,22 +7,40 @@
 #' @param sCompletionStatus \dots
 #' @param sHeadingType \dots
 #' @param sResponseType \dots
-#' @param \dots Further arguments to \code{\link{call_limer}}.
+#' @param \dots Further arguments to \code{\link{limer_call_limer}}.
 #' @export
 #' @examples \dontrun{
-#' get_responses(12345)
+#' limer_get_responses(12345)
 #' }
 
-limer_get_responses <- function(iSurveyID, sDocumentType = "csv", sLanguageCode = NULL,
-                          sCompletionStatus = "complete", sHeadingType = "code",
-                          sResponseType = "long", ...,
-                          encoding="UTF-8") {
-  # Put all the function's arguments in a list to then be passed to call_limer()
-  params <- as.list(environment())
-  dots <- list(...)
-  if(length(dots) > 0) params <- append(params,dots)
+limer_get_responses <- function(iSurveyID,
+                                sDocumentType = "csv",
+                                sLanguageCode = NULL,
+                                sCompletionStatus = "complete",
+                                sHeadingType = "code",
+                                sResponseType = "long",
+                                encoding_limerCall=NULL,
+                                encoding_txtCon=NULL,
+                                ...) {
+
+  ### Put all the function's arguments in a list to then be passed to call_limer()
+  params <- as.list(environment());
+  dots <- list(...);
+  if(length(dots) > 0) params <- append(params,dots);
   # print(params) # uncomment to debug the params
 
-  results <- limer_call_limer(method = "export_responses", params = params)
-  return(limer_base64_to_df(unlist(results), encoding=encoding))
+  results <-
+    limer_call_limer(
+      method = "export_responses",
+      params = params,
+      encoding=encoding_limerCall
+    );
+
+  return(
+    limer_base64_to_df(
+      unlist(results),
+      encoding=encoding_txtCon
+    )
+  );
+
 }

@@ -13,7 +13,8 @@ ls_apply_script_bits(
   convertToFactor = FALSE,
   categoricalQuestions = NULL,
   massConvertToNumeric = TRUE,
-  silent = limonaid::opts$get("silent")
+  silent = limonaid::opts$get("silent"),
+  sticky = limonaid::opts$get("sticky")
 )
 }
 \arguments{
