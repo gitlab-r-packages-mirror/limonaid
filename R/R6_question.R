@@ -171,6 +171,9 @@ Question <- R6::R6Class(
         } else if (type %in% c("equation")) {
           lsType <- "*";
 
+        } else if (type %in% c("boilerplate", "text display")) {
+          lsType <- "X";
+
         } else {
           stop("Questions of type '", type, "' are not yet supported.");
         }
