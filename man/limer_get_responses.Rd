@@ -29,13 +29,13 @@ limer_get_responses(
 
 \item{sResponseType}{\dots}
 
-\item{\dots}{Further arguments to \code{\link{call_limer}}.}
+\item{\dots}{Further arguments to \code{\link{limer_call_limer}}.}
 }
 \description{
 This function exports and downloads data from a LimeSurvey survey.
 }
 \examples{
 \dontrun{
-get_responses(12345)
+limer_get_responses(12345)
 }
 }

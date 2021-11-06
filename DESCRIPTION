@@ -19,7 +19,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://r-packages.gitlab.io/limonaid
 BugReports: https://gitlab.com/r-packages/limonaid/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
 Imports:
