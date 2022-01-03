@@ -1,8 +1,14 @@
+### The importing of R6 is to avoid an error for R CMD Check, see:
+### https://stackoverflow.com/questions/64055049/unexpected-note-namespace-in-imports-field-not-imported-from-r6
+
 #' R6 Class representing a LimeSurvey survey
 #'
 #' Create and work with a Survey to programmatically (or interactively)
 #' create a survey, export it to a tab separated values file, and import
 #' it to LimeSurvey.
+#'
+#' @import R6
+#'
 #' @export
 Survey <- R6::R6Class(
 
