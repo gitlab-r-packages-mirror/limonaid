@@ -1,13 +1,14 @@
 #' Make a call to the LimeSurvey API
 #'
-#' This function makes a generic call to the LimeSurvey API. See \url{https://manual.limesurvey.org/RemoteControl_2_API} for API documentation.
+#' This function makes a generic call to the LimeSurvey API.
+#' See \url{https://manual.limesurvey.org/RemoteControl_2_API} for
+#' API documentation.
 #'
 #' @param method API function to call. Full lis Defaults to value set in \code{options()}.
 #' @param params Optional named list of parameters to pass to the function.
+#' @param encoding The encoding to use
 #' @param \dots Other arguments passed to \code{\link[httr]{POST}}.
 #' @return Results from the API (sometimes plain text, sometimes base64-encoded text).
-#' @import httr
-#' @export
 #' @examples \dontrun{
 #' limer_call_limer(method = "list_surveys")
 #' limer_call_limer(method = "get_summary",

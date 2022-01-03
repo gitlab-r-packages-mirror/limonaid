@@ -200,7 +200,8 @@ testthat::test_that("autofixing multiple choice questions works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-checkbox-autofix-export.txt";
+  tmpFile <- tempfile(pattern = "testing-checkbox-autofix-export",
+                      fileext = ".txt");
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);

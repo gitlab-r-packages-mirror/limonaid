@@ -16,7 +16,7 @@ Description: LimeSurvey is Free/Libre Open Source Software for
   that can then be imported into LimeSurvey, as well as
   userfriendly import of responses from LimeSurvey studies.
 Encoding: UTF-8
-LazyData: true
+#LazyData: true
 URL: https://r-packages.gitlab.io/limonaid
 BugReports: https://gitlab.com/r-packages/limonaid/issues
 RoxygenNote: 7.1.2
@@ -27,6 +27,9 @@ Imports:
   jsonlite (>= 1.7),
   R6 (>= 2.4)
 Suggests: 
-    knitr,
-    sticky,
-    testthat
+  ggplot2,
+  ggrepel,
+  knitr,
+  parallel,
+  sticky,
+  testthat

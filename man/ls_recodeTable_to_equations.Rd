@@ -29,6 +29,8 @@ in the case of a match.}
 to build each logical expression.}
 
 \item{elseExpr}{The value to return if there are no matches.}
+
+\item{naok}{Whether to append "\code{.NAOK}" to variable codes by default.}
 }
 \value{
 A character value.

@@ -14,6 +14,8 @@
 #' variable names) are considered categorical questions; for these, the script
 #' to convert the variables to factors, as extracted from the LimeSurvey import
 #' file, is applied.
+#' @param sticky Whether to make labels sticky (requires the {`sticky`}
+#' package).
 #' @param massConvertToNumeric Whether to convert all variables to numeric
 #' using \code{\link{massConvertToNumeric}}.
 #' @param silent Whether to be silent or verbose ('chatty').
@@ -93,7 +95,7 @@ ls_apply_script_bits <- function(data,
   }
 
   if (sticky) {
-    if ("sticky" %in% installed.packages()) {
+    if (requireNamespace("sticky", quietly = TRUE)) {
       data <- sticky::sticky_all(data);
     } else {
       warning("The `sticky` package is not installed. Without this ",

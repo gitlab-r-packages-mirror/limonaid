@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,7 +42,6 @@
 <meta property="og:title" content="R6 Class representing a LimeSurvey question — Question" />
 <meta property="og:description" content="R6 Class representing a LimeSurvey question
 R6 Class representing a LimeSurvey question" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@ R6 Class representing a LimeSurvey question" />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -70,7 +73,7 @@ R6 Class representing a LimeSurvey question" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">limonaid</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -78,7 +81,7 @@ R6 Class representing a LimeSurvey question" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -87,7 +90,12 @@ R6 Class representing a LimeSurvey question" />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://gitlab.com/r-packages/limonaid/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -102,7 +110,7 @@ R6 Class representing a LimeSurvey question" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R6 Class representing a LimeSurvey question</h1>
-    
+    <small class="dont-index">Source: <a href='https://gitlab.com/r-packages/limonaid/blob/master/R/R6_question.R'><code>R/R6_question.R</code></a></small>
     <div class="hidden name"><code>Question.Rd</code></div>
     </div>
 
@@ -118,7 +126,7 @@ R6 Class representing a LimeSurvey question" />
     <p>A question has at least a code and a primary language.</p>
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+    <p><div class="r6-fields"></p><dl>
 <dt><code>code</code></dt><dd><p>The code of the question.</p></dd>
 
 <dt><code>id</code></dt><dd><p>The identifier of the question (a unique number in a survey)</p></dd>
@@ -160,13 +168,13 @@ to apply.</p></dd>
 <dt><code>hide_tip</code></dt><dd><p>Whether to hide the tip (<code>Y</code> or <code>N</code>).</p></dd>
 
 <dt><code>otherOptions</code></dt><dd><p>Any additional options, stored as a named list
-by assigning <code><a href='https://rdrr.io/r/base/list.html'>as.list(...)</a></code>.</p></dd>
+by assigning <code>as.list(...)</code>.</p></dd>
 
 </dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
-<h3>Public methods</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Public methods</h3>
 
 <ul>
 <li><p><a href='#method-new'><code>Question$new()</code></a></p></li>
@@ -175,34 +183,34 @@ by assigning <code><a href='https://rdrr.io/r/base/list.html'>as.list(...)</a></
 <li><p><a href='#method-clone'><code>Question$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3>Method <code>new()</code></h3>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
 <p>Create a new question object. Most of this text comes directly
 from the TSV manual page at
 https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
-please see that page for more details.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>Question$new(
-  code,
-  type = NULL,
-  lsType = NULL,
-  id = NULL,
-  questionTexts = "",
-  helpTexts = "",
-  relevance = 1,
-  validation = "",
-  mandatory = "N",
-  other = "N",
-  otherReplaceTexts = "",
-  default = "",
-  same_default = "0",
-  array_filter = "",
-  cssclass = "",
-  hide_tip = "",
-  language = "en",
-  ...
-)</pre><p></div></p>
+please see that page for more details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Question</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
+  <span class='va'>code</span>,
+  type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lsType <span class='op'>=</span> <span class='cn'>NULL</span>,
+  id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  questionTexts <span class='op'>=</span> <span class='st'>""</span>,
+  helpTexts <span class='op'>=</span> <span class='st'>""</span>,
+  relevance <span class='op'>=</span> <span class='fl'>1</span>,
+  validation <span class='op'>=</span> <span class='st'>""</span>,
+  mandatory <span class='op'>=</span> <span class='st'>"N"</span>,
+  other <span class='op'>=</span> <span class='st'>"N"</span>,
+  otherReplaceTexts <span class='op'>=</span> <span class='st'>""</span>,
+  default <span class='op'>=</span> <span class='st'>""</span>,
+  same_default <span class='op'>=</span> <span class='st'>"0"</span>,
+  array_filter <span class='op'>=</span> <span class='st'>""</span>,
+  cssclass <span class='op'>=</span> <span class='st'>""</span>,
+  hide_tip <span class='op'>=</span> <span class='st'>""</span>,
+  language <span class='op'>=</span> <span class='st'>"en"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>code</code></dt><dd><p>The question code.</p></dd>
 
 <dt><code>type</code></dt><dd><p>The human-readable question type.</p></dd>
@@ -242,21 +250,21 @@ to apply.</p></dd>
 <dt><code>language</code></dt><dd><p>The question's primary language.</p></dd>
 
 <dt><code>...</code></dt><dd><p>Any additional options, stored as a named list in the
-<code>otherOptions</code> property by assigning <code><a href='https://rdrr.io/r/base/list.html'>as.list(...)</a></code>.</p></dd>
+<code>otherOptions</code> property by assigning <code>as.list(...)</code>.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>A new <code>Survey</code> object.</p>
 <p><hr>
-<a id="method-add_answer_option"></a></p><h3>Method <code>add_answer_option()</code></h3>
+<a id="method-add_answer_option"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add_answer_option()</code></h3>
 <p>Add an answer option to a question. Most of this text comes directly
 from the TSV manual page at
 https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
-please see that page for more details.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>Question$add_answer_option(code, optionTexts, type.scale = 0, relevance = "")</pre><p></div></p>
+please see that page for more details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Question</span><span class='op'>$</span><span class='fu'>add_answer_option</span><span class='op'>(</span><span class='va'>code</span>, <span class='va'>optionTexts</span>, type.scale <span class='op'>=</span> <span class='fl'>0</span>, relevance <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>code</code></dt><dd><p>The answer option code.</p></dd>
 
 <dt><code>optionTexts</code></dt><dd><p>The answer option text(s).</p></dd>
@@ -267,28 +275,28 @@ please see that page for more details.</p><h3>Usage</h3>
 value for the answer ('assessment_value').</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>Invisibly, the question object.</p>
 <p><hr>
-<a id="method-add_subquestion"></a></p><h3>Method <code>add_subquestion()</code></h3>
+<a id="method-add_subquestion"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>add_subquestion()</code></h3>
 <p>Add a subquestion to a question. Most of this text comes directly from
 the TSV manual page at
 https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
-please see that page for more details.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>Question$add_subquestion(
-  code,
-  subquestionTexts,
-  relevance = "",
-  helpTexts = NULL,
-  type.scale = 0,
-  validation = "",
-  mandatory = "",
-  default = "",
-  same_default = ""
-)</pre><p></div></p>
+please see that page for more details.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Question</span><span class='op'>$</span><span class='fu'>add_subquestion</span><span class='op'>(</span>
+  <span class='va'>code</span>,
+  <span class='va'>subquestionTexts</span>,
+  relevance <span class='op'>=</span> <span class='st'>""</span>,
+  helpTexts <span class='op'>=</span> <span class='cn'>NULL</span>,
+  type.scale <span class='op'>=</span> <span class='fl'>0</span>,
+  validation <span class='op'>=</span> <span class='st'>""</span>,
+  mandatory <span class='op'>=</span> <span class='st'>""</span>,
+  default <span class='op'>=</span> <span class='st'>""</span>,
+  same_default <span class='op'>=</span> <span class='st'>""</span>
+<span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>code</code></dt><dd><p>The subquestions code.</p></dd>
 
 <dt><code>subquestionTexts</code></dt><dd><p>The subquestion text(s).</p></dd>
@@ -317,15 +325,15 @@ subquestion (inserted into defaultvalues table).</p></dd>
 is used for all other languages.</p></dd>
 
 </dl><p></div></p>
-<h3>Returns</h3>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>Invisibly, the question object.</p>
 <p><hr>
-<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
-<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre>Question$clone(deep = FALSE)</pre><p></div></p>
+<a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>Question</span><span class='op'>$</span><span class='fu'>clone</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
 
-<h3>Arguments</h3>
-<p><div class="arguments"></p><dl class='dl-horizontal'>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
 <dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
 
 </dl><p></div></p>
@@ -333,14 +341,10 @@ is used for all other languages.</p></dd>
 
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#details">Details</a></li>
-      <li><a href="#public-fields">Public fields</a></li>
-      <li><a href="#methods">Methods</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -351,7 +355,7 @@ is used for all other languages.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

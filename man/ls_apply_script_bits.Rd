@@ -36,6 +36,9 @@ file, is applied.}
 using \code{\link{massConvertToNumeric}}.}
 
 \item{silent}{Whether to be silent or verbose ('chatty').}
+
+\item{sticky}{Whether to make labels sticky (requires the {\code{sticky}}
+package).}
 }
 \value{
 The dataframe.

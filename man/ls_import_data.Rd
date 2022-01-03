@@ -64,24 +64,6 @@ to override the setting in the \code{limonaid} options (i.e. in \code{opts}) in 
 \code{encoding} field (the default value is "\code{UTF-8}").}
 
 \item{silent}{Whether to be silent or verbose ('chatty').}
-
-\item{limeSurveyRegEx.varNames}{The regular expression used to extract the
-variable names from the script file. The first regex expression (i.e. the
-first expression between parentheses) will be extracted as variable name.}
-
-\item{limeSurveyRegEx.toChar}{The regular expression to detect the lines in
-the import script where variables are converted to the character type.}
-
-\item{limeSurveyRegEx.varLabels}{The regular expression used to detect the
-lines in the import script where variable labels are set.}
-
-\item{limeSurveyRegEx.toFactor}{The regular expression used to detect the
-lines in the import script where vectors are converted to factors.}
-
-\item{limeSurveyRegEx.varNameSanitizing}{A list of regular expression
-patterns and their replacements to sanitize the variable names (e.g. replace
-hashes/pound signs ('#') by something that is not considered the comment
-symbol by R).}
 }
 \value{
 The dataframe.

@@ -877,11 +877,20 @@ Survey <- R6::R6Class(
                "computing to utilize all CPU cores.\n\n");
         }
 
-        if (parallel) {
+        if (parallel && requireNamespace("parallel", quietly = TRUE)) {
 
           ### Then for all other languages in parallel; detect number of cores
           ### and create a cluster
           nCores <- parallel::detectCores();
+
+          chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+
+          ### From https://stackoverflow.com/questions/50571325/r-cran-check-fail-when-using-parallel-functions
+          if (nzchar(chk) && chk == "TRUE") {
+            # use 2 cores in CRAN/Travis/AppVeyor
+            nCores <- min(2L, nCores);
+          }
+
           cl <- parallel::makeCluster(nCores);
 
           ### Load the limonaid package in each cluster
@@ -935,6 +944,13 @@ Survey <- R6::R6Class(
           }
 
         } else {
+
+          if (parallel) {
+            warning("Argument `parallel` was `TRUE` (its default value), ",
+                    "but you don't have package 'parallel' installed. ",
+                    "If you want to install it, you can use:\n\n",
+                    "  install.packages('parallel');\n");
+          }
 
           for (currentLanguage in self$additional_languages) {
 

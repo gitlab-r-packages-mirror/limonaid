@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Reading LimeSurvey data exported to R — ls_import_data" />
 <meta property="og:description" content="This function can be used to import files exported by LimeSurvey." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">limonaid</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -77,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -86,7 +89,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://gitlab.com/r-packages/limonaid/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -101,7 +109,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reading LimeSurvey data exported to R</h1>
-    
+    <small class="dont-index">Source: <a href='https://gitlab.com/r-packages/limonaid/blob/master/R/ls_import_data.R'><code>R/ls_import_data.R</code></a></small>
     <div class="hidden name"><code>ls_import_data.Rd</code></div>
     </div>
 
@@ -109,24 +117,24 @@
     <p>This function can be used to import files exported by LimeSurvey.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ls_import_data</span>(
-  <span class='kw'>sid</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>dataPath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>datafileRegEx</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>scriptfile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>setVarNames</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>setLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>convertToCharacter</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>convertToFactor</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>categoricalQuestions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>massConvertToNumeric</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>dataHasVarNames</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>dataEncoding</span> <span class='kw'>=</span> <span class='st'>"UTF-8-BOM"</span>,
-  <span class='kw'>scriptEncoding</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/limonaid/man/opts.html'>opts</a></span>$<span class='fu'><a href='opts.html'>get</a></span>(<span class='st'>"silent"</span>)
-)</pre>
+    <pre class="usage"><span class='fu'>ls_import_data</span><span class='op'>(</span>
+  sid <span class='op'>=</span> <span class='cn'>NULL</span>,
+  path <span class='op'>=</span> <span class='cn'>NULL</span>,
+  datafile <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dataPath <span class='op'>=</span> <span class='cn'>NULL</span>,
+  datafileRegEx <span class='op'>=</span> <span class='cn'>NULL</span>,
+  scriptfile <span class='op'>=</span> <span class='cn'>NULL</span>,
+  setVarNames <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  setLabels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  convertToCharacter <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  convertToFactor <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  categoricalQuestions <span class='op'>=</span> <span class='cn'>NULL</span>,
+  massConvertToNumeric <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  dataHasVarNames <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  dataEncoding <span class='op'>=</span> <span class='st'>"UTF-8-BOM"</span>,
+  scriptEncoding <span class='op'>=</span> <span class='cn'>NULL</span>,
+  silent <span class='op'>=</span> <span class='fu'>limonaid</span><span class='fu'>::</span><span class='va'><a href='opts.html'>opts</a></span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"silent"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,32 +197,8 @@ to override the setting in the <code>limonaid</code> options (i.e. in <code>opts
 <code>encoding</code> field (the default value is "<code>UTF-8</code>").</p></td>
     </tr>
     <tr>
-      <th>limeSurveyRegEx.varNames</th>
-      <td><p>The regular expression used to extract the
-variable names from the script file. The first regex expression (i.e. the
-first expression between parentheses) will be extracted as variable name.</p></td>
-    </tr>
-    <tr>
-      <th>limeSurveyRegEx.toChar</th>
-      <td><p>The regular expression to detect the lines in
-the import script where variables are converted to the character type.</p></td>
-    </tr>
-    <tr>
-      <th>limeSurveyRegEx.varLabels</th>
-      <td><p>The regular expression used to detect the
-lines in the import script where variable labels are set.</p></td>
-    </tr>
-    <tr>
-      <th>limeSurveyRegEx.toFactor</th>
-      <td><p>The regular expression used to detect the
-lines in the import script where vectors are converted to factors.</p></td>
-    </tr>
-    <tr>
-      <th>limeSurveyRegEx.varNameSanitizing</th>
-      <td><p>A list of regular expression
-patterns and their replacements to sanitize the variable names (e.g. replace
-hashes/pound signs ('#') by something that is not considered the comment
-symbol by R).</p></td>
+      <th>silent</th>
+      <td><p>Whether to be silent or verbose ('chatty').</p></td>
     </tr>
     </table>
 
@@ -228,36 +212,33 @@ easier. The default settings used by LimeSurvey are not always convenient,
 and this function provides a bit more control.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'>### Of course, you need valid LimeSurvey files. This is an example of</span>
-<span class='co'>### what you'd do if you have them, assuming you specified that path</span>
-<span class='co'>### containing the data in 'dataPath', the name of the datafile in</span>
-<span class='co'>### 'dataFileName', the name of the script file in 'dataLoadScriptName',</span>
-<span class='co'>### and that you only want variables 'informedConsent', 'gender', 'hasJob',</span>
-<span class='co'>### 'currentEducation', 'prevEducation', and 'country' to be converted to</span>
-<span class='co'>### factors.</span>
-<span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>limonaid</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/limonaid/man/ls_import_data.html'>ls_import_data</a></span>(
-  <span class='kw'>datafile</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>dataPath</span>, <span class='no'>dataFileName</span>),
-  <span class='kw'>scriptfile</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>dataPath</span>, <span class='no'>dataLoadScriptName</span>),
-  <span class='kw'>categoricalQuestions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'informedConsent'</span>,
-                           <span class='st'>'gender'</span>,
-                           <span class='st'>'hasJob'</span>,
-                           <span class='st'>'currentEducation'</span>,
-                           <span class='st'>'prevEducation'</span>,
-                           <span class='st'>'country'</span>)
-);
-}</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='co'>### Of course, you need valid LimeSurvey files. This is an example of</span></span>
+<span class='r-in'><span class='co'>### what you'd do if you have them, assuming you specified that path</span></span>
+<span class='r-in'><span class='co'>### containing the data in 'dataPath', the name of the datafile in</span></span>
+<span class='r-in'><span class='co'>### 'dataFileName', the name of the script file in 'dataLoadScriptName',</span></span>
+<span class='r-in'><span class='co'>### and that you only want variables 'informedConsent', 'gender', 'hasJob',</span></span>
+<span class='r-in'><span class='co'>### 'currentEducation', 'prevEducation', and 'country' to be converted to</span></span>
+<span class='r-in'><span class='co'>### factors.</span></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'>limonaid</span><span class='fu'>::</span><span class='fu'>ls_import_data</span><span class='op'>(</span></span>
+<span class='r-in'>  datafile <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>dataPath</span>, <span class='va'>dataFileName</span><span class='op'>)</span>,</span>
+<span class='r-in'>  scriptfile <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>dataPath</span>, <span class='va'>dataLoadScriptName</span><span class='op'>)</span>,</span>
+<span class='r-in'>  categoricalQuestions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'informedConsent'</span>,</span>
+<span class='r-in'>                           <span class='st'>'gender'</span>,</span>
+<span class='r-in'>                           <span class='st'>'hasJob'</span>,</span>
+<span class='r-in'>                           <span class='st'>'currentEducation'</span>,</span>
+<span class='r-in'>                           <span class='st'>'prevEducation'</span>,</span>
+<span class='r-in'>                           <span class='st'>'country'</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span>;</span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -268,7 +249,7 @@ and this function provides a bit more control.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

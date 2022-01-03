@@ -12,12 +12,16 @@ limer_call_limer(method, params = list(), ..., encoding = "utf-8")
 \item{params}{Optional named list of parameters to pass to the function.}
 
 \item{\dots}{Other arguments passed to \code{\link[httr]{POST}}.}
+
+\item{encoding}{The encoding to use}
 }
 \value{
 Results from the API (sometimes plain text, sometimes base64-encoded text).
 }
 \description{
-This function makes a generic call to the LimeSurvey API. See \url{https://manual.limesurvey.org/RemoteControl_2_API} for API documentation.
+This function makes a generic call to the LimeSurvey API.
+See \url{https://manual.limesurvey.org/RemoteControl_2_API} for
+API documentation.
 }
 \examples{
 \dontrun{
