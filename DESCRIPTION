@@ -1,5 +1,5 @@
 Package: limonaid
-Title: Working With LimeSurvey Surveys and Responses
+Title: Working with LimeSurvey Surveys and Responses
 Version: 0.1.0
 Authors@R: 
     person(given = "Gjalt-Jorn",
@@ -16,9 +16,9 @@ Description: LimeSurvey is Free/Libre Open Source Software for
   that can then be imported into LimeSurvey, as well as
   userfriendly import of responses from LimeSurvey studies.
 Encoding: UTF-8
-#LazyData: true
+LazyData: true
 URL: https://r-packages.gitlab.io/limonaid
-BugReports: https://gitlab.com/r-packages/limonaid/issues
+BugReports: https://gitlab.com/r-packages/limonaid/-/issues
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
