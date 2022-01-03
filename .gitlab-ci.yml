@@ -34,15 +34,13 @@ stages:
 # https://about.gitlab.com/2016/11/03/publish-code-coverage-report-with-gitlab-pages/
 
 pages:
-    stage: deploy
-    # dependencies:
-    #     - testing
-    script:
-      - mkdir public/img
-      - cp img/hex-logo.png public/img
-      - ls
-    artifacts:
-        paths:
-            - public
-    only:
-        - prod
+  stage: deploy
+  script:
+    - mkdir public/img
+    - cp img/hex-logo.png public/img
+    - ls
+  artifacts:
+    paths:
+      - public
+  only:
+    - prod
