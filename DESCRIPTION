@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "gjalt-jorn@behaviorchange.eu",
            comment = c(ORCID = "0000-0002-0336-9589"))
-Maintainer: Gjalt-Jorn Ygram Peters <gjalt-jorn@behaviorchange.eu>
+Maintainer: Gjalt-Jorn Peters <gjalt-jorn@behaviorchange.eu>
 License: GPL (>= 3)
 Description: LimeSurvey is Free/Libre Open Source Software for
   the development and administrations of online studies, using

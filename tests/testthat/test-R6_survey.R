@@ -42,7 +42,7 @@ testthat::test_that("exporting a survey to a TSV file works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
+  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
@@ -86,7 +86,7 @@ testthat::test_that("exporting a survey with two languages to a TSV file works",
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-export.txt";
+  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
@@ -154,7 +154,7 @@ testthat::test_that("exporting an en/nl survey with a slider works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-slider-export.txt";
+  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-slider-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
