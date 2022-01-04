@@ -890,9 +890,14 @@ Survey <- R6::R6Class(
           ### and create a cluster
           nCores <- parallel::detectCores();
 
-          chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+          ### Because the trick below doesn't seem to work
+          maxCores <- limonaid::opts$get("maxCores");
+          if (!is.null(maxCores) && is.numeric(maxCores)) {
+            nCores <- min(maxCores, nCores);
+          }
 
           ### From https://stackoverflow.com/questions/50571325/r-cran-check-fail-when-using-parallel-functions
+          chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
           if (nzchar(chk) && chk == "TRUE") {
             # use 2 cores in CRAN/Travis/AppVeyor
             nCores <- min(2L, nCores);

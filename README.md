@@ -2,9 +2,9 @@
 <!-- badges: start -->
 
 [![Pipeline
-status](https://gitlab.com/r-packages/limonaid/badges/master/pipeline.svg)](https://gitlab.com/r-packages/limonaid/commits/master)
+status](https://gitlab.com/r-packages/limonaid/badges/prod/pipeline.svg)](https://gitlab.com/r-packages/limonaid/-/commits/prod)
 [![Coverage
-status](https://codecov.io/gl/r-packages/limonaid/branch/master/graph/badge.svg)](https://codecov.io/gl/r-packages/limonaid?branch=master)
+status](https://app.codecov.io/gl/r-packages/limonaid/branch/prod/graph/badge.svg)](https://codecov.io/gl/r-packages/limonaid?branch=prod)
 [![Version on
 CRAN](https://www.r-pkg.org/badges/version/limonaid?color=brightgreen)](https://cran.r-project.org/package=limonaid)
 [![Version on
@@ -21,9 +21,7 @@ The pkgdown website for this project is located at
 <https://r-packages.gitlab.io/limonaid>.
 
 <!--------------------------------------------->
-
 <!-- Start of a custom bit for every package -->
-
 <!--------------------------------------------->
 
 LimeSurvey is Free/Libre Open Source Software for the development and
@@ -34,9 +32,7 @@ LimeSurvey, as well as userfriendly import of responses from LimeSurvey
 studies.
 
 <!--------------------------------------------->
-
 <!--  End of a custom bit for every package  -->
-
 <!--------------------------------------------->
 
 ## Installation
@@ -49,11 +45,11 @@ install.packages('limonaid');
 ```
 
 You can install the development version of `limonaid` from
-[GitLab](https://gitlab.com) with:
+[GitLab](https://about.gitlab.com) with:
 
 ``` r
-devtools::install_gitlab('r-packages/limonaid');
+remotes::install_gitlab('r-packages/limonaid');
 ```
 
-(assuming you have `devtools` installed; otherwise, install that first
+(assuming you have `remotes` installed; otherwise, install that first
 using the `install.packages` function)

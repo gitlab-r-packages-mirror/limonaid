@@ -20,7 +20,7 @@ gitLab_ci_url <-
   paste0("https://gitlab.com/r-packages/", packagename, "/-/commits/prod");
 
 codecov_badge <-
-  paste0("https://codecov.io/gl/r-packages/", packagename, "/branch/prod/graph/badge.svg");
+  paste0("https://app.codecov.io/gl/r-packages/", packagename, "/branch/prod/graph/badge.svg");
 codecov_url <-
   paste0("https://codecov.io/gl/r-packages/", packagename, "?branch=prod");
 
@@ -76,7 +76,7 @@ install.packages('", packagename, "');
 ```"));
 ```
 
-You can install the development version of ``r packagename`` from [GitLab](https://gitlab.com) with:
+You can install the development version of ``r packagename`` from [GitLab](https://about.gitlab.com) with:
 
 ```{r echo=FALSE, comment="", results="asis"}
 cat(paste0("``` r

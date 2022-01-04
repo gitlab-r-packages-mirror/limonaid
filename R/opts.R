@@ -113,6 +113,8 @@ opts$defaults <-
 
     debug = FALSE,
 
+    maxCores = NULL,
+
     recTab2Eq_varCodeCol = "varCode",
     recTab2Eq_valueCol = "value",
     recTab2Eq_recodeToCol = "recode",

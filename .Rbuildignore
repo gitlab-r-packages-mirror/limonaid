@@ -6,3 +6,5 @@
 ^\.gitlab-ci\.yml$
 ^img$
 ^README.Rmd$
+^CRAN-RELEASE$
+^cran-comments\.md$
