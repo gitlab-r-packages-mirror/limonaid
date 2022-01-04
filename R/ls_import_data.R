@@ -22,19 +22,6 @@
 #' in the path should be read.
 #' @param scriptfile The path and filename of the file containing the R script
 #' to import the data.
-#' @param limeSurveyRegEx.varNames The regular expression used to extract the
-#' variable names from the script file. The first regex expression (i.e. the
-#' first expression between parentheses) will be extracted as variable name.
-#' @param limeSurveyRegEx.toChar The regular expression to detect the lines in
-#' the import script where variables are converted to the character type.
-#' @param limeSurveyRegEx.varLabels The regular expression used to detect the
-#' lines in the import script where variable labels are set.
-#' @param limeSurveyRegEx.toFactor The regular expression used to detect the
-#' lines in the import script where vectors are converted to factors.
-#' @param limeSurveyRegEx.varNameSanitizing A list of regular expression
-#' patterns and their replacements to sanitize the variable names (e.g. replace
-#' hashes/pound signs ('#') by something that is not considered the comment
-#' symbol by R).
 #' @param setVarNames,setLabels,convertToCharacter,convertToFactor Whether to
 #' set variable names or labels, or convert to character or factor, using the
 #' code isolated using the specified regular expression.

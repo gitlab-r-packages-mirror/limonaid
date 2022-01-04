@@ -73,7 +73,7 @@ ls_parse_data_import_script <- function(scriptfile = NULL,
         function(x) {
           eval(parse(text = paste0("y<-", x[[4]])));
           eval(parse(text = paste0("z<-", x[[3]])));
-          return(stats::setNames(y, nm = z));
+          return(stats::setNames(get('y'), nm = get('z')));
         }),
       nm = unlist(
         lapply(

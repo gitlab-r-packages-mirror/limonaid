@@ -6,7 +6,11 @@
 #' @param aTokenProperties \dots
 #' @export
 #' @examples \dontrun{
-#' limer_get_participant_property(iSurveyID = 12345, aTokenQueryProperties = 1, aTokenProperties = list("attribute_1"))
+#' limer_get_participant_property(
+#'   iSurveyID = 12345,
+#'   aTokenQueryProperties = 1,
+#'   aTokenProperties = list("attribute_1")
+#' );
 #' }
 
 limer_get_participant_property <- function(iSurveyID, aTokenQueryProperties, aTokenProperties) {

@@ -20,6 +20,7 @@
 #' @param operatorCol The name or index of the column with the operator used
 #' to build each logical expression.
 #' @param elseExpr The value to return if there are no matches.
+#' @param naok Whether to append "`.NAOK`" to variable codes by default.
 #'
 #' @return A character value.
 #' @export

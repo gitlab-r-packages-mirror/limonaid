@@ -22,6 +22,10 @@ This function exports and downloads a participant property from a LimeSurvey sur
 }
 \examples{
 \dontrun{
-limer_get_participant_property(iSurveyID = 12345, aTokenQueryProperties = 1, aTokenProperties = list("attribute_1"))
+limer_get_participant_property(
+  iSurveyID = 12345,
+  aTokenQueryProperties = 1,
+  aTokenProperties = list("attribute_1")
+);
 }
 }

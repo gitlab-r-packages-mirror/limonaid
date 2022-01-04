@@ -1,15 +1,47 @@
-image: rocker/tidyverse
+variables:
+  _R_CHECK_CRAN_INCOMING_: "true"
+  _R_CHECK_FORCE_SUGGESTS_: "true"
+  APT_PKGS: "libcurl4-openssl-dev libssh2-1-dev libssl-dev libxml2-dev zlib1g-dev git" # libgsl0-dev"
 
 stages:
-#  - build
-#  - test
-  - deploy
+  - test
+  - build
 
-# building:
-#   stage: build
-#   script:
-#     - R -e "remotes::install_deps(dependencies = TRUE)"
-#     - R -e 'devtools::check()'
+image: rocker/tidyverse
+
+before_script:
+  - apt-get update
+  - apt-get install -y --no-install-recommends ${APT_PKGS}
+  - apt-get install -y --no-install-recommends qpdf pandoc pandoc-citeproc
+  - R -e 'install.packages(c("httr", "jsonlite", "R6"));'
+  - R -e 'install.packages(c("ggplot2", "ggrepel", "knitr"));'
+  - R -e 'install.packages(c("parallel", "sticky"));'
+  - R -e 'install.packages(c("testthat", "rmarkdown"));'
+  - R -e 'install.packages(c("devtools", "pkgdown"));'
+  - R -e "install.packages(c('tinytex'), repos='http://cran.rstudio.com')"
+  - R -e "tinytex::install_tinytex()"
+
+devtools-check-dev:
+  stage: test
+  script:
+    - R -e 'devtools::check()'
+  only:
+    - dev
+
+devtools-check-topic-branches:
+  stage: test
+  script:
+    - R -e 'devtools::check()'
+  except:
+    - dev
+    - prod
+
+devtools-check-prod:
+  stage: test
+  script:
+    - R -e 'devtools::check()'
+  only:
+    - prod
 
 # To have the coverage percentage appear as a gitlab badge follow these
 # instructions:
@@ -34,16 +66,13 @@ stages:
 # https://about.gitlab.com/2016/11/03/publish-code-coverage-report-with-gitlab-pages/
 
 pages:
-    stage: deploy
-    # dependencies:
-    #     - testing
-    script:
-      - mkdir public/img
-      - cp img/hex-logo.png public/img
-      - ls
-    artifacts:
-        paths:
-            - public
-        expire_in: 30 days
-    only:
-        - master
+  stage: build
+  script:
+    - R -e 'devtools::document(); pkgdown::build_site();'
+    - mkdir public/img
+    - cp img/hex-logo.png public/img/hex-logo.png
+  artifacts:
+    paths:
+      - public
+  only:
+    - prod

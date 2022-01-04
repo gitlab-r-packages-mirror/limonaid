@@ -3,11 +3,13 @@
 #' This function converts raw base64 results into a data frame.
 #' @param x \dots
 #' @param encoding Either `NULL` or an encoding to pass to [textConnection()].
-#' @importFrom utils read.csv
-#' @export
+#' @param iconvArgs Arguments to pass to [base::iconv().
+#'
 #' @examples \dontrun{
 #' limer_base64_to_df()
 #' }
+#'
+#' @export
 limer_base64_to_df <- function(x, encoding=NULL, iconvArgs=list(from="UTF-8", to="UTF-8")) {
   raw_csv <- rawToChar(
     jsonlite::base64_dec(x)
@@ -25,14 +27,14 @@ limer_base64_to_df <- function(x, encoding=NULL, iconvArgs=list(from="UTF-8", to
 
   if (is.null(encoding)) {
     res <-
-      read.csv(
+      utils::read.csv(
         textConnection(raw_csv),
         stringsAsFactors = FALSE,
         sep = ";"
       );
   } else {
     res <-
-      read.csv(
+      utils::read.csv(
         textConnection(
           raw_csv,
           encoding=encoding

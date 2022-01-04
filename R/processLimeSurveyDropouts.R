@@ -19,10 +19,18 @@
 processLimeSurveyDropouts <- function(lastpage, pagenames = NULL,
                                       relevantPagenames = NULL) {
 
+  if ((!requireNamespace("ggplot2", quietly = TRUE)) ||
+      (!requireNamespace("ggrepel", quietly = TRUE))) {
+    stop("To process the LimeSurvey dropouts, you need to have both ",
+         "the {ggplot2} and {ggrepel} packages installed. You can ",
+         "install them with:\n\n  install.packages(",
+         "c('ggplot2', 'ggrepel'));\n");
+  }
+
   if (!is.numeric(lastpage)) {
     stop("Argument 'lastpage' is not a numeric vector but has class ",
          class(lastpage), ". The first nonmissing values are: ",
-         vecTxtQ(head(complete.cases(lastpage))), ".");
+         vecTxtQ(utils::head(stats::complete.cases(lastpage))), ".");
   }
 
   res <- list();
@@ -53,7 +61,7 @@ processLimeSurveyDropouts <- function(lastpage, pagenames = NULL,
   res$specificDropout$comments <- pagenames;
 
   res$progressiveDropout <- data.frame(frequency = totalParticipants -
-                                         head(c(0, utils::tail(cumsum(res$specificDropout$frequency), -1)), -1));
+                                         utils::head(c(0, utils::tail(cumsum(res$specificDropout$frequency), -1)), -1));
   res$progressiveDropout$percentage <- 100 * res$progressiveDropout$frequency /
     totalParticipants;
   res$progressiveDropout$page <- 1:nrow(res$progressiveDropout);
@@ -64,7 +72,7 @@ processLimeSurveyDropouts <- function(lastpage, pagenames = NULL,
   res$plots$absoluteDropout <-
     ggplot2::ggplot(
       res$progressiveDropout,
-      aes_string(x='page', y='frequency')
+      ggplot2::aes_string(x='page', y='frequency')
     ) +
     ggplot2::geom_point(size=4) +
     ggplot2::geom_line(size=1) +
@@ -89,8 +97,8 @@ processLimeSurveyDropouts <- function(lastpage, pagenames = NULL,
     ggplot2::xlab('Page in the questionnaire') +
     ggplot2::theme_bw() +
     ggrepel::geom_text_repel(ggplot2::aes_string(label='prettyPercentage'),
-                             point.padding = unit(1, 'lines'),
-                             min.segment.length = unit(0.05, "lines"),
+                             point.padding = ggplot2::unit(1, 'lines'),
+                             min.segment.length = ggplot2::unit(0.05, "lines"),
                              segment.color="#2A5581", color="#2A5581",
                              size=5, nudge_x=1) +
     ggplot2::scale_x_continuous(breaks=res$progressiveDropout$page);

@@ -14,6 +14,8 @@ limer_base64_to_df(
 \item{x}{\dots}
 
 \item{encoding}{Either \code{NULL} or an encoding to pass to \code{\link[=textConnection]{textConnection()}}.}
+
+\item{iconvArgs}{Arguments to pass to [base::iconv().}
 }
 \description{
 This function converts raw base64 results into a data frame.
@@ -22,4 +24,5 @@ This function converts raw base64 results into a data frame.
 \dontrun{
 limer_base64_to_df()
 }
+
 }

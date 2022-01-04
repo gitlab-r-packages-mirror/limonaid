@@ -57,7 +57,7 @@ export_with_languages <-
     }
 
     fullSurveyFilename <-
-      file.path(limesurveyPath,
+      file.path(path,
                 paste0(prefix, new_sid,
                        suffix, ".txt"));
 

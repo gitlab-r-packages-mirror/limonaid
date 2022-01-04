@@ -1,10 +1,17 @@
+### The importing of R6 is to avoid an error for R CMD Check, see:
+### https://stackoverflow.com/questions/64055049/unexpected-note-namespace-in-imports-field-not-imported-from-r6
+
 #' R6 Class representing a LimeSurvey survey
 #'
 #' Create and work with a Survey to programmatically (or interactively)
 #' create a survey, export it to a tab separated values file, and import
 #' it to LimeSurvey.
+#'
+#' @import R6
+#'
 #' @export
 Survey <- R6::R6Class(
+
   "Survey",
 
   ###---------------------------------------------------------------------------
@@ -877,11 +884,25 @@ Survey <- R6::R6Class(
                "computing to utilize all CPU cores.\n\n");
         }
 
-        if (parallel) {
+        if (parallel && requireNamespace("parallel", quietly = TRUE)) {
 
           ### Then for all other languages in parallel; detect number of cores
           ### and create a cluster
           nCores <- parallel::detectCores();
+
+          ### Because the trick below doesn't seem to work
+          maxCores <- limonaid::opts$get("maxCores");
+          if (!is.null(maxCores) && is.numeric(maxCores)) {
+            nCores <- min(maxCores, nCores);
+          }
+
+          ### From https://stackoverflow.com/questions/50571325/r-cran-check-fail-when-using-parallel-functions
+          chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+          if (nzchar(chk) && chk == "TRUE") {
+            # use 2 cores in CRAN/Travis/AppVeyor
+            nCores <- min(2L, nCores);
+          }
+
           cl <- parallel::makeCluster(nCores);
 
           ### Load the limonaid package in each cluster
@@ -935,6 +956,13 @@ Survey <- R6::R6Class(
           }
 
         } else {
+
+          if (parallel) {
+            warning("Argument `parallel` was `TRUE` (its default value), ",
+                    "but you don't have package 'parallel' installed. ",
+                    "If you want to install it, you can use:\n\n",
+                    "  install.packages('parallel');\n");
+          }
 
           for (currentLanguage in self$additional_languages) {
 

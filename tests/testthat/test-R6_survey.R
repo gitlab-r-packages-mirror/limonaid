@@ -1,7 +1,15 @@
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+
 testthat::test_that("creating a simple survey works", {
   ls <- Survey$new("Test Survey");
   testthat::expect_equal(ls$titles, c(en = "Test Survey"));
 })
+
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
 
 testthat::test_that("adding groups works", {
   ls <- Survey$new("Test Survey");
@@ -9,6 +17,10 @@ testthat::test_that("adding groups works", {
   ls$add_group("Group 2");
   testthat::expect_equal(ls$groups$`1`$titles[['en']], "Group 1");
 })
+
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
 
 testthat::test_that("adding a question works", {
   ls <- Survey$new("Test Survey");
@@ -20,7 +32,15 @@ testthat::test_that("adding a question works", {
                          "firstQuestion");
 })
 
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+
 testthat::test_that("exporting a survey to a TSV file works", {
+
+  ### CRAN tests only allow 2 cores max, and the trick from Stack Exchange
+  ### seems to not work properly.
+  limonaid::opts$set(maxCores = 2)
 
   ls <- limonaid::Survey$new("Test Survey");
   ls$add_group("Only group",
@@ -42,7 +62,7 @@ testthat::test_that("exporting a survey to a TSV file works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
+  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
@@ -53,7 +73,15 @@ testthat::test_that("exporting a survey to a TSV file works", {
                          "onlyQuestion");
 })
 
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+
 testthat::test_that("exporting a survey with two languages to a TSV file works", {
+
+  ### CRAN tests only allow 2 cores max, and the trick from Stack Exchange
+  ### seems to not work properly.
+  limonaid::opts$set(maxCores = 2)
 
   ls <- limonaid::Survey$new(c(en = "Test Survey",
                                nl = "Uittestvragenlijst"));
@@ -86,7 +114,7 @@ testthat::test_that("exporting a survey with two languages to a TSV file works",
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-export.txt";
+  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
@@ -97,8 +125,15 @@ testthat::test_that("exporting a survey with two languages to a TSV file works",
                          "onlyQuestion");
 })
 
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
 
 testthat::test_that("exporting an en/nl survey with a slider works", {
+
+  ### CRAN tests only allow 2 cores max, and the trick from Stack Exchange
+  ### seems to not work properly.
+  limonaid::opts$set(maxCores = 2)
 
   ls <- limonaid::Survey$new(c(en = "Test Survey",
                                nl = "Uittestvragenlijst"));
@@ -154,7 +189,7 @@ testthat::test_that("exporting an en/nl survey with a slider works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-slider-export.txt";
+  #tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-multilingual-slider-export.txt";
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
@@ -170,6 +205,10 @@ testthat::test_that("exporting an en/nl survey with a slider works", {
 ###-----------------------------------------------------------------------------
 
 testthat::test_that("autofixing multiple choice questions works", {
+
+  ### CRAN tests only allow 2 cores max, and the trick from Stack Exchange
+  ### seems to not work properly.
+  limonaid::opts$set(maxCores = 2)
 
   ls <- limonaid::Survey$new(c(en = "Test Survey",
                                nl = "Uittestvragenlijst"));
@@ -200,7 +239,8 @@ testthat::test_that("autofixing multiple choice questions works", {
   tmpFile <- tempfile(fileext = ".txt");
 
   ### Temporary
-  tmpFile <- "B:/Data/R/limonaid/inst/extdata/testing-checkbox-autofix-export.txt";
+  tmpFile <- tempfile(pattern = "testing-checkbox-autofix-export",
+                      fileext = ".txt");
 
   ls$export_to_tsv(file = tmpFile,
                    preventOverwriting = FALSE);
@@ -211,3 +251,7 @@ testthat::test_that("autofixing multiple choice questions works", {
                          "q1");
 
 })
+
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------
+###-----------------------------------------------------------------------------

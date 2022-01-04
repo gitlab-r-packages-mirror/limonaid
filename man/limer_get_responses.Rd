@@ -17,7 +17,8 @@ limer_get_responses(
 )
 }
 \arguments{
-\item{iSurveyID}{\dots}
+\item{iSurveyID}{The LimeSurvey survey identifier (the \code{sid}, usually
+6 digits long).}
 
 \item{sDocumentType}{\dots}
 
@@ -28,6 +29,12 @@ limer_get_responses(
 \item{sHeadingType}{\dots}
 
 \item{sResponseType}{\dots}
+
+\item{encoding_limerCall}{The encoding to pass to
+the \code{\link[=limer_call_limer]{limer_call_limer()}} function.}
+
+\item{encoding_txtCon}{The encoding to pass to
+\code{\link[=limer_base64_to_df]{limer_base64_to_df()}}.}
 
 \item{\dots}{Further arguments to \code{\link{limer_call_limer}}.}
 }
