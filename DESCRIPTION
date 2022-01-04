@@ -14,7 +14,7 @@ Description: LimeSurvey is Free/Libre Open Source Software for
   sophisticated tailoring capabilities to support multiple study
   designs. This package supports programmatic creation of surveys
   that can then be imported into LimeSurvey, as well as
-  userfriendly import of responses from LimeSurvey studies.
+  user friendly import of responses from LimeSurvey studies.
 Encoding: UTF-8
 LazyData: true
 URL: https://r-packages.gitlab.io/limonaid

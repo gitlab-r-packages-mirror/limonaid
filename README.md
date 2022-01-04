@@ -4,7 +4,7 @@
 [![Pipeline
 status](https://gitlab.com/r-packages/limonaid/badges/prod/pipeline.svg)](https://gitlab.com/r-packages/limonaid/-/commits/prod)
 [![Coverage
-status](https://app.codecov.io/gl/r-packages/limonaid/branch/prod/graph/badge.svg)](https://codecov.io/gl/r-packages/limonaid?branch=prod)
+status](https://codecov.io/gl/r-packages/limonaid/branch/prod/graph/badge.svg)](https://app.codecov.io/gl/r-packages/limonaid?branch=prod)
 [![Version on
 CRAN](https://www.r-pkg.org/badges/version/limonaid?color=brightgreen)](https://cran.r-project.org/package=limonaid)
 [![Version on

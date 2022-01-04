@@ -20,9 +20,9 @@ gitLab_ci_url <-
   paste0("https://gitlab.com/r-packages/", packagename, "/-/commits/prod");
 
 codecov_badge <-
-  paste0("https://app.codecov.io/gl/r-packages/", packagename, "/branch/prod/graph/badge.svg");
+  paste0("https://codecov.io/gl/r-packages/", packagename, "/branch/prod/graph/badge.svg");
 codecov_url <-
-  paste0("https://codecov.io/gl/r-packages/", packagename, "?branch=prod");
+  paste0("https://app.codecov.io/gl/r-packages/", packagename, "?branch=prod");
 
 pkgdown_url <-
   paste0("https://r-packages.gitlab.io/", packagename);
