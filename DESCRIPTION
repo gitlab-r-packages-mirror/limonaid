@@ -1,6 +1,6 @@
 Package: limonaid
 Title: Working with 'LimeSurvey' Surveys and Responses
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person(given = "Gjalt-Jorn",
            family = "Peters",

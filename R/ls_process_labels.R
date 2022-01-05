@@ -40,7 +40,7 @@ ls_process_labels <- function(data,
 
   dat <- data;
 
-  labelDat <- data.frame(varNames.raw = names(dat),
+  labelDat <- data.frame(varNames.raw = names(dat)[seq_along(attributes(dat)$variable.labels)],
                          varLabels.raw = attributes(dat)$variable.labels,
                          stringsAsFactors = FALSE);
 
@@ -84,13 +84,16 @@ ls_process_labels <- function(data,
   }
 
   if (!is.null(leftAnchorRegExPairs)) {
-    labelDat$subQuestions <- sapply(1:nrow(labelDat),
-                                    function(rowNr) {
-                                      return(sub(paste0("^(.*)", escapeRegex(labelDat$leftAnchors[rowNr]),
-                                                        ".*\\|?.*", escapeRegex(labelDat$rightAnchors[rowNr])),
-                                                 "\\1",
-                                                 labelDat$varLabels.cln[rowNr]));
-                                    });
+    labelDat$subQuestions <-
+      sapply(
+        1:nrow(labelDat),
+        function(rowNr) {
+          return(sub(paste0("^(.*)", escapeRegex(labelDat$leftAnchors[rowNr]),
+                            ".*\\|?.*", escapeRegex(labelDat$rightAnchors[rowNr])),
+                     "\\1",
+                     labelDat$varLabels.cln[rowNr]));
+        }
+      );
 
   }
 
