@@ -1,10 +1,8 @@
 Hey there!
 
-Resubmitting after first two submissions got automatically archived. Now use a different "trick" to not use more than two parallel cores during testing, fixed the URLs that I apparently missed, and removed the VignetteBuilder field in the DESCRIPTION. The two possibly misspelled words remain, but both are correct ('Libre' and 'LimeSurvey').
+I single quoted software names such as 'LimeSurvey ' in both Title and Description fields, and provides a link in the form <https://....>.
 
-Thank you *very much* for all your work on CRAN!!!
-
-And have a great 2022!
+Thank you *very much* for all your work on CRAN and have a great 2022!
 
 Kind regards,
 
