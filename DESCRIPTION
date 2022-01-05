@@ -1,6 +1,6 @@
 Package: limonaid
-Title: Working with LimeSurvey Surveys and Responses
-Version: 0.1.0
+Title: Working with 'LimeSurvey' Surveys and Responses
+Version: 0.1.1
 Authors@R: 
     person(given = "Gjalt-Jorn",
            family = "Peters",
@@ -9,12 +9,13 @@ Authors@R:
            comment = c(ORCID = "0000-0002-0336-9589"))
 Maintainer: Gjalt-Jorn Peters <gjalt-jorn@behaviorchange.eu>
 License: GPL (>= 3)
-Description: LimeSurvey is Free/Libre Open Source Software for
+Description: 'LimeSurvey' is Free/Libre Open Source Software for
   the development and administrations of online studies, using
   sophisticated tailoring capabilities to support multiple study
-  designs. This package supports programmatic creation of surveys
-  that can then be imported into LimeSurvey, as well as
-  user friendly import of responses from LimeSurvey studies.
+  designs (see <https://www.limesurvey.org>). This package supports
+  programmatic creation of surveys that can then be imported into
+  'LimeSurvey', as well as user friendly import of responses from
+  'LimeSurvey' studies.
 Encoding: UTF-8
 LazyData: true
 URL: https://r-packages.gitlab.io/limonaid
