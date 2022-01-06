@@ -44,7 +44,7 @@ ls_process_labels <- function(data,
   nrOfLabels <- length(labels);
   nrOfVars <- length(names(dat));
 
-  if (nrOfLabels = nrOfVars) {
+  if (nrOfLabels == nrOfVars) {
     labelDat <-
       data.frame(
         varNames.raw = names(data),
