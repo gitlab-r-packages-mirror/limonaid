@@ -40,6 +40,37 @@ ls_process_labels <- function(data,
 
   dat <- data;
 
+  labels <- attributes(data)$variable.labels;
+  nrOfLabels <- length(labels);
+  nrOfVars <- length(names(dat));
+
+  if (nrOfLabels = nrOfVars) {
+    labelDat <-
+      data.frame(
+        varNames.raw = names(data),
+        varLabels.raw = labels,
+        stringsAsFactors = FALSE
+      );
+  } else if (nrOfLabels < nrOfVars) {
+    additionalLabels <-
+      names(data)[(nrOfLabels+1):nrOfVars];
+    labelDat <-
+      data.frame(
+        varNames.raw = names(data),
+        varLabels.raw = c(labels, additionalLabels),
+        stringsAsFactors = FALSE
+      );
+  } else {
+    additionalVarNames <-
+      labels[(nrOfVarsnrOfVars+1):nrOfLabels];
+    labelDat <-
+      data.frame(
+        varNames.raw = c(names(data), additionalVarNames),
+        varLabels.raw = labels,
+        stringsAsFactors = FALSE
+      );
+  }
+
   labelDat <-
     data.frame(
       varNames.raw = names(dat),
