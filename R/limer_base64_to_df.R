@@ -1,6 +1,9 @@
 #' Convert base64 encoded data to a data frame
 #'
-#' This function converts raw base64 results into a data frame.
+#' This function converts raw base64 results into a data frame. It was
+#' adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+#' Heiss.
+#'
 #' @param x \dots
 #' @param encoding Either `NULL` or an encoding to pass to [textConnection()].
 #' @param iconvArgs Arguments to pass to [base::iconv().

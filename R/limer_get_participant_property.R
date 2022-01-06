@@ -1,6 +1,10 @@
 #' Get a participant property from a LimeSurvey survey
 #'
-#' This function exports and downloads a participant property from a LimeSurvey survey.
+#' This function exports and downloads a participant property from a
+#' LimeSurvey survey. It was
+#' adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+#' Heiss.
+#'
 #' @param iSurveyID \dots
 #' @param aTokenQueryProperties \dots
 #' @param aTokenProperties \dots

@@ -1,6 +1,10 @@
 #' Get a LimeSurvey API session key
 #'
-#' This function logs into the LimeSurvey API and provides an access session key.
+#' This function logs into the LimeSurvey API and provides an access
+#' session key. It was
+#' adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+#' Heiss.
+#'
 #' @param username LimeSurvey username. Defaults to value set in \code{options()}.
 #' @param password LimeSurvey password Defaults to value set in \code{options()}.
 #' @return API token

@@ -2,7 +2,9 @@
 #'
 #' This function makes a generic call to the LimeSurvey API.
 #' See \url{https://manual.limesurvey.org/RemoteControl_2_API} for
-#' API documentation.
+#' API documentation. It was
+#' adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+#' Heiss.
 #'
 #' @param method API function to call. Full lis Defaults to value set in \code{options()}.
 #' @param params Optional named list of parameters to pass to the function.
