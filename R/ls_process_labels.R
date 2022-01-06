@@ -40,9 +40,14 @@ ls_process_labels <- function(data,
 
   dat <- data;
 
-  labelDat <- data.frame(varNames.raw = names(dat)[seq_along(attributes(dat)$variable.labels)],
-                         varLabels.raw = attributes(dat)$variable.labels,
-                         stringsAsFactors = FALSE);
+  labelDat <-
+    data.frame(
+      varNames.raw = names(dat),
+      varLabels.raw =
+        c(attributes(lsDat)$variable.labels,
+          names(lsDat)[(length(attributes(lsDat)$variable.labels)+1):ncol(lsDat)]),
+      stringsAsFactors = FALSE
+    );
 
   labelDat$varNames.cln <- labelDat$varNames.raw;
 
