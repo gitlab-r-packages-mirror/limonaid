@@ -6,12 +6,12 @@ Authors@R:
              family = "Peters",
              role = c("aut", "cre"),
              email = "gjalt-jorn@behaviorchange.eu",
-             comment = c(ORCID = "0000-0002-0336-9589"),
+             comment = c(ORCID = "0000-0002-0336-9589")),
       person(given = "Andrew",
              family = "Heiss",
              role = "aut",
              email = "andrew@andrewheiss.com",
-             comment = c(ORCID = "0000-0002-3948-3914"))))
+             comment = c(ORCID = "0000-0002-3948-3914")))
 Maintainer: Gjalt-Jorn Peters <gjalt-jorn@behaviorchange.eu>
 License: GPL (>= 3)
 Description: 'LimeSurvey' is Free/Libre Open Source Software for
