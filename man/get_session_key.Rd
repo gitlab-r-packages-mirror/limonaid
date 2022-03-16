@@ -18,7 +18,10 @@ get_session_key(
 API token
 }
 \description{
-This function logs into the LimeSurvey API and provides an access session key.
+This function logs into the LimeSurvey API and provides an access
+session key. It was
+adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+Heiss.
 }
 \examples{
 \dontrun{

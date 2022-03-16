@@ -7,10 +7,13 @@
 limer_release_session_key()
 }
 \description{
-This function clears the LimeSurvey API session key currently in use, effectively logging out.
+This function clears the LimeSurvey API session key currently in use,
+effectively logging out. This function was
+adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+Heiss.
 }
 \examples{
 \dontrun{
-limer_release_session_key()
+limesurvey::limer_release_session_key()
 }
 }

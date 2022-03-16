@@ -18,7 +18,9 @@ limer_base64_to_df(
 \item{iconvArgs}{Arguments to pass to [base::iconv().}
 }
 \description{
-This function converts raw base64 results into a data frame.
+This function converts raw base64 results into a data frame. It was
+adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+Heiss.
 }
 \examples{
 \dontrun{

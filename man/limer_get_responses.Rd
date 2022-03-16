@@ -39,7 +39,9 @@ the \code{\link[=limer_call_limer]{limer_call_limer()}} function.}
 \item{\dots}{Further arguments to \code{\link{limer_call_limer}}.}
 }
 \description{
-This function exports and downloads data from a LimeSurvey survey.
+This function exports and downloads data from a LimeSurvey survey. It was
+adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+Heiss.
 }
 \examples{
 \dontrun{
