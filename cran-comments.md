@@ -1,8 +1,8 @@
 Hey there!
 
-I single quoted software names such as 'LimeSurvey ' in both Title and Description fields, and provides a link in the form <https://....>.
+Sorry for being a bit too late with the fixes! Also improved the documentation a bit and fixed an unrelated minor bug.
 
-Thank you *very much* for all your work on CRAN and have a great 2022!
+Thank you *very much* for all your work on CRAN!
 
 Kind regards,
 
@@ -13,4 +13,4 @@ Gjalt-Jorn
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* This is a new release. (X-CRAN-Comment: Archived on 2022-03-14 as check problems were not corrected in time.)
