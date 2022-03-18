@@ -62,7 +62,7 @@ ls_process_labels <- function(data,
       );
   } else {
     additionalVarNames <-
-      labels[(nrOfVarsnrOfVars+1):nrOfLabels];
+      labels[(nrOfVars+1):nrOfLabels];
     labelDat <-
       data.frame(
         varNames.raw = c(names(data), additionalVarNames),

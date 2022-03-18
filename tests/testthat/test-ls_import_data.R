@@ -22,7 +22,7 @@ testthat::test_that("data from LS5 can be imported, test 2", {
       sid = 998192
     );
 
-  testthat::expect_equal(dat$age[2], 66);
+  testthat::expect_equal(unclass(dat$age[2]), 66);
 
 })
 
