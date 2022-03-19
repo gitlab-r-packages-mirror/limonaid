@@ -31,7 +31,7 @@ programmatic creation of surveys that can then be imported into
 LimeSurvey, as well as userfriendly import of responses from LimeSurvey
 studies. {limonaid} also implements a number of functions to work with
 the LimeSurvey API from the defunct {limer} package by [Andrew
-Heiss](https://andrewheiss.com).
+Heiss](https://www.andrewheiss.com).
 
 <!--------------------------------------------->
 <!--  End of a custom bit for every package  -->
