@@ -1,5 +1,7 @@
 Hey there!
 
+[update: fixed URL in readme, bumped version]
+
 Sorry for being a bit too late with the fixes! Also improved the documentation a bit and fixed an unrelated minor bug.
 
 Thank you *very much* for all your work on CRAN!
