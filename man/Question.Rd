@@ -10,6 +10,41 @@ R6 Class representing a LimeSurvey question
 }
 \details{
 A question has at least a code and a primary language.
+
+The human-readable question types are (with some additional
+variants also being valid, in any case the literal labels used at
+\url{https://manual.limesurvey.org/Question_object_types#Current_question_types}):
+\itemize{
+\item "\verb{array dual scale}"
+\item "\verb{5 point choice}"
+\item "\verb{5 point array}"
+\item "\verb{10 point array}"
+\item "\verb{yes/no/uncertain array}"
+\item "\code{date}"
+\item "\verb{increase/same/decrease array}"
+\item "\code{array}" (this is the "\verb{array (flexible labels)}" type)
+\item "\code{gender}"
+\item "\verb{array by column}"
+\item "\verb{language switch}"
+\item "\verb{multiple numerical input}",
+\item "\code{radio}" (this is the "\code{list}" type)
+\item "\code{checkboxes}" (this is the "\verb{multiple choice}" type)
+\item "\verb{numerical input}",
+\item "\verb{list with comment}"
+\item "\verb{multiple choice with comments}"
+\item "\verb{multiple short text}"
+\item "\code{ranking}"
+\item "\verb{short text}"
+\item "\verb{long text}"
+\item "\verb{huge text}"
+\item "\verb{text display}"
+\item "\code{yes/no}"
+\item "\verb{multiple texts array}",
+\item "\verb{multiple dropdown array}"
+\item "\code{file}"
+\item "\code{dropdown}"
+\item "\code{equation}".
+}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -74,7 +109,7 @@ by assigning \code{as.list(...)}.}
 \subsection{Method \code{new()}}{
 Create a new question object. Most of this text comes directly
 from the TSV manual page at
-https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+\url{https://manual.limesurvey.org/Tab_Separated_Value_survey_structure}, so
 please see that page for more details.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Question$new(
@@ -104,10 +139,11 @@ please see that page for more details.
 \describe{
 \item{\code{code}}{The question code.}
 
-\item{\code{type}}{The human-readable question type.}
+\item{\code{type}}{The human-readable question type (see details).}
 
-\item{\code{lsType}}{The type as LimeSurvey type (see
-https://manual.limesurvey.org/Question_object_types).}
+\item{\code{lsType}}{The type as LimeSurvey type ("\code{1}"; "\code{5}"; "\code{A}" to "\code{Y}",
+except "\code{J}", "\code{V}" and "\code{W}"; "\code{!}"; "\code{:}"; "\verb{;}"; "\code{*}"; or "\code{|}" --see
+\url{https://manual.limesurvey.org/Question_object_types#Current_question_types}).}
 
 \item{\code{id}}{The identifier of the question (in a survey).}
 

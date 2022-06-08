@@ -1,6 +1,7 @@
 #' R6 Class representing a LimeSurvey question
 #'
 #' A question has at least a code and a primary language.
+#'
 #' @export
 Question <- R6::R6Class(
   "Question",
@@ -85,12 +86,46 @@ Question <- R6::R6Class(
     #' @description
     #' Create a new question object. Most of this text comes directly
     #' from the TSV manual page at
-    #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
+    #' <https://manual.limesurvey.org/Tab_Separated_Value_survey_structure>, so
     #' please see that page for more details.
+    #' @details The human-readable question types are (with some additional
+    #' variants also being valid, in any case the literal labels used at
+    #' <https://manual.limesurvey.org/Question_object_types#Current_question_types>):
+    #'
+    #' - "`array dual scale`"
+    #' - "`5 point choice`"
+    #' - "`5 point array`"
+    #' - "`10 point array`"
+    #' - "`yes/no/uncertain array`"
+    #' - "`date`"
+    #' - "`increase/same/decrease array`"
+    #' - "`array`" (this is the "`array (flexible labels)`" type)
+    #' - "`gender`"
+    #' - "`array by column`"
+    #' - "`language switch`"
+    #' - "`multiple numerical input`",
+    #' - "`radio`" (this is the "`list`" type)
+    #' - "`checkboxes`" (this is the "`multiple choice`" type)
+    #' - "`numerical input`",
+    #' - "`list with comment`"
+    #' - "`multiple choice with comments`"
+    #' - "`multiple short text`"
+    #' - "`ranking`"
+    #' - "`short text`"
+    #' - "`long text`"
+    #' - "`huge text`"
+    #' - "`text display`"
+    #' - "`yes/no`"
+    #' - "`multiple texts array`",
+    #' - "`multiple dropdown array`"
+    #' - "`file`"
+    #' - "`dropdown`"
+    #' - "`equation`".
     #' @param code The question code.
-    #' @param type The human-readable question type.
-    #' @param lsType The type as LimeSurvey type (see
-    #' https://manual.limesurvey.org/Question_object_types).
+    #' @param type The human-readable question type (see details).
+    #' @param lsType The type as LimeSurvey type ("`1`"; "`5`"; "`A`" to "`Y`",
+    #' except "`J`", "`V`" and "`W`"; "`!`"; "`:`"; "`;`"; "`*`"; or "`|`" --see
+    #' <https://manual.limesurvey.org/Question_object_types#Current_question_types>).
     #' @param id The identifier of the question (in a survey).
     #' @param questionTexts The question text(s).
     #' @param helpTexts The help text(s).
@@ -153,26 +188,121 @@ Question <- R6::R6Class(
       type <- trimws(tolower(type));
 
       if (is.null(lsType)) {
-        if (type %in% c("array dual scale")) {
+        if (type %in% c("array dual scale",
+                        "array (dual scale)")) {
           lsType <- "1";
+
+        } else if (type %in% c("5 point choice")) {
+          lsType <- "5";
+
+        } else if (type %in% c("5 point array",
+                               "array (5 point choice)")) {
+          lsType <- "A";
+
+        } else if (type %in% c("10 point array",
+                               "array (10 point choice)")) {
+          lsType <- "B";
+
+        } else if (type %in% c("yes, no, uncertain array",
+                               "yes/no/uncertain array",
+                               "array (yes/no/uncertain)")) {
+          lsType <- "C";
+
+        } else if (type %in% c("date")) {
+          lsType <- "D";
+
+        } else if (type %in% c("increase, same, decrease array",
+                               "increase/same/decrease array",
+                               "array (increase/same/decrease)")) {
+          lsType <- "E";
+
+        } else if (type %in% c("array",
+                               "array (flexible labels)")) {
+          lsType <- "F";
+
+        } else if (type %in% c("gender")) {
+          lsType <- "G";
+
+        } else if (type %in% c("array by column",
+                               "array (flexible labels) by column")) {
+          lsType <- "H";
+
+        } else if (type %in% c("language switch", "language")) {
+          lsType <- "I";
 
         } else if (type %in% c("multiple numerical input", "slider")) {
           lsType <- "K";
 
-        } else if (type %in% c("radio", "radiobuttons")) {
+        } else if (type %in% c("list", "radio", "radiobuttons", "radio buttons")) {
           lsType <- "L";
 
-        } else if (type %in% c("multiple choice", "checkboxes")) {
+        } else if (type %in% c("multiple choice", "checkboxes", "checkbox")) {
           lsType <- "M";
 
-        } else if (type %in% c("dropdown")) {
+        } else if (type %in% c("numerical input")) {
+          lsType <- "N";
+
+        } else if (type %in% c("list with comment",
+                               "list (with comment)")) {
+          lsType <- "O";
+
+        } else if (type %in% c("multiple choice with comments",
+                               "multiple choice (with comments)")) {
+          lsType <- "P";
+
+        } else if (type %in% c("multiple short text",
+                               "short text (multiple)")) {
+          lsType <- "Q";
+
+        } else if (type %in% c("ranking")) {
+          lsType <- "R";
+
+        } else if (type %in% c("short free text",
+                               "free text (short)",
+                               "text (short)",
+                               "short text")) {
+          lsType <- "S";
+
+        } else if (type %in% c("long free text",
+                               "free text (long)",
+                               "text (long)",
+                               "long text")) {
+          lsType <- "T";
+
+        } else if (type %in% c("huge free text",
+                               "free text (huge)",
+                               "text (huge)",
+                               "huge text")) {
+          lsType <- "U";
+
+        } else if (type %in% c("boilerplate", "text display")) {
+          lsType <- "X";
+
+        } else if (type %in% c("yes/no",
+                               "yes, no")) {
+          lsType <- "Y";
+
+        } else if (type %in% c("array (flexible labels) multiple texts",
+                               "multiple texts array",
+                               "multiple texts array")) {
+          lsType <- ":";
+
+        } else if (type %in% c("array (flexible labels) multiple drop down",
+                               "multiple drop down array",
+                               "multiple dropdown array")) {
+          lsType <- ":";
+
+        } else if (type %in% c("file",
+                               "file upload",
+                               "upload")) {
+          lsType <- "|";
+
+        } else if (type %in% c("dropdown",
+                               "list (dropdown)")) {
           lsType <- "!";
 
         } else if (type %in% c("equation")) {
           lsType <- "*";
-
-        } else if (type %in% c("boilerplate", "text display")) {
-          lsType <- "X";
 
         } else {
           stop("Questions of type '", type, "' are not yet supported.");

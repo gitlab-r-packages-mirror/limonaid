@@ -1,16 +1,9 @@
 Hey there!
 
-I single quoted software names such as 'LimeSurvey ' in both Title and Description fields, and provides a link in the form <https://....>.
+Hereby I fix the documentation error pointed out by Kurt in his email of 2022-05-30, 16:15. Thank you for the information to help fix this!
 
-Thank you *very much* for all your work on CRAN and have a great 2022!
+And as always, thank you for your work on keeping CRAN in the sweet spot of flexibility, versatility, and userfriendliness to new R users!
 
 Kind regards,
 
 Gjalt-Jorn
-
-
-## R CMD check results
-
-0 errors | 0 warnings | 1 note
-
-* This is a new release.

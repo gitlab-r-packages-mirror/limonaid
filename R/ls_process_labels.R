@@ -40,9 +40,36 @@ ls_process_labels <- function(data,
 
   dat <- data;
 
-  labelDat <- data.frame(varNames.raw = names(dat),
-                         varLabels.raw = attributes(dat)$variable.labels,
-                         stringsAsFactors = FALSE);
+  labels <- attributes(data)$variable.labels;
+  nrOfLabels <- length(labels);
+  nrOfVars <- length(names(dat));
+
+  if (nrOfLabels == nrOfVars) {
+    labelDat <-
+      data.frame(
+        varNames.raw = names(data),
+        varLabels.raw = labels,
+        stringsAsFactors = FALSE
+      );
+  } else if (nrOfLabels < nrOfVars) {
+    additionalLabels <-
+      names(data)[(nrOfLabels+1):nrOfVars];
+    labelDat <-
+      data.frame(
+        varNames.raw = names(data),
+        varLabels.raw = c(labels, additionalLabels),
+        stringsAsFactors = FALSE
+      );
+  } else {
+    additionalVarNames <-
+      labels[(nrOfVars+1):nrOfLabels];
+    labelDat <-
+      data.frame(
+        varNames.raw = c(names(data), additionalVarNames),
+        varLabels.raw = labels,
+        stringsAsFactors = FALSE
+      );
+  }
 
   labelDat$varNames.cln <- labelDat$varNames.raw;
 
@@ -84,13 +111,16 @@ ls_process_labels <- function(data,
   }
 
   if (!is.null(leftAnchorRegExPairs)) {
-    labelDat$subQuestions <- sapply(1:nrow(labelDat),
-                                    function(rowNr) {
-                                      return(sub(paste0("^(.*)", escapeRegex(labelDat$leftAnchors[rowNr]),
-                                                        ".*\\|?.*", escapeRegex(labelDat$rightAnchors[rowNr])),
-                                                 "\\1",
-                                                 labelDat$varLabels.cln[rowNr]));
-                                    });
+    labelDat$subQuestions <-
+      sapply(
+        1:nrow(labelDat),
+        function(rowNr) {
+          return(sub(paste0("^(.*)", escapeRegex(labelDat$leftAnchors[rowNr]),
+                            ".*\\|?.*", escapeRegex(labelDat$rightAnchors[rowNr])),
+                     "\\1",
+                     labelDat$varLabels.cln[rowNr]));
+        }
+      );
 
   }
 

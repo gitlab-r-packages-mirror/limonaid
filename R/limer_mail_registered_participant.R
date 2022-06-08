@@ -1,12 +1,14 @@
-#' mail_registered_participant
+#' Mail registered participant
 #'
-#' mail_registered_participant
+#' This function was
+#' adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+#' Heiss.
 #'
 #' @param iSurveyID \dots
 #' @param tid \dots
 #' @export
 #' @examples \dontrun{
-#' limer::mail_registered_participant(iSurveyID = 123456, tid = 2)
+#' limonaid::mail_registered_participant(iSurveyID = 123456, tid = 2)
 #' }
 mail_registered_participant <- function(iSurveyID, tid) {
 

@@ -18,7 +18,10 @@ limer_get_participant_property(
 \item{aTokenProperties}{\dots}
 }
 \description{
-This function exports and downloads a participant property from a LimeSurvey survey.
+This function exports and downloads a participant property from a
+LimeSurvey survey. It was
+adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+Heiss.
 }
 \examples{
 \dontrun{

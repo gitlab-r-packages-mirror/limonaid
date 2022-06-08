@@ -36,7 +36,7 @@ ls_parse_data_import_script <- function(scriptfile = NULL,
 
   ### Use separate connection to make sure proper encoding is selected
   con <- file(scriptfile, encoding=scriptEncoding)
-  datascript <- readLines(con);
+  datascript <- readLines(con, warn=FALSE);
   close(con);
 
   if (!silent) {

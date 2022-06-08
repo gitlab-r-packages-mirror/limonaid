@@ -1,12 +1,13 @@
 #' Export data from a LimeSurvey survey
 #'
-#' This function exports and downloads data from a LimeSurvey survey.
+#' This function exports and downloads data from a LimeSurvey survey. It was
+#' adapted by Gjalt-Jorn Peters from a function originally written by Andrew
+#' Heiss.
 #'
 #' @param encoding_limerCall The encoding to pass to
 #' the [limonaid::limer_call_limer()] function.
 #' @param encoding_txtCon The encoding to pass to
 #' [limonaid::limer_base64_to_df()].
-#'
 #' @param iSurveyID The LimeSurvey survey identifier (the `sid`, usually
 #' 6 digits long).
 #' @param sDocumentType \dots
