@@ -62,11 +62,12 @@ testthat::test_that("a more extensive LimeSurvey TSV file can be imported", {
     ### under Linux using LANG=en_US.iso88591 (see the debian-clang results).
     ### see https://cran-archive.r-project.org/web/checks/2022/2022-03-14_check_results_limonaid.html
     testthat::expect_equal(nrow(lsrv), 163);
+  } else {
+    ### Changed on 2022-06-08 as this still fails as per Kurt's email of
+    ### 2022-05-30... Very weird.
+    testthat::expect_equal(nrow(lsrv), 312);
+    #testthat::expect_success((nrow(lsrv) == 312) || (nrow(lsrv) == 163));
   }
-  ### Changed on 2022-06-08 as this still fails as per Kurt's email of
-  ### 2022-05-30... Very weird.
-  ### testthat::expect_equal(nrow(lsrv), 163);
-  testthat::expect_success((nrow(lsrv) == 312) || (nrow(lsrv) == 163));
 
 })
 
