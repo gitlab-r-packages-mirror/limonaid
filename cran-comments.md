@@ -1,18 +1,9 @@
 Hey there!
 
-[update: fixed URL in readme, bumped version]
+Hereby I fix the documentation error pointed out by Kurt in his email of 2022-05-30, 16:15. Thank you for the information to help fix this!
 
-Sorry for being a bit too late with the fixes! Also improved the documentation a bit and fixed an unrelated minor bug.
-
-Thank you *very much* for all your work on CRAN!
+And as always, thank you for your work on keeping CRAN in the sweet spot of flexibility, versatility, and userfriendliness to new R users!
 
 Kind regards,
 
 Gjalt-Jorn
-
-
-## R CMD check results
-
-0 errors | 0 warnings | 1 note
-
-* This is a new release. (X-CRAN-Comment: Archived on 2022-03-14 as check problems were not corrected in time.)
