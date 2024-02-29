@@ -616,6 +616,33 @@ Survey <- R6::R6Class(
     },
 
     ###-------------------------------------------------------------------------
+    ### Export one group to an LSG (xml) file
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Export the survey as a tab separated values file (see
+    #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
+    #' @param file The filename to which to save the file.
+    #' @param preventOverwriting Whether to prevent overwritting.
+    #' @param parallel Whether to work serially or in parallel.
+    #' @param encoding The encoding to use
+    #' @param silent Whether to be silent or chatty.
+    #' @param backupLanguage The language to get content from if not from
+    #' the primary langage.
+    #' @return Invisibly, the `Survey` object.
+    export_to_lsg = function(groupId,
+                             file,
+                             preventOverwriting = limonaid::opts$get("preventOverwriting"),
+                             encoding = limonaid::opts$get("encoding"),
+                             silent = limonaid::opts$get("silent"),
+                             backupLanguage = self$language) {
+
+
+
+
+    },
+
+    ###-------------------------------------------------------------------------
     ### Export the survey as a tab separated values file
     ###-------------------------------------------------------------------------
 
