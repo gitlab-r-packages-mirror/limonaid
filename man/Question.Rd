@@ -51,7 +51,11 @@ variants also being valid, in any case the literal labels used at
 \describe{
 \item{\code{code}}{The code of the question.}
 
-\item{\code{id}}{The identifier of the question (a unique number in a survey)}
+\item{\code{id}}{The identifier of the question (a unique number in a survey).}
+
+\item{\code{gid}}{The identifier of the group to which this question belongs.}
+
+\item{\code{sid}}{The identifier of the survey to which this question belongs.}
 
 \item{\code{type}}{The question type.}
 
@@ -67,9 +71,13 @@ variants also being valid, in any case the literal labels used at
 
 \item{\code{language}}{The primary language of the question.}
 
+\item{\code{additional_languages}}{Any additional languages for the title and description elements.}
+
 \item{\code{answerOptions}}{The answer options in the question.}
 
 \item{\code{subquestions}}{The subquestions in the question.}
+
+\item{\code{parent_qid}}{The question identifier of the parent question (or 0).}
 
 \item{\code{mandatory}}{Whether the question is mandatory (\code{Y} or \code{N}).}
 
@@ -94,18 +102,28 @@ by assigning \code{as.list(...)}.}
 }
 \if{html}{\out{</div>}}
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{has_subquestions}}{Whether the question has subquestions.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Question$new()}}
-\item \href{#method-add_answer_option}{\code{Question$add_answer_option()}}
-\item \href{#method-add_subquestion}{\code{Question$add_subquestion()}}
-\item \href{#method-clone}{\code{Question$clone()}}
+\item \href{#method-Question-new}{\code{Question$new()}}
+\item \href{#method-Question-add_answer_option}{\code{Question$add_answer_option()}}
+\item \href{#method-Question-add_subquestion}{\code{Question$add_subquestion()}}
+\item \href{#method-Question-xmlExport_row_question}{\code{Question$xmlExport_row_question()}}
+\item \href{#method-Question-xmlExport_row_subquestions}{\code{Question$xmlExport_row_subquestions()}}
+\item \href{#method-Question-xmlExport_row_question_l10ns}{\code{Question$xmlExport_row_question_l10ns()}}
+\item \href{#method-Question-clone}{\code{Question$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Question-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new question object. Most of this text comes directly
 from the TSV manual page at
@@ -117,11 +135,14 @@ please see that page for more details.
   type = NULL,
   lsType = NULL,
   id = NULL,
+  gid = NULL,
+  sid = NULL,
   questionTexts = "",
   helpTexts = "",
   relevance = 1,
   validation = "",
   mandatory = "N",
+  parent_qid = 0,
   other = "N",
   otherReplaceTexts = "",
   default = "",
@@ -130,6 +151,9 @@ please see that page for more details.
   cssclass = "",
   hide_tip = "",
   language = "en",
+  additional_languages = "",
+  new_l10n_id = NULL,
+  new_subquestion_id = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -147,6 +171,10 @@ except "\code{J}", "\code{V}" and "\code{W}"; "\code{!}"; "\code{:}"; "\verb{;}"
 
 \item{\code{id}}{The identifier of the question (in a survey).}
 
+\item{\code{gid}}{The identifier of the group to which this question belongs.}
+
+\item{\code{sid}}{The identifier of the survey to which this question belongs.}
+
 \item{\code{questionTexts}}{The question text(s).}
 
 \item{\code{helpTexts}}{The help text(s).}
@@ -156,6 +184,8 @@ except "\code{J}", "\code{V}" and "\code{W}"; "\code{!}"; "\code{:}"; "\verb{;}"
 \item{\code{validation}}{The question's validation.}
 
 \item{\code{mandatory}}{Whether the question is mandatory (\code{Y} or \code{N});.}
+
+\item{\code{parent_qid}}{The question identifier of the parent question (or 0).}
 
 \item{\code{other}}{Whether the question has an 'other' option (\code{Y} or \code{N}).}
 
@@ -176,6 +206,11 @@ to apply.}
 
 \item{\code{language}}{The question's primary language.}
 
+\item{\code{additional_languages}}{Any additional languages}
+
+\item{\code{new_l10n_id, new_subquestion_id}}{Optionally, functions to generate
+new unique identifiers for localization and subquestions.}
+
 \item{\code{...}}{Any additional options, stored as a named list in the
 \code{otherOptions} property by assigning \code{as.list(...)}.}
 }
@@ -186,8 +221,8 @@ A new \code{Survey} object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_answer_option"></a>}}
-\if{latex}{\out{\hypertarget{method-add_answer_option}{}}}
+\if{html}{\out{<a id="method-Question-add_answer_option"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-add_answer_option}{}}}
 \subsection{Method \code{add_answer_option()}}{
 Add an answer option to a question. Most of this text comes directly
 from the TSV manual page at
@@ -216,8 +251,8 @@ Invisibly, the question object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-add_subquestion"></a>}}
-\if{latex}{\out{\hypertarget{method-add_subquestion}{}}}
+\if{html}{\out{<a id="method-Question-add_subquestion"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-add_subquestion}{}}}
 \subsection{Method \code{add_subquestion()}}{
 Add a subquestion to a question. Most of this text comes directly from
 the TSV manual page at
@@ -274,8 +309,79 @@ Invisibly, the question object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Question-xmlExport_row_question"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-xmlExport_row_question}{}}}
+\subsection{Method \code{xmlExport_row_question()}}{
+Export the question in XML format (for lss, lsg, or lsq files).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Question$xmlExport_row_question(silent = limonaid::opts$get("silent"))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{silent}}{Whether to be silent or chatty.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The produced XML
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Question-xmlExport_row_subquestions"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-xmlExport_row_subquestions}{}}}
+\subsection{Method \code{xmlExport_row_subquestions()}}{
+Export the question in XML format (for lss, lsg, or lsq files).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Question$xmlExport_row_subquestions(
+  returnRows = FALSE,
+  silent = limonaid::opts$get("silent")
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{returnRows}}{Whether to return a list with each row as element,
+or a \code{rows} node (as \code{xml2} object) containing each row as nodes}
+
+\item{\code{silent}}{Whether to be silent or chatty.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The produced XML
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Question-xmlExport_row_question_l10ns"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-xmlExport_row_question_l10ns}{}}}
+\subsection{Method \code{xmlExport_row_question_l10ns()}}{
+Export the question's question_l10ns info in a list of XML nodes.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Question$xmlExport_row_question_l10ns(
+  id_fun = NULL,
+  silent = limonaid::opts$get("silent")
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id_fun}}{The function to use to produce l10n identifiers}
+
+\item{\code{silent}}{Whether to be silent or chatty.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The produced list of XML nodes
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Question-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

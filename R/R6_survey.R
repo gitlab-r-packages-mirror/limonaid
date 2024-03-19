@@ -420,6 +420,60 @@ Survey <- R6::R6Class(
                                 className = "numeric");
 
       ###-----------------------------------------------------------------------
+      ### Set identifier functions
+      ###-----------------------------------------------------------------------
+
+      if (is.null(new_group_id)) {
+        self$new_group_id <- function() {
+          private$groupIdCounter <-
+            private$groupIdCounter + 1;
+          return(private$groupIdCounter);
+        }
+      } else {
+        self$new_group_id <- new_group_id;
+      }
+
+      if (is.null(new_question_id)) {
+        self$new_question_id <- function() {
+          private$questionIdCounter <-
+            private$questionIdCounter + 1;
+          return(private$questionIdCounter);
+        }
+      } else {
+        self$new_question_id <- new_question_id;
+      }
+
+      if (is.null(new_subquestion_id)) {
+        self$new_subquestion_id <- function() {
+          private$subquestionIdCounter <-
+            private$subquestionIdCounter + 1;
+          return(private$subquestionIdCounter);
+        }
+      } else {
+        self$new_subquestion_id <- new_subquestion_id;
+      }
+
+      if (is.null(new_answer_id)) {
+        self$new_answer_id <- function() {
+          private$answerIdCounter <-
+            private$answerIdCounter + 1;
+          return(private$answerIdCounter);
+        }
+      } else {
+        self$new_answer_id <- new_answer_id;
+      }
+
+      if (is.null(new_l10n_id)) {
+        self$new_l10n_id <- function() {
+          private$l10n_IdCounter <-
+            private$l10n_IdCounter + 1;
+          return(private$l10n_IdCounter);
+        }
+      } else {
+        self$new_l10n_id <- new_l10n_id;
+      }
+
+      ###-----------------------------------------------------------------------
       ### Set general settings
       ###-----------------------------------------------------------------------
 
@@ -530,7 +584,7 @@ Survey <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       thisGroup <-
-        list(id = private$new_group_id(),
+        list(id = self$new_group_id(),
              titles = titles,
              descriptions = descriptions,
              relevance = relevance,
@@ -595,7 +649,7 @@ Survey <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       thisQuestion <-
-        Question$new(id = private$new_question_id(),
+        Question$new(id = self$new_question_id(),
                      code = code,
                      type = type,
                      lsType = lsType,
@@ -615,32 +669,32 @@ Survey <- R6::R6Class(
       return(invisible(self));
     },
 
-    ###-------------------------------------------------------------------------
-    ### Export one group to an LSG (xml) file
-    ###-------------------------------------------------------------------------
-
-    #' @description
-    #' Export the survey as a tab separated values file (see
-    #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
-    #' @param file The filename to which to save the file.
-    #' @param preventOverwriting Whether to prevent overwritting.
-    #' @param parallel Whether to work serially or in parallel.
-    #' @param encoding The encoding to use
-    #' @param silent Whether to be silent or chatty.
-    #' @param backupLanguage The language to get content from if not from
-    #' the primary langage.
-    #' @return Invisibly, the `Survey` object.
-    export_to_lsg = function(groupId,
-                             file,
-                             preventOverwriting = limonaid::opts$get("preventOverwriting"),
-                             encoding = limonaid::opts$get("encoding"),
-                             silent = limonaid::opts$get("silent"),
-                             backupLanguage = self$language) {
-
-
-
-
-    },
+    #' ###-------------------------------------------------------------------------
+    #' ### Export one group to an LSG (xml) file
+    #' ###-------------------------------------------------------------------------
+    #'
+    #' #' @description
+    #' #' Export the survey as a tab separated values file (see
+    #' #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
+    #' #' @param file The filename to which to save the file.
+    #' #' @param preventOverwriting Whether to prevent overwriting.
+    #' #' @param parallel Whether to work serially or in parallel.
+    #' #' @param encoding The encoding to use
+    #' #' @param silent Whether to be silent or chatty.
+    #' #' @param backupLanguage The language to get content from if not from
+    #' #' the primary langage.
+    #' #' @return Invisibly, the `Survey` object.
+    #' export_to_lsg = function(groupId,
+    #'                          file,
+    #'                          preventOverwriting = limonaid::opts$get("preventOverwriting"),
+    #'                          encoding = limonaid::opts$get("encoding"),
+    #'                          silent = limonaid::opts$get("silent"),
+    #'                          backupLanguage = self$language) {
+    #'
+    #'
+    #'
+    #'
+    #' },
 
     ###-------------------------------------------------------------------------
     ### Export the survey as a tab separated values file
@@ -650,7 +704,7 @@ Survey <- R6::R6Class(
     #' Export the survey as a tab separated values file (see
     #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
     #' @param file The filename to which to save the file.
-    #' @param preventOverwriting Whether to prevent overwritting.
+    #' @param preventOverwriting Whether to prevent overwriting.
     #' @param parallel Whether to work serially or in parallel.
     #' @param encoding The encoding to use
     #' @param silent Whether to be silent or chatty.
@@ -1088,7 +1142,27 @@ Survey <- R6::R6Class(
         return(FALSE);
       }
 
-    }
+    },
+
+    # #' @description Create a new group identifier and return it
+    # #' @return The identifier
+    new_group_id = NULL,
+
+    # #' @description Create a new question identifier and return it
+    # #' @return The identifier
+    new_question_id = NULL,
+
+    # #' @description Create a new subquestion identifier and return it
+    # #' @return The identifier
+    new_subquestion_id = NULL,
+
+    # #' @description Create a new answer identifier and return it
+    # #' @return The identifier
+    new_answer_id = NULL,
+
+    # #' @description Create a new localization identifier and return it
+    # #' @return The identifier
+    new_l10n_id = NULL
 
   ), ### End of public properties and methods
 
@@ -1140,6 +1214,8 @@ Survey <- R6::R6Class(
     ### Unique numeric identifiers for groups and questions in this survey
     groupIdCounter = 0,
     questionIdCounter = 1000,
+    subquestionIdCounter = 10000,
+    l10n_IdCounter = 20000,
 
     ### Counters for exporting
     exportGroupIdMapping = c(),
@@ -1425,21 +1501,7 @@ Survey <- R6::R6Class(
                  "by clicking here:<br />{STATISTICSURL}<br /><br /><br />The ",
                  "following answers were given by the participant:",
                  "<br />{ANSWERTABLE}")
-        ),
-
-    ### Create a new group identifier and return it
-    new_group_id = function() {
-      private$groupIdCounter <-
-        private$groupIdCounter + 1;
-      return(private$groupIdCounter);
-    },
-
-    ### Create a new group identifier and return it
-    new_question_id = function() {
-      private$questionIdCounter <-
-        private$questionIdCounter + 1;
-      return(private$questionIdCounter);
-    }
+        )
 
   ) ### End of private properties and methods
 

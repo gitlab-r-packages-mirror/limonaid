@@ -19,8 +19,14 @@ Question <- R6::R6Class(
     #' @field code The code of the question.
     code = NULL,
 
-    #' @field id The identifier of the question (a unique number in a survey)
+    #' @field id The identifier of the question (a unique number in a survey).
     id = NULL,
+
+    #' @field gid The identifier of the group to which this question belongs.
+    gid = NULL,
+
+    #' @field sid The identifier of the survey to which this question belongs.
+    sid = NULL,
 
     #' @field type The question type.
     type = NULL,
@@ -43,11 +49,17 @@ Question <- R6::R6Class(
     #' @field language The primary language of the question.
     language = NULL,
 
+    #' @field additional_languages Any additional languages for the title and description elements.
+    additional_languages = "",
+
     #' @field answerOptions The answer options in the question.
     answerOptions = list(),
 
     #' @field subquestions The subquestions in the question.
     subquestions = list(),
+
+    #' @field parent_qid The question identifier of the parent question (or 0).
+    parent_qid = 0,
 
     #' @field mandatory Whether the question is mandatory (`Y` or `N`).
     mandatory = NULL,
@@ -127,6 +139,8 @@ Question <- R6::R6Class(
     #' except "`J`", "`V`" and "`W`"; "`!`"; "`:`"; "`;`"; "`*`"; or "`|`" --see
     #' <https://manual.limesurvey.org/Question_object_types#Current_question_types>).
     #' @param id The identifier of the question (in a survey).
+    #' @param gid The identifier of the group to which this question belongs.
+    #' @param sid The identifier of the survey to which this question belongs.
     #' @param questionTexts The question text(s).
     #' @param helpTexts The help text(s).
     #' @param relevance The question's relevance equation.
@@ -138,11 +152,15 @@ Question <- R6::R6Class(
     #' @param default The default value.
     #' @param same_default `Y` for true, in which case any default value set
     #' for the primary language applies to other languages.
+    #' @param parent_qid The question identifier of the parent question (or 0).
     #' @param array_filter The question code of the array filter question
     #' to apply.
     #' @param cssclass The CSS class(es) to apply to this question.
     #' @param hide_tip Whether to hide the tip (`Y` or `N`).
     #' @param language The question's primary language.
+    #' @param additional_languages Any additional languages
+    #' @param new_l10n_id,new_subquestion_id Optionally, functions to generate
+    #' new unique identifiers for localization and subquestions.
     #' @param ... Any additional options, stored as a named list in the
     #' `otherOptions` property by assigning `as.list(...)`.
     #' @return A new `Survey` object.
@@ -150,11 +168,14 @@ Question <- R6::R6Class(
                           type = NULL,
                           lsType = NULL,
                           id = NULL,
+                          gid = NULL,
+                          sid = NULL,
                           questionTexts = "",
                           helpTexts = "",
                           relevance = 1,
                           validation = "",
                           mandatory = "N",
+                          parent_qid = 0,
                           other = "N",
                           otherReplaceTexts = "",
                           default = "",
@@ -163,6 +184,9 @@ Question <- R6::R6Class(
                           cssclass = "",
                           hide_tip = "",
                           language = "en",
+                          additional_languages = "",
+                          new_l10n_id = NULL,
+                          new_subquestion_id = NULL,
                           ...) {
 
       ###-----------------------------------------------------------------------
@@ -180,6 +204,30 @@ Question <- R6::R6Class(
       otherReplaceTexts <-
         checkMultilingualFields(otherReplaceTexts,
                                 language = language);
+
+      ###-----------------------------------------------------------------------
+      ### Set identifier functions
+      ###-----------------------------------------------------------------------
+
+      if (is.null(new_l10n_id)) {
+        self$new_l10n_id <- function() {
+          private$l10n_IdCounter <-
+            private$l10n_IdCounter + 1;
+          return(private$l10n_IdCounter);
+        }
+      } else {
+        self$new_l10n_id <- new_l10n_id;
+      }
+
+      if (is.null(new_subquestion_id)) {
+        self$new_subquestion_id <- function() {
+          private$subquestionIdCounter <-
+            private$subquestionIdCounter + 1;
+          return(private$subquestionIdCounter);
+        }
+      } else {
+        self$new_subquestion_id <- new_subquestion_id;
+      }
 
       ###-----------------------------------------------------------------------
       ### Check question type
@@ -341,14 +389,20 @@ Question <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       self$id <- id;
+      self$gid <- gid;
+      self$sid <- sid;
+
       self$code <- code;
       self$type <- type;
       self$lsType <- lsType;
 
       self$language <- language;
+      self$additional_languages <- additional_languages;
 
       self$questionTexts <- questionTexts;
       self$helpTexts <- helpTexts;
+
+      self$parent_qid <- parent_qid;
 
       self$relevance <- relevance;
       self$validation <- validation;
@@ -503,7 +557,8 @@ Question <- R6::R6Class(
                     validation = validation,
                     mandatory = mandatory,
                     default = default,
-                    same_default = same_default)));
+                    same_default = same_default,
+                    id = self$new_subquestion_id())));
 
       ### Set name of this new subquestion
       names(self$subquestions)[
@@ -511,7 +566,333 @@ Question <- R6::R6Class(
 
       ### Return self invisibly
       return(invisible(self));
+    },
+
+    ###-------------------------------------------------------------------------
+    ### Export question row in XML format
+    ###
+    ### Note: question text and other language stuff is in question_l10ns rows,
+    ### not the question rows
+    ###
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Export the question in XML format (for lss, lsg, or lsq files).
+    #' @param silent Whether to be silent or chatty.
+    #' @return The produced XML
+    xmlExport_row_question = function(silent = limonaid::opts$get("silent")) {
+
+      return(
+        xmlNode_from_vector(
+          "row",
+          subNames = ls_xmlFields$questions,
+          c(self$id,
+            na_if_null(self$parent_qid),
+            self$sid,
+            self$gid,
+            self$type,
+            self$code, ### "title"
+            na_if_null(self$preg),
+            na_if_null(self$other),
+            na_if_null(self$mandatory),
+            na_if_null(self$question_order),
+            na_if_null(self$scale_id),
+            na_if_null(self$same_default),
+            na_if_null(self$relevance),
+            na_if_null(self$modulename),
+            na_if_null(self$encrypted),
+            na_if_null(self$question_theme_name),
+            na_if_null(self$same_script)
+          ),
+          cdata = TRUE
+        )
+      );
+
+    },
+
+    ###-------------------------------------------------------------------------
+    ### Export subquestion row in XML format
+    ###
+    ### Note: question text and other language stuff is in question_l10ns rows,
+    ### not the subquestion rows
+    ###
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Export the question in XML format (for lss, lsg, or lsq files).
+    #' @param silent Whether to be silent or chatty.
+    #' @param returnRows Whether to return a list with each row as element,
+    #' or a `rows` node (as `xml2` object) containing each row as nodes
+    #' @return The produced XML
+    xmlExport_row_subquestions = function(returnRows = FALSE,
+                                          silent = limonaid::opts$get("silent")) {
+
+      if (length(self$subquestions) == 0) {
+
+        return(NULL);
+
+      } else {
+
+        listOfRows <-
+          lapply(
+            self$subquestions,
+            function(currentSubQuestion) {
+              return(
+                xmlNode_from_vector(
+                  "row",
+                  subNames = ls_xmlFields$subquestions,
+                  c(currentSubQuestion$id,
+                    self$id,
+                    self$sid,
+                    self$gid,
+                    na_if_null(currentSubQuestion$type),
+                    currentSubQuestion$code, ### "title"
+                    na_if_null(currentSubQuestion$preg),
+                    na_if_null(currentSubQuestion$other),
+                    na_if_null(currentSubQuestion$mandatory),
+                    na_if_null(self$question_order),
+                    na_if_null(currentSubQuestion$type), # scale_id
+                    na_if_null(currentSubQuestion$same_default),
+                    na_if_null(currentSubQuestion$relevance),
+                    na_if_null(currentSubQuestion$modulename),
+                    na_if_null(self$encrypted),
+                    na_if_null(self$question_theme_name),
+                    na_if_null(currentSubQuestion$same_script)
+                  ),
+                  cdata = TRUE
+                )
+              )
+            }
+          );
+
+        if (returnRows) {
+
+          xml <- xml2::xml_new_root("rows");
+
+          for (i in seq_along(listOfRows)) {
+
+            xml2::xml_add_child(
+              xml,
+              listOfRows[[i]]
+            );
+
+          }
+
+          return(xml);
+
+        } else {
+
+          return(listOfRows);
+
+        }
+
+      }
+
+    },
+
+    ###-------------------------------------------------------------------------
+    ### Export question_l10ns info in a list
+    ###
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Export the question's question_l10ns info in a list of XML nodes.
+    #' @param id_fun The function to use to produce l10n identifiers
+    #' @param silent Whether to be silent or chatty.
+    #' @return The produced list of XML nodes
+    xmlExport_row_question_l10ns = function(id_fun = NULL,
+                                            silent = limonaid::opts$get("silent")) {
+
+      ###-----------------------------------------------------------------------
+      ### Configure language list
+      ###-----------------------------------------------------------------------
+
+      if ((length(self$additional_languages) > 0) &&
+          nchar(self$additional_languages[1]) > 0) {
+        ### We have multiple languages
+        languageList <-
+          c(self$language,
+            self$additional_languages);
+      } else {
+        ### Only one language
+        languageList <- self$language;
+      }
+
+      ###-----------------------------------------------------------------------
+      ### Add rows for main question fields
+      ###-----------------------------------------------------------------------
+
+      listOfRows <-
+        lapply(
+          languageList,
+          function(currentLanguage) {
+            return(
+              xmlNode_from_vector(
+                "row",
+                subNames = ls_xmlFields$question_l10ns,
+                c(self$new_l10n_id(),
+                  self$id,
+                  self$questionTexts[[currentLanguage]],
+                  na_if_null(self$helpTexts[[currentLanguage]]),
+                  currentLanguage,
+                  na_if_null(self$script)
+                ),
+                cdata = TRUE
+              )
+            )
+          }
+        );
+
+      if (self$has_subquestions) {
+
+        for (currentSubquestion in self$subquestions) {
+
+          for (currentLanguage in languageList) {
+
+            listOfRows <-
+              c(listOfRows,
+                list(
+                  xmlNode_from_vector(
+                    "row",
+                    subNames = ls_xmlFields$question_l10ns,
+                    c(self$new_l10n_id(),
+                      currentSubquestion$id,
+                      currentSubquestion$subquestionTexts[[currentLanguage]],
+                      na_if_null(currentSubquestion$helpTexts[[currentLanguage]]),
+                      currentLanguage,
+                      na_if_null(currentSubquestion$script)
+                    ),
+                    cdata = TRUE
+                  )
+                ));
+
+          }
+
+        }
+
+      }
+
+      return(listOfRows);
+
+    },
+
+
+    ###-------------------------------------------------------------------------
+    ### Export answer row in XML format
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Export the answer options in XML format (for lss, lsg, or lsq files).
+    #' @param silent Whether to be silent or chatty.
+    #' @param returnRows Whether to return a list with each row as element,
+    #' or a `rows` node (as `xml2` object) containing each row as nodes
+    #' @return The produced XML
+    xmlExport_row_answers = function(returnRows = FALSE,
+                                     silent = limonaid::opts$get("silent")) {
+
+      if (length(self$answerOptions) == 0) {
+
+        return(NULL);
+
+      } else {
+
+        answers = c("aid", "qid", "code", "sortorder", "assessment_value", "scale_id")
+
+        listOfRows <-
+          lapply(
+            self$answerOptions,
+            function(currentAnswerOption) {
+              return(
+                xmlNode_from_vector(
+                  "row",
+                  subNames = ls_xmlFields$subquestions,
+                  c(currentSubQuestion$id,
+                    self$id,
+                    self$sid,
+                    self$gid,
+                    na_if_null(currentSubQuestion$type)
+                  ),
+                  cdata = TRUE
+                )
+              )
+            }
+          );
+
+        if (returnRows) {
+
+          xml <- xml2::xml_new_root("rows");
+
+          for (i in seq_along(listOfRows)) {
+
+            xml2::xml_add_child(
+              xml,
+              listOfRows[[i]]
+            );
+
+          }
+
+          return(xml);
+
+        } else {
+
+          return(listOfRows);
+
+        }
+
+      }
+
+    },
+
+
+
+    ### https://stackoverflow.com/questions/39914775/updating-method-definitions-in-r6-object-instance#51714770
+
+    # #' @description Create a new subquestion identifier and return it
+    # #' @return The identifier
+    new_subquestion_id = NULL,
+
+    # #' @description Create a new answer identifier and return it
+    # #' @return The identifier
+    new_answer_id = NULL,
+
+    # #' @description Create a new localization identifier and return it
+    # #' @return The identifier
+    new_l10n_id = NULL
+
+  ), ### End of public properties and methods
+
+  ###---------------------------------------------------------------------------
+  ### Active fields
+  ###---------------------------------------------------------------------------
+
+  active = list(
+
+    #' @field has_subquestions Whether the question has subquestions.
+    has_subquestions = function(value) {
+      if (missing(value)) {
+        if (length(self$subquestions) > 0) {
+          return(TRUE)
+        } else {
+          return(FALSE)
+        }
+      } else {
+        warning("You cannot assign anything to this field!");
+      }
     }
 
-  )
+  ), ### End of active fields
+
+  ###---------------------------------------------------------------------------
+  ### Private properties & methods
+  ###---------------------------------------------------------------------------
+
+  private = list(
+
+    ### Unique numeric identifiers for localizations (for exporting)
+    subquestionIdCounter = 10000,
+    l10n_IdCounter = 20000
+
+  ) ### End of private properties and methods
+
+
 )
