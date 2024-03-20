@@ -24,14 +24,6 @@
 #'   "option2",
 #'   "Second option"
 #' );
-#' myGroup$questions$testQuestion2$add_subquestion(
-#'   "subquestion1",
-#'   "First subquestion"
-#' );
-#' myGroup$questions$testQuestion2$add_subquestion(
-#'   "subquestion2",
-#'   "Second subquestion"
-#' );
 #'
 #' cat(as.character(myGroup$export_to_lsg()));
 #'
@@ -116,6 +108,10 @@ Group <- R6::R6Class(
     #' 'received' this function from the parent object, and it 'bubbles down'
     #' through groups to the questions, those functions still get and set a
     #' private identifier property in the 'top-most' object).
+    #' @param uqid A Unique Questionnaire Identifier (UQID) to import a
+    #' questionnaire and populate the group with it.
+    #' @param repo_url The URL to a repo serving the questionnaire with the
+    #' UQID in JSON.
     #' @param ... Any additional options, stored as a named list in the
     #' `otherOptions` property by assigning `as.list(...)`.
     #' @return A new `Group` object.
@@ -129,7 +125,25 @@ Group <- R6::R6Class(
                           id = NULL,
                           sid = NULL,
                           new_id_fun = NULL,
+                          uqid = NULL,
+                          repo_url = "https://operationalizations.com/questionnaires/json",
                           ...) {
+
+      ###-----------------------------------------------------------------------
+      ### When populating from a SOQ retrieved using a UQID, we only do that
+      ###-----------------------------------------------------------------------
+
+      if (!is.null(uqid)) {
+
+        if (!requireNamespace("psyverse", quietly = TRUE)) {
+          stop("You need the {psyverse} package to be able to import from ",
+               "a questionnaire repo, and at least version 0.3.");
+        }
+
+
+
+
+      }
 
       ###-----------------------------------------------------------------------
       ### Check whether the multilingual fields have been passed properly
@@ -167,16 +181,16 @@ Group <- R6::R6Class(
       ### Set fields
       ###-----------------------------------------------------------------------
 
-      if (is.null(id)) {
-        self$id <- private$new_id();
-      } else {
-        self$id <- id;
-      }
-
       if (is.null(sid)) {
         self$sid <- private$new_id();
       } else {
         self$sid <- sid;
+      }
+
+      if (is.null(id)) {
+        self$id <- private$new_id();
+      } else {
+        self$id <- id;
       }
 
       if (is.null(group_order)) {
@@ -217,6 +231,7 @@ Group <- R6::R6Class(
     add_question = function(code,
                             type = NULL,
                             lsType = NULL,
+                            question_order = NULL,
                             ...) {
 
       ###-----------------------------------------------------------------------
@@ -234,16 +249,31 @@ Group <- R6::R6Class(
       }
 
       ###-----------------------------------------------------------------------
+      ### Set the question order
+      ###-----------------------------------------------------------------------
+
+      if (is.null(question_order)) {
+        if (length(self$questions) == 0) {
+          question_order <- 0;
+        } else {
+          question_order <- max(unlist(lapply(self$questions, \(x) x$question_order))) + 1;
+        }
+      }
+
+      ###-----------------------------------------------------------------------
       ### Create question object and store it
       ###-----------------------------------------------------------------------
 
       thisQuestion <-
         Question$new(id = private$new_id(),
+                     sid = self$sid,
+                     gid = self$id,
                      code = code,
                      type = type,
                      lsType = lsType,
                      language = self$language,
                      new_id = private$new_id,
+                     question_order = question_order,
                      ...);
 
       ### Add to group
@@ -521,12 +551,34 @@ Group <- R6::R6Class(
 
       }
 
-
       ###-----------------------------------------------------------------------
       ### Add question_attributes
       ###-----------------------------------------------------------------------
 
       xml2::xml_add_child(xml, "question_attributes");
+
+      xml2::xml_add_child(
+        xml2::xml_child(xml, "question_attributes"),
+        xmlNode_from_vector("fields", "fieldname", ls_xmlFields$question_attributes)
+      );
+
+      xml2::xml_add_child(xml2::xml_find_all(xml, "question_attributes"), "rows");
+
+      tempNode <- xml2::xml_find_all(xml, "question_attributes/rows");
+
+      attributeRows <- lapply(self$questions,
+                              \(x) x$xmlExport_row_attributes());
+
+      for (currentAttributeRow in unlist(attributeRows, recursive=FALSE)) {
+
+        xml2::xml_add_child(
+          tempNode,
+          currentAttributeRow
+        );
+
+      }
+
+
 
       ###-----------------------------------------------------------------------
       ### Potentially write file and return result
@@ -537,6 +589,18 @@ Group <- R6::R6Class(
         return(xml);
 
       } else {
+
+        if (preventOverwriting && file.exists(file)) {
+          warning("The file you specified, '", file, "', already exists, and ",
+                  "the `preventOverwriting` argument is set to TRUE, so I ",
+                  "will not overwrite the file. Set it to FALSE to write anyway.");
+        } else {
+          xml2::write_xml(xml,
+                          file,
+                          encoding = encoding);
+        }
+
+        return(invisible(xml));
 
       }
 

@@ -12,5 +12,6 @@ ls_xmlFields <- list(
                    "question_theme_name", "same_script"),
   question_l10ns = c("id", "qid", "question", "help", "language", "script"),
   answers = c("aid", "qid", "code", "sortorder", "assessment_value", "scale_id"),
-  answer_l10ns = c("id", "aid", "answer", "language")
+  answer_l10ns = c("id", "aid", "answer", "language"),
+  question_attributes = c("qid", "attribute", "value", "language")
 );

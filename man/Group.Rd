@@ -79,9 +79,6 @@ by assigning \code{as.list(...)}.}
 \item \href{#method-Group-new}{\code{Group$new()}}
 \item \href{#method-Group-add_question}{\code{Group$add_question()}}
 \item \href{#method-Group-export_to_lsg}{\code{Group$export_to_lsg()}}
-\item \href{#method-Group-new_question_id}{\code{Group$new_question_id()}}
-\item \href{#method-Group-new_subquestion_id}{\code{Group$new_subquestion_id()}}
-\item \href{#method-Group-new_l10n_id}{\code{Group$new_l10n_id()}}
 \item \href{#method-Group-clone}{\code{Group$clone()}}
 }
 }
@@ -104,9 +101,7 @@ please see that page for more details.
   additional_languages = "",
   id = NULL,
   sid = NULL,
-  new_l10n_id = NULL,
-  new_question_id = NULL,
-  new_subquestion_id = NULL,
+  new_id_fun = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -137,9 +132,16 @@ language and every element's name is the language code).}
 \item{\code{sid}}{Optionally, the identifier of the survey that this group
 belongs to.}
 
-\item{\code{new_l10n_id, new_question_id, new_subquestion_id}}{Optionally,
-functions to generate new unique identifiers for localization, questions,
-and subquestions.}
+\item{\code{new_id_fun}}{A function to set identifiers (for XML exports, which
+mirrors MySQL tables and so needs identifiers). By default, new question
+objects receive this function from the group containing them; and groups
+receive it from the survey containing them. This ensures that identifiers
+are always unique in a survey (despite question objects not being able
+to 'see' anything in the group containing them, and group objects not
+being able to 'see' anything in the survey containing them; because they
+'received' this function from the parent object, and it 'bubbles down'
+through groups to the questions, those functions still get and set a
+private identifier property in the 'top-most' object).}
 
 \item{\code{...}}{Any additional options, stored as a named list in the
 \code{otherOptions} property by assigning \code{as.list(...)}.}
@@ -212,45 +214,6 @@ the primary langage.}
 }
 \subsection{Returns}{
 Invisibly, the \code{Survey} object.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Group-new_question_id"></a>}}
-\if{latex}{\out{\hypertarget{method-Group-new_question_id}{}}}
-\subsection{Method \code{new_question_id()}}{
-Create a new question identifier and return it
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Group$new_question_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The identifier
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Group-new_subquestion_id"></a>}}
-\if{latex}{\out{\hypertarget{method-Group-new_subquestion_id}{}}}
-\subsection{Method \code{new_subquestion_id()}}{
-Create a new subquestion identifier and return it
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Group$new_subquestion_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The identifier
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Group-new_l10n_id"></a>}}
-\if{latex}{\out{\hypertarget{method-Group-new_l10n_id}{}}}
-\subsection{Method \code{new_l10n_id()}}{
-Create a new localization identifier and return it
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Group$new_l10n_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The identifier
 }
 }
 \if{html}{\out{<hr>}}

@@ -81,6 +81,9 @@ Question <- R6::R6Class(
     #' to apply.
     array_filter = NULL,
 
+    #' @field question_order The question order (starts at 0)
+    question_order = NULL,
+
     #' @field cssclass The CSS class(es) to apply to this question.
     cssclass = NULL,
 
@@ -168,9 +171,11 @@ Question <- R6::R6Class(
     #' being able to 'see' anything in the survey containing them; because they
     #' 'received' this function from the parent object, and it 'bubbles down'
     #' through groups to the questions, those functions still get and set a
-    #' private identifier property in the 'top-most' object).    #' @param ... Any additional options, stored as a named list in the
+    #' private identifier property in the 'top-most' object).
+    #' @param question_order The question order (starts at 0)
+    #' @param ... Any additional options, stored as a named list in the
     #' `otherOptions` property by assigning `as.list(...)`.
-    #' @return A new `Survey` object.
+    #' @return A new `Question` object.
     initialize = function(code,
                           type = NULL,
                           lsType = NULL,
@@ -193,6 +198,7 @@ Question <- R6::R6Class(
                           language = "en",
                           additional_languages = "",
                           new_id_fun = NULL,
+                          question_order = 0,
                           ...) {
 
       ###-----------------------------------------------------------------------
@@ -402,6 +408,8 @@ Question <- R6::R6Class(
       self$type <- type;
       self$lsType <- lsType;
 
+      self$question_order <- question_order;
+
       self$language <- language;
       self$additional_languages <- additional_languages;
 
@@ -439,8 +447,11 @@ Question <- R6::R6Class(
     #' @param code The answer option code.
     #' @param optionTexts The answer option text(s).
     #' @param type.scale `0` or `1` (e.g. for dual-scale; 'scale_id').
-    #' @param relevance If using assessment option, this is the assessment
+    #' @param relevance The answer option's relevance equation.
+    #' @param assessment.value If using assessment, this is the assessment
     #' value for the answer ('assessment_value').
+    #' @param sort.order The sort order (to manually specify); starts at 0. If
+    #' left empty, new options are added at the bottom.
     #' @return Invisibly, the question object.
     add_answer_option = function(code,
                                  optionTexts,
@@ -528,6 +539,8 @@ Question <- R6::R6Class(
     #' subquestion (inserted into defaultvalues table).
     #' @param same_default If set, then the default for the primary language
     #' is used for all other languages.
+    #' @param subquestion.order The subquestion order (to manually specify);
+    #' starts at 0. If left empty, new options are added at the bottom.
     #' @return Invisibly, the question object.
     add_subquestion = function(code,
                                subquestionTexts,
@@ -537,7 +550,8 @@ Question <- R6::R6Class(
                                validation = "",
                                mandatory = "",
                                default = "",
-                               same_default = "") {
+                               same_default = "",
+                               subquestion.order = NULL) {
 
       ###-----------------------------------------------------------------------
       ### Check code
@@ -567,6 +581,18 @@ Question <- R6::R6Class(
       }
 
       ###-----------------------------------------------------------------------
+      ### Set the subquestion order
+      ###-----------------------------------------------------------------------
+
+      if (is.null(subquestion.order)) {
+        if (length(self$subquestions) == 0) {
+          subquestion.order <- 0;
+        } else {
+          subquestion.order <- max(unlist(lapply(self$subquestions, \(x) x$subquestion.order))) + 1;
+        }
+      }
+
+      ###-----------------------------------------------------------------------
       ### Set the subquestions
       ###-----------------------------------------------------------------------
 
@@ -581,6 +607,7 @@ Question <- R6::R6Class(
                     mandatory = mandatory,
                     default = default,
                     same_default = same_default,
+                    subquestion.order = subquestion.order,
                     id = private$new_id())));
 
       ### Set name of this new subquestion
@@ -613,12 +640,12 @@ Question <- R6::R6Class(
             na_if_null(self$parent_qid),
             self$sid,
             self$gid,
-            self$type,
+            self$lsType,
             self$code, ### "title"
             na_if_null(self$preg),
             na_if_null(self$other),
             na_if_null(self$mandatory),
-            na_if_null(self$question_order),
+            self$question_order,
             na_if_null(self$scale_id),
             na_if_null(self$same_default),
             na_if_null(self$relevance),
@@ -673,7 +700,7 @@ Question <- R6::R6Class(
                     na_if_null(currentSubQuestion$preg),
                     na_if_null(currentSubQuestion$other),
                     na_if_null(currentSubQuestion$mandatory),
-                    na_if_null(self$question_order),
+                    na_if_null(currentSubQuestion$question_order),
                     na_if_null(currentSubQuestion$type), # scale_id
                     na_if_null(currentSubQuestion$same_default),
                     na_if_null(currentSubQuestion$relevance),
@@ -720,10 +747,10 @@ Question <- R6::R6Class(
 
     #' @description
     #' Export the question's question_l10ns info in a list of XML nodes.
-    #' @param id_fun The function to use to produce l10n identifiers
+    #' @param id_fun The function to use to produce unique identifiers
     #' @param silent Whether to be silent or chatty.
     #' @return The produced list of XML nodes
-    xmlExport_row_question_l10ns = function(id_fun = NULL,
+    xmlExport_row_question_l10ns = function(id_fun = private$new_id(),
                                             silent = limonaid::opts$get("silent")) {
 
       ###-----------------------------------------------------------------------
@@ -778,7 +805,7 @@ Question <- R6::R6Class(
                   xmlNode_from_vector(
                     "row",
                     subNames = ls_xmlFields$question_l10ns,
-                    c(private$new_id(),
+                    c(id_fun(),
                       currentSubquestion$id,
                       currentSubquestion$subquestionTexts[[currentLanguage]],
                       na_if_null(currentSubquestion$helpTexts[[currentLanguage]]),
@@ -871,6 +898,7 @@ Question <- R6::R6Class(
 
     #' @description
     #' Export the question's answer optoin l10ns info in a list of XML nodes.
+    #' @param id_fun The function to use to produce unique identifiers
     #' @param silent Whether to be silent or chatty.
     #' @return The produced list of XML nodes
     xmlExport_row_answer_l10ns = function(id_fun = private$new_id,
@@ -897,6 +925,8 @@ Question <- R6::R6Class(
 
       } else {
 
+        listOfRows <- list();
+
         for (currentAnswerOption in self$answerOptions) {
 
           for (currentLanguage in languageList) {
@@ -907,7 +937,7 @@ Question <- R6::R6Class(
                   xmlNode_from_vector(
                     "row",
                     subNames = ls_xmlFields$answer_l10ns,
-                    c(private$new_id(),
+                    c(id_fun(),
                       currentAnswerOption$id,
                       currentAnswerOption$optionTexts[[currentLanguage]],
                       currentLanguage
@@ -923,6 +953,74 @@ Question <- R6::R6Class(
       }
 
       return(listOfRows);
+
+    },
+
+    ###-------------------------------------------------------------------------
+    ### Export question attributes in a list
+    ###
+    ###-------------------------------------------------------------------------
+
+    #' @description
+    #' Export the question's attributes in a list of XML nodes.
+    #'
+    #' @param silent Whether to be silent or chatty.
+    #' @return The produced list of XML nodes
+    xmlExport_row_attributes = function(silent = limonaid::opts$get("silent")) {
+
+      ###-----------------------------------------------------------------------
+      ### Configure language list
+      ###-----------------------------------------------------------------------
+
+      if ((length(self$additional_languages) > 0) &&
+          nchar(self$additional_languages[1]) > 0) {
+        ### We have multiple languages
+        languageList <-
+          c(self$language,
+            self$additional_languages);
+      } else {
+        ### Only one language
+        languageList <- self$language;
+      }
+
+      if (self$lsType %in% names(ls_attributeDefaults)) {
+
+        defaultAttributes <- list();
+
+        for (currentLanguage in languageList) {
+
+          defaultAttributes <-
+            c(defaultAttributes,
+              lapply(names(ls_attributeDefaults[[self$lsType]]), \(x)
+                     c(
+                       qid = self$id,
+                       attribute = x,
+                       value = ls_attributeDefaults[[self$lsType]][x],
+                       language = ifelse(x %in% ls_attributesWithLanguage, currentLanguage, NA)
+                     )));
+
+        }
+
+        listOfRows <-
+          lapply(
+            defaultAttributes,
+            \(x)
+              xmlNode_from_vector(
+                "row",
+                subNames = ls_xmlFields$question_attributes,
+                x,
+                cdata = TRUE
+              )
+          );
+
+        return(listOfRows);
+
+      } else {
+
+        stop("I cannot create attibutes for questions with LimeSurvey question type '",
+             self$lsType, "' yet.");
+
+      }
 
     }
 

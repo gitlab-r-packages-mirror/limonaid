@@ -1,6 +1,6 @@
 Package: limonaid
 Title: Working with 'LimeSurvey' Surveys and Responses
-Version: 0.1.5
+Version: 0.2
 Authors@R: 
     c(person(given = "Gjalt-Jorn",
              family = "Peters",
@@ -36,5 +36,6 @@ Suggests:
   ggrepel,
   knitr,
   parallel,
+  psyverse (>= 0.3),
   sticky,
   testthat

@@ -106,6 +106,8 @@ by assigning \code{as.list(...)}.}
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{has_subquestions}}{Whether the question has subquestions.}
+
+\item{\code{has_answerOptions}}{Whether the question has answer options}
 }
 \if{html}{\out{</div>}}
 }
@@ -118,6 +120,9 @@ by assigning \code{as.list(...)}.}
 \item \href{#method-Question-xmlExport_row_question}{\code{Question$xmlExport_row_question()}}
 \item \href{#method-Question-xmlExport_row_subquestions}{\code{Question$xmlExport_row_subquestions()}}
 \item \href{#method-Question-xmlExport_row_question_l10ns}{\code{Question$xmlExport_row_question_l10ns()}}
+\item \href{#method-Question-xmlExport_row_answers}{\code{Question$xmlExport_row_answers()}}
+\item \href{#method-Question-xmlExport_row_answer_l10ns}{\code{Question$xmlExport_row_answer_l10ns()}}
+\item \href{#method-Question-xmlExport_row_attributes}{\code{Question$xmlExport_row_attributes()}}
 \item \href{#method-Question-clone}{\code{Question$clone()}}
 }
 }
@@ -152,8 +157,7 @@ please see that page for more details.
   hide_tip = "",
   language = "en",
   additional_languages = "",
-  new_l10n_id = NULL,
-  new_subquestion_id = NULL,
+  new_id_fun = NULL,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -208,8 +212,16 @@ to apply.}
 
 \item{\code{additional_languages}}{Any additional languages}
 
-\item{\code{new_l10n_id, new_subquestion_id}}{Optionally, functions to generate
-new unique identifiers for localization and subquestions.}
+\item{\code{new_id_fun}}{A function to set identifiers (for XML exports, which
+mirrors MySQL tables and so needs identifiers). By default, new question
+objects receive this function from the group containing them; and groups
+receive it from the survey containing them. This ensures that identifiers
+are always unique in a survey (despite question objects not being able
+to 'see' anything in the group containing them, and group objects not
+being able to 'see' anything in the survey containing them; because they
+'received' this function from the parent object, and it 'bubbles down'
+through groups to the questions, those functions still get and set a
+private identifier property in the 'top-most' object).}
 
 \item{\code{...}}{Any additional options, stored as a named list in the
 \code{otherOptions} property by assigning \code{as.list(...)}.}
@@ -217,7 +229,7 @@ new unique identifiers for localization and subquestions.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new \code{Survey} object.
+A new \code{Question} object.
 }
 }
 \if{html}{\out{<hr>}}
@@ -229,7 +241,14 @@ from the TSV manual page at
 https://manual.limesurvey.org/Tab_Separated_Value_survey_structure, so
 please see that page for more details.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Question$add_answer_option(code, optionTexts, type.scale = 0, relevance = "")}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Question$add_answer_option(
+  code,
+  optionTexts,
+  type.scale = 0,
+  relevance = "",
+  assessment.value = 0,
+  sort.order = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -241,8 +260,13 @@ please see that page for more details.
 
 \item{\code{type.scale}}{\code{0} or \code{1} (e.g. for dual-scale; 'scale_id').}
 
-\item{\code{relevance}}{If using assessment option, this is the assessment
+\item{\code{relevance}}{The answer option's relevance equation.}
+
+\item{\code{assessment.value}}{If using assessment, this is the assessment
 value for the answer ('assessment_value').}
+
+\item{\code{sort.order}}{The sort order (to manually specify); starts at 0. If
+left empty, new options are added at the bottom.}
 }
 \if{html}{\out{</div>}}
 }
@@ -361,7 +385,7 @@ The produced XML
 Export the question's question_l10ns info in a list of XML nodes.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Question$xmlExport_row_question_l10ns(
-  id_fun = NULL,
+  id_fun = private$new_id(),
   silent = limonaid::opts$get("silent")
 )}\if{html}{\out{</div>}}
 }
@@ -369,8 +393,79 @@ Export the question's question_l10ns info in a list of XML nodes.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id_fun}}{The function to use to produce l10n identifiers}
+\item{\code{id_fun}}{The function to use to produce unique identifiers}
 
+\item{\code{silent}}{Whether to be silent or chatty.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The produced list of XML nodes
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Question-xmlExport_row_answers"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-xmlExport_row_answers}{}}}
+\subsection{Method \code{xmlExport_row_answers()}}{
+Export the answer options in XML format (for lss, lsg, or lsq files).
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Question$xmlExport_row_answers(
+  returnRows = FALSE,
+  silent = limonaid::opts$get("silent")
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{returnRows}}{Whether to return a list with each row as element,
+or a \code{rows} node (as \code{xml2} object) containing each row as nodes}
+
+\item{\code{silent}}{Whether to be silent or chatty.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The produced XML
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Question-xmlExport_row_answer_l10ns"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-xmlExport_row_answer_l10ns}{}}}
+\subsection{Method \code{xmlExport_row_answer_l10ns()}}{
+Export the question's answer optoin l10ns info in a list of XML nodes.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Question$xmlExport_row_answer_l10ns(
+  id_fun = private$new_id,
+  silent = limonaid::opts$get("silent")
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id_fun}}{The function to use to produce unique identifiers}
+
+\item{\code{silent}}{Whether to be silent or chatty.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+The produced list of XML nodes
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Question-xmlExport_row_attributes"></a>}}
+\if{latex}{\out{\hypertarget{method-Question-xmlExport_row_attributes}{}}}
+\subsection{Method \code{xmlExport_row_attributes()}}{
+Export the question's attributes in a list of XML nodes.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Question$xmlExport_row_attributes(silent = limonaid::opts$get("silent"))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
 \item{\code{silent}}{Whether to be silent or chatty.}
 }
 \if{html}{\out{</div>}}

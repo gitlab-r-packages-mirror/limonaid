@@ -182,10 +182,6 @@ tab separated values.}
 \item \href{#method-Survey-add_question}{\code{Survey$add_question()}}
 \item \href{#method-Survey-export_to_tsv}{\code{Survey$export_to_tsv()}}
 \item \href{#method-Survey-find_group_id}{\code{Survey$find_group_id()}}
-\item \href{#method-Survey-new_group_id}{\code{Survey$new_group_id()}}
-\item \href{#method-Survey-new_question_id}{\code{Survey$new_question_id()}}
-\item \href{#method-Survey-new_subquestion_id}{\code{Survey$new_subquestion_id()}}
-\item \href{#method-Survey-new_l10n_id}{\code{Survey$new_l10n_id()}}
 \item \href{#method-Survey-clone}{\code{Survey$clone()}}
 }
 }
@@ -251,7 +247,8 @@ Create a new survey object.
   nokeyboard = "N",
   alloweditaftercompletion = "N",
   googleanalyticsstyle = 0,
-  googleanalyticsapikey = ""
+  googleanalyticsapikey = "",
+  new_id_fun = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -399,6 +396,17 @@ reponses (\code{N}) or to allow updating responses with one token (\code{Y})?}
 other values for other settings.}
 
 \item{\code{googleanalyticsapikey}}{The google analytics API key.}
+
+\item{\code{new_id_fun}}{A function to set identifiers (for XML exports, which
+mirrors MySQL tables and so needs identifiers). By default, new question
+objects receive this function from the group containing them; and groups
+receive it from the survey containing them. This ensures that identifiers
+are always unique in a survey (despite question objects not being able
+to 'see' anything in the group containing them, and group objects not
+being able to 'see' anything in the survey containing them; because they
+'received' this function from the parent object, and it 'bubbles down'
+through groups to the questions, those functions still get and set a
+private identifier property in the 'top-most' object).}
 }
 \if{html}{\out{</div>}}
 }
@@ -551,58 +559,6 @@ Find the numeric group identifier by group title.
 }
 \subsection{Returns}{
 Invisibly, the \code{Survey} object.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Survey-new_group_id"></a>}}
-\if{latex}{\out{\hypertarget{method-Survey-new_group_id}{}}}
-\subsection{Method \code{new_group_id()}}{
-Create a new question identifier and return it
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$new_group_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The identifier
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Survey-new_question_id"></a>}}
-\if{latex}{\out{\hypertarget{method-Survey-new_question_id}{}}}
-\subsection{Method \code{new_question_id()}}{
-Create a new question identifier and return it
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$new_question_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The identifier
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Survey-new_subquestion_id"></a>}}
-\if{latex}{\out{\hypertarget{method-Survey-new_subquestion_id}{}}}
-\subsection{Method \code{new_subquestion_id()}}{
-Create a new subquestion identifier and return it
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$new_subquestion_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The identifier
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Survey-new_l10n_id"></a>}}
-\if{latex}{\out{\hypertarget{method-Survey-new_l10n_id}{}}}
-\subsection{Method \code{new_l10n_id()}}{
-Create a new localization identifier and return it
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Survey$new_l10n_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-The identifier
 }
 }
 \if{html}{\out{<hr>}}
