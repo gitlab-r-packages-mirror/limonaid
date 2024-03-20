@@ -106,9 +106,16 @@ Group <- R6::R6Class(
     #' @param id Optionally, the id of the group.
     #' @param sid Optionally, the identifier of the survey that this group
     #' belongs to.
-    #' @param new_l10n_id,new_question_id,new_subquestion_id Optionally,
-    #' functions to generate new unique identifiers for localization, questions,
-    #' and subquestions.
+    #' @param new_id_fun A function to set identifiers (for XML exports, which
+    #' mirrors MySQL tables and so needs identifiers). By default, new question
+    #' objects receive this function from the group containing them; and groups
+    #' receive it from the survey containing them. This ensures that identifiers
+    #' are always unique in a survey (despite question objects not being able
+    #' to 'see' anything in the group containing them, and group objects not
+    #' being able to 'see' anything in the survey containing them; because they
+    #' 'received' this function from the parent object, and it 'bubbles down'
+    #' through groups to the questions, those functions still get and set a
+    #' private identifier property in the 'top-most' object).
     #' @param ... Any additional options, stored as a named list in the
     #' `otherOptions` property by assigning `as.list(...)`.
     #' @return A new `Group` object.
@@ -121,9 +128,7 @@ Group <- R6::R6Class(
                           additional_languages = "",
                           id = NULL,
                           sid = NULL,
-                          new_l10n_id = NULL,
-                          new_question_id = NULL,
-                          new_subquestion_id = NULL,
+                          new_id_fun = NULL,
                           ...) {
 
       ###-----------------------------------------------------------------------
@@ -145,19 +150,17 @@ Group <- R6::R6Class(
       otherOptions <- list(...);
 
       ###-----------------------------------------------------------------------
-      ### Override identifier functions
+      ### Set identifier function
       ###-----------------------------------------------------------------------
 
-      if (!is.null(new_l10n_id)) {
-        self$new_l10n_id <- new_l10n_id;
-      }
-
-      if (!is.null(new_question_id)) {
-        self$new_question_id <- new_question_id;
-      }
-
-      if (!is.null(new_subquestion_id)) {
-        self$new_subquestion_id <- new_subquestion_id;
+      if (is.null(new_id_fun)) {
+        private$new_id <- function() {
+          private$idCounter <-
+            private$idCounter + 1;
+          return(private$idCounter);
+        }
+      } else {
+        private$new_id <- new_id_fun;
       }
 
       ###-----------------------------------------------------------------------
@@ -165,13 +168,13 @@ Group <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       if (is.null(id)) {
-        self$id <- 1;
+        self$id <- private$new_id();
       } else {
         self$id <- id;
       }
 
       if (is.null(sid)) {
-        self$sid <- 1;
+        self$sid <- private$new_id();
       } else {
         self$sid <- sid;
       }
@@ -235,13 +238,12 @@ Group <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       thisQuestion <-
-        Question$new(id = self$new_question_id(),
+        Question$new(id = private$new_id(),
                      code = code,
                      type = type,
                      lsType = lsType,
                      language = self$language,
-                     new_l10n_id = self$new_l10n_id,
-                     new_subquestion_id = self$new_subquestion_id,
+                     new_id = private$new_id,
                      ...);
 
       ### Add to group
@@ -364,7 +366,7 @@ Group <- R6::R6Class(
           xmlNode_from_vector(
             "row",
             subNames = ls_xmlFields$group_l10ns,
-            c(self$new_l10n_id(),
+            c(private$new_id(),
               self$id,
               self$group_name[currentLanguage],
               self$description[currentLanguage],
@@ -451,7 +453,7 @@ Group <- R6::R6Class(
       tempNode <- xml2::xml_find_all(xml, "question_l10ns/rows");
 
       question_l10nsRows <- lapply(self$questions,
-                                \(x) x$xmlExport_row_question_l10ns(id_fun = self$new_l10n_id));
+                                \(x) x$xmlExport_row_question_l10ns(id_fun = private$new_id));
 
       for (currentQuestion_l10nsRow in unlist(question_l10nsRows, recursive=FALSE)) {
 
@@ -462,17 +464,63 @@ Group <- R6::R6Class(
 
       }
 
-      ###-----------------------------------------------------------------------
-      ### Add answers
-      ###-----------------------------------------------------------------------
+      if (any(unlist(lapply(self$questions, \(x) x$has_answerOptions)))) {
 
-      xml2::xml_add_child(xml, "answers");
+        ###---------------------------------------------------------------------
+        ### Add answers (if any question has answer options)
+        ###---------------------------------------------------------------------
 
-      ###-----------------------------------------------------------------------
-      ### Add answer_l10ns
-      ###-----------------------------------------------------------------------
+        xml2::xml_add_child(xml, "answers");
 
-      xml2::xml_add_child(xml, "answer_l10ns");
+        xml2::xml_add_child(
+          xml2::xml_child(xml, "answers"),
+          xmlNode_from_vector("fields", "fieldname", ls_xmlFields$answers)
+        );
+
+        xml2::xml_add_child(xml2::xml_find_all(xml, "answers"), "rows");
+
+        tempNode <- xml2::xml_find_all(xml, "answers/rows");
+
+        answerRows <- lapply(self$questions, \(x) x$xmlExport_row_answers());
+
+        for (currentAnswerRow in unlist(answerRows, recursive=FALSE)) {
+
+          xml2::xml_add_child(
+            tempNode,
+            currentAnswerRow
+          );
+
+        }
+
+        ###---------------------------------------------------------------------
+        ### Add answer_l10ns (if any question has answer options)
+        ###--------------------------------------------------------------------
+
+        xml2::xml_add_child(xml, "answer_l10ns");
+
+        xml2::xml_add_child(
+          xml2::xml_child(xml, "answer_l10ns"),
+          xmlNode_from_vector("fields", "fieldname", ls_xmlFields$answer_l10ns)
+        );
+
+        xml2::xml_add_child(xml2::xml_find_all(xml, "answer_l10ns"), "rows");
+
+        tempNode <- xml2::xml_find_all(xml, "answer_l10ns/rows");
+
+        answer_l10nsRows <- lapply(self$questions,
+                                   \(x) x$xmlExport_row_answer_l10ns(id_fun = private$new_id));
+
+        for (currentAnswer_l10nsRow in unlist(answer_l10nsRows, recursive=FALSE)) {
+
+          xml2::xml_add_child(
+            tempNode,
+            currentAnswer_l10nsRow
+          );
+
+        }
+
+      }
+
 
       ###-----------------------------------------------------------------------
       ### Add question_attributes
@@ -492,30 +540,6 @@ Group <- R6::R6Class(
 
       }
 
-    },
-
-    #' @description Create a new question identifier and return it
-    #' @return The identifier
-    new_question_id = function() {
-      private$questionIdCounter <-
-        private$questionIdCounter + 1;
-      return(private$questionIdCounter);
-    },
-
-    #' @description Create a new subquestion identifier and return it
-    #' @return The identifier
-    new_subquestion_id = function() {
-      private$subquestionIdCounter <-
-        private$subquestionIdCounter + 1;
-      return(private$subquestionIdCounter);
-    },
-
-    #' @description Create a new localization identifier and return it
-    #' @return The identifier
-    new_l10n_id = function() {
-      private$l10n_IdCounter <-
-        private$l10n_IdCounter + 1;
-      return(private$l10n_IdCounter);
     }
 
   ), ### End of public properties and methods
@@ -526,11 +550,12 @@ Group <- R6::R6Class(
 
   private = list(
 
-    ### Unique numeric identifiers for groups and questions in this survey
-    groupIdCounter = 0,
-    questionIdCounter = 1000,
-    subquestionIdCounter = 10000,
-    l10n_IdCounter = 20000,
+    ### Unique numeric identifiers (for MySQL basically)
+    idCounter = 0,
+
+    ### This will be loaded with a function to return identifiers
+    ### https://stackoverflow.com/questions/39914775/updating-method-definitions-in-r6-object-instance#51714770
+    new_id = NULL,
 
     ### Counters for exporting
     exportQuestionIdMapping = c()

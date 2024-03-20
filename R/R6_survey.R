@@ -321,6 +321,16 @@ Survey <- R6::R6Class(
     #' @param googleanalyticsstyle The google analytics settings; `0` for None,
     #' other values for other settings.
     #' @param googleanalyticsapikey The google analytics API key.
+    #' @param new_id_fun A function to set identifiers (for XML exports, which
+    #' mirrors MySQL tables and so needs identifiers). By default, new question
+    #' objects receive this function from the group containing them; and groups
+    #' receive it from the survey containing them. This ensures that identifiers
+    #' are always unique in a survey (despite question objects not being able
+    #' to 'see' anything in the group containing them, and group objects not
+    #' being able to 'see' anything in the survey containing them; because they
+    #' 'received' this function from the parent object, and it 'bubbles down'
+    #' through groups to the questions, those functions still get and set a
+    #' private identifier property in the 'top-most' object).
     #' @return A new `Survey` object.
     initialize = function(titles,
                           descriptions = "",
@@ -377,7 +387,8 @@ Survey <- R6::R6Class(
                           nokeyboard = "N",
                           alloweditaftercompletion = "N",
                           googleanalyticsstyle = 0,
-                          googleanalyticsapikey = "") {
+                          googleanalyticsapikey = "",
+                          new_id_fun = NULL) {
 
       ###-----------------------------------------------------------------------
       ### Check whether the multilingual fields have been passed properly
@@ -420,57 +431,17 @@ Survey <- R6::R6Class(
                                 className = "numeric");
 
       ###-----------------------------------------------------------------------
-      ### Set identifier functions
+      ### Set identifier function
       ###-----------------------------------------------------------------------
 
-      if (is.null(new_group_id)) {
-        self$new_group_id <- function() {
-          private$groupIdCounter <-
-            private$groupIdCounter + 1;
-          return(private$groupIdCounter);
+      if (is.null(new_id_fun)) {
+        private$new_id <- function() {
+          private$idCounter <-
+            private$idCounter + 1;
+          return(private$idCounter);
         }
       } else {
-        self$new_group_id <- new_group_id;
-      }
-
-      if (is.null(new_question_id)) {
-        self$new_question_id <- function() {
-          private$questionIdCounter <-
-            private$questionIdCounter + 1;
-          return(private$questionIdCounter);
-        }
-      } else {
-        self$new_question_id <- new_question_id;
-      }
-
-      if (is.null(new_subquestion_id)) {
-        self$new_subquestion_id <- function() {
-          private$subquestionIdCounter <-
-            private$subquestionIdCounter + 1;
-          return(private$subquestionIdCounter);
-        }
-      } else {
-        self$new_subquestion_id <- new_subquestion_id;
-      }
-
-      if (is.null(new_answer_id)) {
-        self$new_answer_id <- function() {
-          private$answerIdCounter <-
-            private$answerIdCounter + 1;
-          return(private$answerIdCounter);
-        }
-      } else {
-        self$new_answer_id <- new_answer_id;
-      }
-
-      if (is.null(new_l10n_id)) {
-        self$new_l10n_id <- function() {
-          private$l10n_IdCounter <-
-            private$l10n_IdCounter + 1;
-          return(private$l10n_IdCounter);
-        }
-      } else {
-        self$new_l10n_id <- new_l10n_id;
+        private$new_id <- new_id_fun;
       }
 
       ###-----------------------------------------------------------------------
@@ -584,11 +555,12 @@ Survey <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       thisGroup <-
-        list(id = self$new_group_id(),
+        list(id = private$new_id(),
              titles = titles,
              descriptions = descriptions,
              relevance = relevance,
-             random_group = random_group);
+             random_group = random_group,
+             new_id_fun = private$new_id);
 
       ### Add to groups in survey
       self$groups <-
@@ -649,11 +621,12 @@ Survey <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       thisQuestion <-
-        Question$new(id = self$new_question_id(),
+        Question$new(id = private$new_id(),
                      code = code,
                      type = type,
                      lsType = lsType,
                      language = self$language,
+                     new_id_fun = private$new_id,
                      ...);
 
       ### Add to group
@@ -1142,27 +1115,7 @@ Survey <- R6::R6Class(
         return(FALSE);
       }
 
-    },
-
-    # #' @description Create a new group identifier and return it
-    # #' @return The identifier
-    new_group_id = NULL,
-
-    # #' @description Create a new question identifier and return it
-    # #' @return The identifier
-    new_question_id = NULL,
-
-    # #' @description Create a new subquestion identifier and return it
-    # #' @return The identifier
-    new_subquestion_id = NULL,
-
-    # #' @description Create a new answer identifier and return it
-    # #' @return The identifier
-    new_answer_id = NULL,
-
-    # #' @description Create a new localization identifier and return it
-    # #' @return The identifier
-    new_l10n_id = NULL
+    }
 
   ), ### End of public properties and methods
 
@@ -1211,11 +1164,12 @@ Survey <- R6::R6Class(
 
   private = list(
 
-    ### Unique numeric identifiers for groups and questions in this survey
-    groupIdCounter = 0,
-    questionIdCounter = 1000,
-    subquestionIdCounter = 10000,
-    l10n_IdCounter = 20000,
+    ### Unique numeric identifiers (for MySQL basically)
+    idCounter = 0,
+
+    ### This will be loaded with a function to return identifiers
+    ### https://stackoverflow.com/questions/39914775/updating-method-definitions-in-r6-object-instance#51714770
+    new_id = NULL,
 
     ### Counters for exporting
     exportGroupIdMapping = c(),

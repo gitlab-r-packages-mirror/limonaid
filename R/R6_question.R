@@ -159,9 +159,16 @@ Question <- R6::R6Class(
     #' @param hide_tip Whether to hide the tip (`Y` or `N`).
     #' @param language The question's primary language.
     #' @param additional_languages Any additional languages
-    #' @param new_l10n_id,new_subquestion_id Optionally, functions to generate
-    #' new unique identifiers for localization and subquestions.
-    #' @param ... Any additional options, stored as a named list in the
+    #' @param new_id_fun A function to set identifiers (for XML exports, which
+    #' mirrors MySQL tables and so needs identifiers). By default, new question
+    #' objects receive this function from the group containing them; and groups
+    #' receive it from the survey containing them. This ensures that identifiers
+    #' are always unique in a survey (despite question objects not being able
+    #' to 'see' anything in the group containing them, and group objects not
+    #' being able to 'see' anything in the survey containing them; because they
+    #' 'received' this function from the parent object, and it 'bubbles down'
+    #' through groups to the questions, those functions still get and set a
+    #' private identifier property in the 'top-most' object).    #' @param ... Any additional options, stored as a named list in the
     #' `otherOptions` property by assigning `as.list(...)`.
     #' @return A new `Survey` object.
     initialize = function(code,
@@ -185,8 +192,7 @@ Question <- R6::R6Class(
                           hide_tip = "",
                           language = "en",
                           additional_languages = "",
-                          new_l10n_id = NULL,
-                          new_subquestion_id = NULL,
+                          new_id_fun = NULL,
                           ...) {
 
       ###-----------------------------------------------------------------------
@@ -206,27 +212,17 @@ Question <- R6::R6Class(
                                 language = language);
 
       ###-----------------------------------------------------------------------
-      ### Set identifier functions
+      ### Set identifier function
       ###-----------------------------------------------------------------------
 
-      if (is.null(new_l10n_id)) {
-        self$new_l10n_id <- function() {
-          private$l10n_IdCounter <-
-            private$l10n_IdCounter + 1;
-          return(private$l10n_IdCounter);
+      if (is.null(new_id_fun)) {
+        private$new_id <- function() {
+          private$idCounter <-
+            private$idCounter + 1;
+          return(private$idCounter);
         }
       } else {
-        self$new_l10n_id <- new_l10n_id;
-      }
-
-      if (is.null(new_subquestion_id)) {
-        self$new_subquestion_id <- function() {
-          private$subquestionIdCounter <-
-            private$subquestionIdCounter + 1;
-          return(private$subquestionIdCounter);
-        }
-      } else {
-        self$new_subquestion_id <- new_subquestion_id;
+        private$new_id <- new_id_fun;
       }
 
       ###-----------------------------------------------------------------------
@@ -389,8 +385,18 @@ Question <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       self$id <- id;
-      self$gid <- gid;
-      self$sid <- sid;
+
+      if (is.null(gid)) {
+        self$gid <- private$new_id();
+      } else {
+        self$gid <- gid;
+      }
+
+      if (is.null(sid)) {
+        self$sid <- private$new_id();
+      } else {
+        self$sid <- sid;
+      }
 
       self$code <- code;
       self$type <- type;
@@ -439,7 +445,9 @@ Question <- R6::R6Class(
     add_answer_option = function(code,
                                  optionTexts,
                                  type.scale = 0,
-                                 relevance = "") {
+                                 relevance = "",
+                                 assessment.value = 0,
+                                 sort.order = NULL) {
 
       ###-----------------------------------------------------------------------
       ### Check code
@@ -460,15 +468,30 @@ Question <- R6::R6Class(
                                 language = self$language);
 
       ###-----------------------------------------------------------------------
+      ### Set the sort order
+      ###-----------------------------------------------------------------------
+
+      if (is.null(sort.order)) {
+        if (length(self$answerOptions) == 0) {
+          sort.order <- 0;
+        } else {
+          sort.order <- max(unlist(lapply(self$answerOptions, \(x) x$sort.order))) + 1;
+        }
+      }
+
+      ###-----------------------------------------------------------------------
       ### Set the answer options
       ###-----------------------------------------------------------------------
 
       self$answerOptions <-
         c(self$answerOptions,
-          list(list(code = code,
+          list(list(id = private$new_id(),
+                    code = code,
                     optionTexts = optionTexts,
                     type.scale = type.scale,
-                    relevance = relevance)));
+                    relevance = relevance,
+                    assessment.value = assessment.value,
+                    sort.order = sort.order)));
 
       ### Set name of this new option
       names(self$answerOptions)[
@@ -558,7 +581,7 @@ Question <- R6::R6Class(
                     mandatory = mandatory,
                     default = default,
                     same_default = same_default,
-                    id = self$new_subquestion_id())));
+                    id = private$new_id())));
 
       ### Set name of this new subquestion
       names(self$subquestions)[
@@ -627,7 +650,7 @@ Question <- R6::R6Class(
     xmlExport_row_subquestions = function(returnRows = FALSE,
                                           silent = limonaid::opts$get("silent")) {
 
-      if (length(self$subquestions) == 0) {
+      if (!self$has_subquestions) {
 
         return(NULL);
 
@@ -730,7 +753,7 @@ Question <- R6::R6Class(
               xmlNode_from_vector(
                 "row",
                 subNames = ls_xmlFields$question_l10ns,
-                c(self$new_l10n_id(),
+                c(private$new_id(),
                   self$id,
                   self$questionTexts[[currentLanguage]],
                   na_if_null(self$helpTexts[[currentLanguage]]),
@@ -755,7 +778,7 @@ Question <- R6::R6Class(
                   xmlNode_from_vector(
                     "row",
                     subNames = ls_xmlFields$question_l10ns,
-                    c(self$new_l10n_id(),
+                    c(private$new_id(),
                       currentSubquestion$id,
                       currentSubquestion$subquestionTexts[[currentLanguage]],
                       na_if_null(currentSubquestion$helpTexts[[currentLanguage]]),
@@ -776,7 +799,6 @@ Question <- R6::R6Class(
 
     },
 
-
     ###-------------------------------------------------------------------------
     ### Export answer row in XML format
     ###-------------------------------------------------------------------------
@@ -790,13 +812,11 @@ Question <- R6::R6Class(
     xmlExport_row_answers = function(returnRows = FALSE,
                                      silent = limonaid::opts$get("silent")) {
 
-      if (length(self$answerOptions) == 0) {
+      if (!self$has_answerOptions) {
 
         return(NULL);
 
       } else {
-
-        answers = c("aid", "qid", "code", "sortorder", "assessment_value", "scale_id")
 
         listOfRows <-
           lapply(
@@ -805,12 +825,13 @@ Question <- R6::R6Class(
               return(
                 xmlNode_from_vector(
                   "row",
-                  subNames = ls_xmlFields$subquestions,
-                  c(currentSubQuestion$id,
-                    self$id,
-                    self$sid,
-                    self$gid,
-                    na_if_null(currentSubQuestion$type)
+                  subNames = ls_xmlFields$answers,
+                  c(currentAnswerOption$id, # aid
+                    self$id, # qid
+                    currentAnswerOption$code, # code
+                    currentAnswerOption$sort.order, # sortorder
+                    currentAnswerOption$assessment.value, # assessment_value
+                    na_if_null(currentAnswerOption$type.scale) # scale_id
                   ),
                   cdata = TRUE
                 )
@@ -843,21 +864,68 @@ Question <- R6::R6Class(
 
     },
 
+    ###-------------------------------------------------------------------------
+    ### Export answer l10ns info in a list
+    ###
+    ###-------------------------------------------------------------------------
 
+    #' @description
+    #' Export the question's answer optoin l10ns info in a list of XML nodes.
+    #' @param silent Whether to be silent or chatty.
+    #' @return The produced list of XML nodes
+    xmlExport_row_answer_l10ns = function(id_fun = private$new_id,
+                                          silent = limonaid::opts$get("silent")) {
 
-    ### https://stackoverflow.com/questions/39914775/updating-method-definitions-in-r6-object-instance#51714770
+      ###-----------------------------------------------------------------------
+      ### Configure language list
+      ###-----------------------------------------------------------------------
 
-    # #' @description Create a new subquestion identifier and return it
-    # #' @return The identifier
-    new_subquestion_id = NULL,
+      if ((length(self$additional_languages) > 0) &&
+          nchar(self$additional_languages[1]) > 0) {
+        ### We have multiple languages
+        languageList <-
+          c(self$language,
+            self$additional_languages);
+      } else {
+        ### Only one language
+        languageList <- self$language;
+      }
 
-    # #' @description Create a new answer identifier and return it
-    # #' @return The identifier
-    new_answer_id = NULL,
+      if (!self$has_answerOptions) {
 
-    # #' @description Create a new localization identifier and return it
-    # #' @return The identifier
-    new_l10n_id = NULL
+        return(NULL);
+
+      } else {
+
+        for (currentAnswerOption in self$answerOptions) {
+
+          for (currentLanguage in languageList) {
+
+            listOfRows <-
+              c(listOfRows,
+                list(
+                  xmlNode_from_vector(
+                    "row",
+                    subNames = ls_xmlFields$answer_l10ns,
+                    c(private$new_id(),
+                      currentAnswerOption$id,
+                      currentAnswerOption$optionTexts[[currentLanguage]],
+                      currentLanguage
+                    ),
+                    cdata = TRUE
+                  )
+                ));
+
+          }
+
+        }
+
+      }
+
+      return(listOfRows);
+
+    }
+
 
   ), ### End of public properties and methods
 
@@ -878,6 +946,19 @@ Question <- R6::R6Class(
       } else {
         warning("You cannot assign anything to this field!");
       }
+    },
+
+    #' @field has_answerOptions Whether the question has answer options
+    has_answerOptions = function(value) {
+      if (missing(value)) {
+        if (length(self$answerOptions) > 0) {
+          return(TRUE)
+        } else {
+          return(FALSE)
+        }
+      } else {
+        warning("You cannot assign anything to this field!");
+      }
     }
 
   ), ### End of active fields
@@ -888,9 +969,12 @@ Question <- R6::R6Class(
 
   private = list(
 
-    ### Unique numeric identifiers for localizations (for exporting)
-    subquestionIdCounter = 10000,
-    l10n_IdCounter = 20000
+    ### Unique numeric identifiers (for MySQL basically)
+    idCounter = 0,
+
+    ### This will be loaded with a function to return identifiers
+    ### https://stackoverflow.com/questions/39914775/updating-method-definitions-in-r6-object-instance#51714770
+    new_id = NULL
 
   ) ### End of private properties and methods
 
