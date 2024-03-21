@@ -51,7 +51,7 @@ Group <- R6::R6Class(
     grelevance = 1,
 
     #' @field group_order The group order (in the survey)
-    group_order = NULL,
+    group_order = 1,
 
     #' @field randomization_group The randomization group (that the group is a part of)
     randomization_group = NULL,
@@ -118,7 +118,7 @@ Group <- R6::R6Class(
     initialize = function(group_name = "",
                           description = "",
                           grelevance = 1,
-                          group_order = NULL,
+                          group_order = 1,
                           randomization_group = NULL,
                           language = "en",
                           additional_languages = "",
