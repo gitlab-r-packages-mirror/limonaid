@@ -33,14 +33,6 @@ myGroup$questions$testQuestion2$add_answer_option(
   "option2",
   "Second option"
 );
-myGroup$questions$testQuestion2$add_subquestion(
-  "subquestion1",
-  "First subquestion"
-);
-myGroup$questions$testQuestion2$add_subquestion(
-  "subquestion2",
-  "Second subquestion"
-);
 
 cat(as.character(myGroup$export_to_lsg()));
 
@@ -102,6 +94,8 @@ please see that page for more details.
   id = NULL,
   sid = NULL,
   new_id_fun = NULL,
+  uqid = NULL,
+  repo_url = "https://operationalizations.com/questionnaires/json",
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -143,6 +137,12 @@ being able to 'see' anything in the survey containing them; because they
 through groups to the questions, those functions still get and set a
 private identifier property in the 'top-most' object).}
 
+\item{\code{uqid}}{A Unique Questionnaire Identifier (UQID) to import a
+questionnaire and populate the group with it.}
+
+\item{\code{repo_url}}{The URL to a repo serving the questionnaire with the
+UQID in JSON.}
+
 \item{\code{...}}{Any additional options, stored as a named list in the
 \code{otherOptions} property by assigning \code{as.list(...)}.}
 }
@@ -158,7 +158,13 @@ A new \code{Group} object.
 \subsection{Method \code{add_question()}}{
 Add a question to a group object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Group$add_question(code, type = NULL, lsType = NULL, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Group$add_question(
+  code,
+  type = NULL,
+  lsType = NULL,
+  question_order = NULL,
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -170,13 +176,19 @@ Add a question to a group object.
 
 \item{\code{lsType}}{The question type, as LimeSurvey question type.}
 
+\item{\code{question_order}}{The question order; automatically filled if left
+empty; starts counting at 0.}
+
 \item{\code{...}}{Additional arguments are used to create the Question using
 \code{Question$new}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Invisibly, the \code{Survey} object.
+Invisibly, the \code{thisQuestion} object that was just added. Note
+that you can further modify this, which will modify the question object
+"in" the survey group as well. This allows you to pipe the question
+creation on to, for example, add answer options.
 }
 }
 \if{html}{\out{<hr>}}

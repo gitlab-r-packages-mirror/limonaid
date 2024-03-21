@@ -12,7 +12,7 @@ Authors@R:
              role = "aut",
              email = "andrew@andrewheiss.com",
              comment = c(ORCID = "0000-0002-3948-3914")))
-Maintainer: Gjalt-Jorn Peters <gjalt-jorn@behaviorchange.eu>
+Maintainer: Gjalt-Jorn Peters <limonaid@opens.science>
 License: GPL (>= 3)
 Description: 'LimeSurvey' is Free/Libre Open Source Software for
   the development and administrations of online studies, using
@@ -25,7 +25,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://r-packages.gitlab.io/limonaid
 BugReports: https://gitlab.com/r-packages/limonaid/-/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Imports:
   httr (>= 1.4),

@@ -93,6 +93,8 @@ label if the default label should be overwritten (multilingual).}
 \item{\code{array_filter}}{The question code of the array filter question
 to apply.}
 
+\item{\code{question_order}}{The question order (starts at 0)}
+
 \item{\code{cssclass}}{The CSS class(es) to apply to this question.}
 
 \item{\code{hide_tip}}{Whether to hide the tip (\code{Y} or \code{N}).}
@@ -158,6 +160,7 @@ please see that page for more details.
   language = "en",
   additional_languages = "",
   new_id_fun = NULL,
+  question_order = 0,
   ...
 )}\if{html}{\out{</div>}}
 }
@@ -222,6 +225,8 @@ being able to 'see' anything in the survey containing them; because they
 'received' this function from the parent object, and it 'bubbles down'
 through groups to the questions, those functions still get and set a
 private identifier property in the 'top-most' object).}
+
+\item{\code{question_order}}{The question order (starts at 0)}
 
 \item{\code{...}}{Any additional options, stored as a named list in the
 \code{otherOptions} property by assigning \code{as.list(...)}.}
@@ -292,7 +297,8 @@ please see that page for more details.
   validation = "",
   mandatory = "",
   default = "",
-  same_default = ""
+  same_default = "",
+  subquestion.order = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -325,6 +331,9 @@ subquestion (inserted into defaultvalues table).}
 
 \item{\code{same_default}}{If set, then the default for the primary language
 is used for all other languages.}
+
+\item{\code{subquestion.order}}{The subquestion order (to manually specify);
+starts at 0. If left empty, new options are added at the bottom.}
 }
 \if{html}{\out{</div>}}
 }

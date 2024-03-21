@@ -3,6 +3,7 @@
 export(Group)
 export(Question)
 export(Survey)
+export(add_answer_option_to_question)
 export(append_lsdf_rows)
 export(cat0)
 export(convertToNumeric)

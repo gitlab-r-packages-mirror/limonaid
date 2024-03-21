@@ -226,9 +226,14 @@ Group <- R6::R6Class(
     #' @param code The question code.
     #' @param type The question type.
     #' @param lsType The question type, as LimeSurvey question type.
+    #' @param question_order The question order; automatically filled if left
+    #' empty; starts counting at 0.
     #' @param ... Additional arguments are used to create the Question using
     #' `Question$new`.
-    #' @return Invisibly, the `Survey` object.
+    #' @return Invisibly, the `thisQuestion` object that was just added. Note
+    #' that you can further modify this, which will modify the question object
+    #' "in" the survey group as well. This allows you to pipe the question
+    #' creation on to, for example, add answer options.
     add_question = function(code,
                             type = NULL,
                             lsType = NULL,
@@ -287,7 +292,7 @@ Group <- R6::R6Class(
         length(self$questions)] <- code;
 
       ### Return self invisibly
-      return(invisible(self));
+      return(invisible(thisQuestion));
     },
 
     ###-------------------------------------------------------------------------

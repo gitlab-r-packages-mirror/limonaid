@@ -16,7 +16,15 @@ designs. This package supports programmatic creation of surveys
 that can then be imported into LimeSurvey, as well as
 userfriendly import of responses from LimeSurvey studies.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://r-packages.gitlab.io/limonaid}
+  \item Report bugs at \url{https://gitlab.com/r-packages/limonaid/-/issues}
+}
+
+}
 \author{
-Gjalt-Jorn Ygram Peters \href{mailto:gjalt-jorn@behaviorchange.eu}{gjalt-jorn@behaviorchange.eu}
+Gjalt-Jorn Peters \href{mailto:limonaid@opens.science}{limonaid@opens.science}
 }
 \keyword{package}
