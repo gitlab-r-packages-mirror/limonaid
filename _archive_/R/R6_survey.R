@@ -321,16 +321,6 @@ Survey <- R6::R6Class(
     #' @param googleanalyticsstyle The google analytics settings; `0` for None,
     #' other values for other settings.
     #' @param googleanalyticsapikey The google analytics API key.
-    #' @param new_id_fun A function to set identifiers (for XML exports, which
-    #' mirrors MySQL tables and so needs identifiers). By default, new question
-    #' objects receive this function from the group containing them; and groups
-    #' receive it from the survey containing them. This ensures that identifiers
-    #' are always unique in a survey (despite question objects not being able
-    #' to 'see' anything in the group containing them, and group objects not
-    #' being able to 'see' anything in the survey containing them; because they
-    #' 'received' this function from the parent object, and it 'bubbles down'
-    #' through groups to the questions, those functions still get and set a
-    #' private identifier property in the 'top-most' object).
     #' @return A new `Survey` object.
     initialize = function(titles,
                           descriptions = "",
@@ -387,8 +377,7 @@ Survey <- R6::R6Class(
                           nokeyboard = "N",
                           alloweditaftercompletion = "N",
                           googleanalyticsstyle = 0,
-                          googleanalyticsapikey = "",
-                          new_id_fun = NULL) {
+                          googleanalyticsapikey = "") {
 
       ###-----------------------------------------------------------------------
       ### Check whether the multilingual fields have been passed properly
@@ -429,20 +418,6 @@ Survey <- R6::R6Class(
                                 language = language,
                                 classCheck = is.numeric,
                                 className = "numeric");
-
-      ###-----------------------------------------------------------------------
-      ### Set identifier function
-      ###-----------------------------------------------------------------------
-
-      if (is.null(new_id_fun)) {
-        private$new_id <- function() {
-          private$idCounter <-
-            private$idCounter + 1;
-          return(private$idCounter);
-        }
-      } else {
-        private$new_id <- new_id_fun;
-      }
 
       ###-----------------------------------------------------------------------
       ### Set general settings
@@ -555,12 +530,11 @@ Survey <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       thisGroup <-
-        list(id = private$new_id(),
+        list(id = private$new_group_id(),
              titles = titles,
              descriptions = descriptions,
              relevance = relevance,
-             random_group = random_group,
-             new_id_fun = private$new_id);
+             random_group = random_group);
 
       ### Add to groups in survey
       self$groups <-
@@ -621,12 +595,11 @@ Survey <- R6::R6Class(
       ###-----------------------------------------------------------------------
 
       thisQuestion <-
-        Question$new(id = private$new_id(),
+        Question$new(id = private$new_question_id(),
                      code = code,
                      type = type,
                      lsType = lsType,
                      language = self$language,
-                     new_id_fun = private$new_id,
                      ...);
 
       ### Add to group
@@ -642,33 +615,6 @@ Survey <- R6::R6Class(
       return(invisible(self));
     },
 
-    #' ###-------------------------------------------------------------------------
-    #' ### Export one group to an LSG (xml) file
-    #' ###-------------------------------------------------------------------------
-    #'
-    #' #' @description
-    #' #' Export the survey as a tab separated values file (see
-    #' #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
-    #' #' @param file The filename to which to save the file.
-    #' #' @param preventOverwriting Whether to prevent overwriting.
-    #' #' @param parallel Whether to work serially or in parallel.
-    #' #' @param encoding The encoding to use
-    #' #' @param silent Whether to be silent or chatty.
-    #' #' @param backupLanguage The language to get content from if not from
-    #' #' the primary langage.
-    #' #' @return Invisibly, the `Survey` object.
-    #' export_to_lsg = function(groupId,
-    #'                          file,
-    #'                          preventOverwriting = limonaid::opts$get("preventOverwriting"),
-    #'                          encoding = limonaid::opts$get("encoding"),
-    #'                          silent = limonaid::opts$get("silent"),
-    #'                          backupLanguage = self$language) {
-    #'
-    #'
-    #'
-    #'
-    #' },
-
     ###-------------------------------------------------------------------------
     ### Export the survey as a tab separated values file
     ###-------------------------------------------------------------------------
@@ -677,7 +623,7 @@ Survey <- R6::R6Class(
     #' Export the survey as a tab separated values file (see
     #' https://manual.limesurvey.org/Tab_Separated_Value_survey_structure).
     #' @param file The filename to which to save the file.
-    #' @param preventOverwriting Whether to prevent overwriting.
+    #' @param preventOverwriting Whether to prevent overwritting.
     #' @param parallel Whether to work serially or in parallel.
     #' @param encoding The encoding to use
     #' @param silent Whether to be silent or chatty.
@@ -1164,12 +1110,9 @@ Survey <- R6::R6Class(
 
   private = list(
 
-    ### Unique numeric identifiers (for MySQL basically)
-    idCounter = 0,
-
-    ### This will be loaded with a function to return identifiers
-    ### https://stackoverflow.com/questions/39914775/updating-method-definitions-in-r6-object-instance#51714770
-    new_id = NULL,
+    ### Unique numeric identifiers for groups and questions in this survey
+    groupIdCounter = 0,
+    questionIdCounter = 1000,
 
     ### Counters for exporting
     exportGroupIdMapping = c(),
@@ -1455,7 +1398,21 @@ Survey <- R6::R6Class(
                  "by clicking here:<br />{STATISTICSURL}<br /><br /><br />The ",
                  "following answers were given by the participant:",
                  "<br />{ANSWERTABLE}")
-        )
+        ),
+
+    ### Create a new group identifier and return it
+    new_group_id = function() {
+      private$groupIdCounter <-
+        private$groupIdCounter + 1;
+      return(private$groupIdCounter);
+    },
+
+    ### Create a new group identifier and return it
+    new_question_id = function() {
+      private$questionIdCounter <-
+        private$questionIdCounter + 1;
+      return(private$questionIdCounter);
+    }
 
   ) ### End of private properties and methods
 
